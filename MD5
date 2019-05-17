@@ -1,4 +1,4 @@
-dc7e62485902caa57a77a648301dc902 *DESCRIPTION
+d25a890aedc16fba99895cf0ed183c38 *DESCRIPTION
 b7ae19923baae34a24eb2bdc265ffd2e *NAMESPACE
 8f15e415d0f7c80562ab394d2461a120 *R/assertions.R
 f5fda24d06a1ef7a2965090df5f6ef88 *R/classInt.R
@@ -51,12 +51,11 @@ d41d8cd98f00b204e9800998ecf8427e *inst/doc/config.txt
 d41d8cd98f00b204e9800998ecf8427e *inst/doc/endpoints.txt
 e601595f67fc12a446a85a32a4c8cffa *inst/doc/ggPMX-guide.R
 30b8fcc1ba02626db915f77519da4605 *inst/doc/ggPMX-guide.Rmd
-9c75a850a3c14d0c23b1e07f2bc93655 *inst/doc/ggPMX-guide.html
+ce5071404fe310dab754d8e8bf436b1e *inst/doc/ggPMX-guide.html
 228fdef7f69c92ce4863e1e736a264d4 *inst/doc/howto.R
 d41d8cd98f00b204e9800998ecf8427e *inst/doc/howto.txt
 d41d8cd98f00b204e9800998ecf8427e *inst/doc/intro.txt
 63fbd8ea88976bb8208aba508fb9d378 *inst/doc/introduction.R
-2e7decc2b62083ebe81e18ecd94b89c7 *inst/doc/introduction.Rmd
 d41d8cd98f00b204e9800998ecf8427e *inst/doc/settings.txt
 d41d8cd98f00b204e9800998ecf8427e *inst/doc/shrink.txt
 d41d8cd98f00b204e9800998ecf8427e *inst/doc/strat.txt
