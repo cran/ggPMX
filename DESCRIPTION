@@ -6,7 +6,7 @@ Description: At Novartis, we aimed at standardizing the set of diagnostic plots 
   For this, we developed a guidance that proposes an adequate set of diagnostics and a toolbox, 
   called 'ggPMX' to execute them. 'ggPMX' is a toolbox that can generate all diagnostic plots at a quality sufficient 
   for publication and submissions using few lines of code. 
-Version: 0.9.3
+Version: 0.9.4
 Authors@R: c(
               person("Amine", "Gassem", email="contact@ag-study.com", role=c("cre","aut")),
               person("Bruno", "Bieth", email="biethb@hotmail.com", role="aut"),
@@ -32,7 +32,7 @@ Suggests: testthat, xtable
 VignetteBuilder: knitr
 NeedsCompilation: no
 RoxygenNote: 6.0.1
-Packaged: 2019-05-26 12:12:01 UTC; agstudy
+Packaged: 2019-06-06 11:40:34 UTC; agstudy
 Author: Amine Gassem [cre, aut],
   Bruno Bieth [aut],
   Irina Baltcheva [aut],
@@ -45,4 +45,4 @@ Author: Amine Gassem [cre, aut],
   Qing Xi Ooi [ctr],
   Novartis Pharma AG [cph]
 Repository: CRAN
-Date/Publication: 2019-05-26 15:10:02 UTC
+Date/Publication: 2019-06-06 12:00:03 UTC

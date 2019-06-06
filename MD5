@@ -1,4 +1,4 @@
-cd08fde61d89d574940d9eb1fa7164ac *DESCRIPTION
+d0debf8a71cf4e5c453a4b149ea4745e *DESCRIPTION
 b7ae19923baae34a24eb2bdc265ffd2e *NAMESPACE
 8f15e415d0f7c80562ab394d2461a120 *R/assertions.R
 f5fda24d06a1ef7a2965090df5f6ef88 *R/classInt.R
@@ -32,18 +32,18 @@ bd05e5e188adaafa4d53ce271b9a636d *R/pmx-plots-quantile.R
 eb2709ebdb47e8a51acdc942e30dea49 *R/pmx-plots-scatter.R
 fef1556767351430b3a9e1ac29504cd9 *R/pmx-plots-vpc.R
 a60791ba15562841113c9345b30c68fc *R/pmx-post_load.R
-feacaf6e954891e9b557a537e667bf56 *R/pmx-reader.R
+930715478478812f62a1b64b9e7012cf *R/pmx-reader.R
 2451e06a60999ecf10e03a5ebcbf76d2 *R/pmx-report.R
-8154749731a56a1cc189c4b459733edd *R/pmxClass.R
+fb1a867143ba980720a6421df68c74d0 *R/pmxClass.R
 b2e8de2c442e8a1ad8e806b193755805 *R/utils.R
 6ac5f3bca8bfa9b2fb96bd59d9aa296d *R/zzz.R
-9d64e077bc4cb39b43091f5e33337123 *README.md
+429ef529af3a8a468e69fcf5f0cc0577 *README.md
 8fa8976a500283198c209d914a04f104 *build/vignette.rds
 f8ecf2cd724a1f9111486d6a4f7d8352 *cleanup
 ab8b45a6b9423f468d403f33918dbcd1 *cleanup.win
-ec194b259636a14b67baa07d88b67682 *inst/doc/ggPMX-guide.R
-ca71555fbcd77f248a1a077f75eca0dd *inst/doc/ggPMX-guide.Rmd
-782bf35c441154b55aeac1943e3982c4 *inst/doc/ggPMX-guide.pdf
+94df9ee96e7006511915e9c51e176ed5 *inst/doc/ggPMX-guide.R
+5139661bdb6c8be0c2325c7569e6240a *inst/doc/ggPMX-guide.Rmd
+a5866f12542d407fc62379ecb72c8b66 *inst/doc/ggPMX-guide.pdf
 4580d030cf1df87d6490c1b5a963042b *inst/examples/controller.R
 f557de4f2b69a80982457d82ab224c2c *inst/examples/custom_inputs.yaml
 1cf0c5ab122820f504cca042eb5d5435 *inst/examples/distribution.R
@@ -180,7 +180,7 @@ f3ebedc4ba1dacdcbeeaf078d2f019ce *man/print.configs.Rd
 2aab27acd74c7fa84b96f8f1c313a5d3 *man/print.pmxClass.Rd
 a9870dc3b30b8fd1176129cc6f375e3d *man/print.pmxConfig.Rd
 08c73725d4aa81ed9b5bcc55d972f505 *man/print.pmx_gpar.Rd
-631389bbbf843e9dce6d163ef0da6c46 *man/read_input.Rd
+6a0232f8e18082bb5ff2bf177d2b0c54 *man/read_input.Rd
 cf96caa3648ec053bce72dcac278487b *man/read_mlx_ind_est.Rd
 398622415eeb199e2e269a015cde9278 *man/read_mlx_par_est.Rd
 d71dfcdef92b31a88eb797378c897c47 *man/read_mlx_pred.Rd
@@ -209,5 +209,5 @@ eb3def4cb679aef3a36540d6eb541173 *tests/testthat/test-gpar.R
 49f0bbcf940d8b673a248a950879bf43 *tests/testthat/test-reader.R
 521a8b7012c360fba6dbf12cc1c607c0 *tests/testthat/test-shrinkage.R
 a8fd047f57891da28ef7bee4cf618272 *tests/testthat/test-utils.R
-ca71555fbcd77f248a1a077f75eca0dd *vignettes/ggPMX-guide.Rmd
+5139661bdb6c8be0c2325c7569e6240a *vignettes/ggPMX-guide.Rmd
 550d8d42539492f998e583313cadad39 *vignettes/ggPMX_arch.png

@@ -5,7 +5,7 @@
 \title{Read Modelling input data}
 \usage{
 read_input(ipath, dv, dvid, cats = "", conts = "", strats = "",
-  occ = "", endpoint = NULL)
+  occ = "", endpoint = NULL, id = NULL, time = NULL)
 }
 \arguments{
 \item{ipath}{full path of the input file}
@@ -23,6 +23,10 @@ read_input(ipath, dv, dvid, cats = "", conts = "", strats = "",
 \item{occ}{\emph{[Optional]}\code{character} inter individual occasion variables}
 
 \item{endpoint}{\code{integer}  null in case of a single endpoint otherwise the index of endpoints.}
+
+\item{id}{\code{character} the name of identifier variable used in the input modelling file.}
+
+\item{time}{\code{character} the name of time variable used in the input modelling file}
 }
 \value{
 data.table well formatted containing modelling input data

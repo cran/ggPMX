@@ -5,14 +5,18 @@ library(ggplot2)
 library(xtable)
 library(knitr)
 
+theophylline <- file.path(system.file(package = "ggPMX"), "testdata", "theophylline")
+work_dir <- file.path(theophylline, "Monolix")
+input_data <- file.path(theophylline, "data_pk.csv")
+
+ctr <- theophylline()
+
 ## ----illustrate_diagnostic, out.width='.25\\linewidth', fig.width=4, fig.height=4, fig.show='hold', fig.align='center', echo=FALSE----
 ctr <- theophylline()
 ctr %>% pmx_plot_dv_pred
+ctr %>% pmx_plot_npde_time
+ctr %>% pmx_plot_vpc
 ctr %>% pmx_plot_eta_box
-ctr %>% pmx_plot_eta_hist(facets=list(scales="free_y"))
-ctr %>% pmx_plot_individual(npage = 1,
-                            is.legend=FALSE,
-                            facets=list(ncol=2,nrow=3))
 ctr %>% pmx_plot_eta_matrix(
   shrink=list(size=3,hjust=1.5))
 
@@ -43,7 +47,7 @@ colnames(out) <- c("Argument", "Description", "Values")
 xt <- xtable(head(out), label = "tab:pmx_mandatory", caption = "Mandatory arguments of pmx() function")
 print(xt, comment = F)
 
-## ----init_ctr1-----------------------------------------------------------
+## ----init_ctr------------------------------------------------------------
 theophylline_path <- file.path(system.file(package = "ggPMX"), "testdata", "theophylline")
 work_dir          <- file.path(theophylline_path, "Monolix")
 input_data_path   <- file.path(theophylline_path, "data_pk.csv")
@@ -127,19 +131,19 @@ ctr <- pmx_mlx(
   strats    = c("STUD", "SEX")
 )
 
-## ----get_covar1----------------------------------------------------------
+## ----get_covar-----------------------------------------------------------
 ctr %>% get_cats()
 ctr %>% get_conts()
 ctr %>% get_strats()
 ctr %>% get_covariates()
 
-## ----display_ctr1--------------------------------------------------------
+## ----display_ctr---------------------------------------------------------
 ctr
 
-## ----plot_lists2---------------------------------------------------------
+## ----plot_lists----------------------------------------------------------
 ctr %>% plot_names()
 
-## ----plot_types2---------------------------------------------------------
+## ----plot_types----------------------------------------------------------
 ctr %>% plots()
 
 ## ----datasets_list,echo=FALSE,results='asis'-----------------------------
@@ -158,93 +162,44 @@ colnames(out) <- c("ggPMX dataset", "Description")
 xt <- xtable(head(out), label = "tab:ggPMX_datasets", caption = "ggPMX datasets")
 print(xt, comment = F)
 
-## ----init_ctr------------------------------------------------------------
-
+## ----echo=FALSE----------------------------------------------------------
 theophylline <- file.path(system.file(package = "ggPMX"), "testdata", "theophylline")
 work_dir <- file.path(theophylline, "Monolix")
 input_data <- file.path(theophylline, "data_pk.csv")
 
-ctr <- pmx(
-  sys = "mlx",
-  config = "standing",
-  directory = work_dir,
-  input = input_data,
-  dv = "Y",
-  dvid = "DVID"
-)
-
-## ----theophylline_ctr----------------------------------------------------
 ctr <- theophylline()
 
-## ----display_ctr---------------------------------------------------------
-ctr
-
-## ----init_pmx_mlx--------------------------------------------------------
-ctr <- pmx_mlx(
-  config = "standing",
-  directory = work_dir,
-  input = input_data,
-  dv = "Y",
-  dvid = "DVID"
-)
-
-## ----init_ctr_covar1-----------------------------------------------------
-ctr <- pmx_mlx(
-  config = "standing",
-  directory = work_dir,
-  input = input_data,
-  dv = "Y",
-  dvid = "DVID",
-  cats = c("SEX"),
-  conts = c("WT0", "AGE0"),
-  strats = c("STUD", "SEX")
-)
-
-## ----get_covar-----------------------------------------------------------
-ctr %>% get_cats()
-ctr %>% get_conts()
-ctr %>% get_strats()
-ctr %>% get_covariates()
-
-## ----plot_lists----------------------------------------------------------
+## ------------------------------------------------------------------------
 ctr %>% plot_names()
 
-## ----plot_types----------------------------------------------------------
-ctr %>% plots()
-
-## ----basics_res, out.width='.48\\linewidth', fig.height=4, fig.width=6, fig.show='hold', fig.align='center'----
-ctr %>% pmx_plot_dv_pred
-ctr %>% pmx_plot_dv_ipred
-
+## ----fig.height=5, fig.width=8-------------------------------------------
 ctr %>% pmx_plot_iwres_time
-ctr %>% pmx_plot_npde_time
 
-ctr %>% pmx_plot_iwres_ipred
-ctr %>% pmx_plot_abs_iwres_ipred
+## ----basics_res, eval=F, out.width='.48\\linewidth', fig.height=4, fig.width=6, fig.show='hold', fig.align='center'----
+#  ctr %>% pmx_plot_dv_pred
+#  ctr %>% pmx_plot_dv_ipred
+#  
+#  ctr %>% pmx_plot_iwres_time
+#  ctr %>% pmx_plot_npde_time
+#  
+#  ctr %>% pmx_plot_iwres_ipred
+#  ctr %>% pmx_plot_abs_iwres_ipred
+#  
+#  ctr %>% pmx_plot_npde_pred
 
-ctr %>% pmx_plot_npde_pred
+## ----basics_ebe_hist, eval=F , fig.height=3, fig.width=3, fig.show='hold', fig.align='center'----
+#  ctr %>% pmx_plot_eta_hist
+#  ctr %>% pmx_plot_eta_box
 
-## ----basics_ebe_hist , fig.height=3, fig.width=3, fig.show='hold', fig.align='center'----
-ctr %>% pmx_plot_eta_hist()
-ctr %>% pmx_plot_eta_box()
+## ----basics_indiv, eval=F, fig.height=6, fig.width=6, fig.show='hold', fig.align='center'----
+#  ctr %>% pmx_plot_individual(npage = 1)
 
+## ----basics_qq, eval=F, fig.height=3, fig.width=3, fig.show='hold', fig.align='center'----
+#  ctr %>% pmx_plot_npde_qq
+#  ctr %>% pmx_plot_iwres_qq
 
-## ----basics_indiv, fig.height=6, fig.width=6, fig.show='hold', fig.align='center'----
-ctr %>% pmx_plot_individual(npage = 1)
-
-## ----basics_qq, fig.height=3, fig.width=3, fig.show='hold', fig.align='center'----
-ctr %>% pmx_plot_npde_qq()
-ctr %>% pmx_plot_iwres_qq()
-
-## ----basics_matrix_plot,  fig.height=6, fig.width=6, fig.show='hold', fig.align='center'----
-ctr %>% pmx_plot_eta_matrix
-
-## ----basics_update_defaults, out.width='.98\\linewidth', fig.height=6, fig.width=9, fig.show='hold', fig.align='center'----
-ctr %>% pmx_plot_individual(
-  npage = 1, 
-  facets = list(nrow = 2, ncol = 2),
-  labels = list(title = "My individuals")
-) + ggplot2::scale_y_log10()
+## ----basics_matrix_plot, eval=F,  fig.height=6, fig.width=6, fig.show='hold', fig.align='center'----
+#  ctr %>% pmx_plot_eta_matrix
 
 ## ------------------------------------------------------------------------
 
@@ -279,19 +234,19 @@ ctr <- pmx_mlx(
 
 
 
-## ------------------------------------------------------------------------
+## ----fig.height=4, fig.width=6-------------------------------------------
 ctr %>% pmx_plot_vpc
 
-## ------------------------------------------------------------------------
+## ----fig.height=3.5, fig.width=5.5---------------------------------------
 ctr %>% pmx_plot_vpc(type ="scatter")
 
-## ------------------------------------------------------------------------
+## ----fig.height=3.5, fig.width=5.5---------------------------------------
 ctr %>% pmx_plot_vpc(bin=pmx_vpc_bin(style = "kmeans",n=5))
 
-## ------------------------------------------------------------------------
+## ----fig.height=7, fig.width=6-------------------------------------------
 ctr %>% pmx_plot_vpc(strat.facet="SEX",facets=list(nrow=2))
 
-## ------------------------------------------------------------------------
+## ----fig.height=7, fig.width=6-------------------------------------------
 ctr %>% pmx_plot_vpc(
   strat.facet="SEX",
   facets=list(nrow=2),
@@ -304,6 +259,13 @@ ctr %>% pmx_plot_vpc(
   ci = pmx_vpc_ci(interval = c(0.1,0.9),
               median=list(fill="red"))
 )
+
+## ----echo=FALSE----------------------------------------------------------
+theophylline <- file.path(system.file(package = "ggPMX"), "testdata", "theophylline")
+work_dir <- file.path(theophylline, "Monolix")
+input_data <- file.path(theophylline, "data_pk.csv")
+
+ctr <- theophylline()
 
 ## ----eval=FALSE----------------------------------------------------------
 #  ctr %>% pmx_report(name='Diagnostic_plots2',
@@ -483,7 +445,7 @@ ctr %>% pmx_comp_shrink
 ctr %>% pmx_plot_eta_box
 
 
-## ----shrink_plot_hist----------------------------------------------------
+## ----shrink_plot_hist,fig.height=8, fig.width=5--------------------------
 ctr %>% pmx_plot_eta_hist
 
 
@@ -507,7 +469,7 @@ ctr %>% pmx_comp_shrink(strat.color = "SEX")
 ctr %>% pmx_plot_eta_hist(is.shrink = TRUE, strat.facet = ~SEX,
                           facets=list(scales="free_y"))
 
-## ----fig.width=9, fig.height=8-------------------------------------------
+## ----fig.width=12, fig.height=6------------------------------------------
 ctr %>% pmx_plot_eta_box(is.shrink = TRUE, strat.facet = "SEX",
                           facets=list(scales="free_y",ncol=2))
 
