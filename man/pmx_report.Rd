@@ -5,8 +5,8 @@
 \title{Generates ggpmX report from a pre-defined template}
 \usage{
 pmx_report(contr, name, save_dir, format = c("both", "plots", "report"),
-  template = "standing", footnote = format == "both", edit = FALSE, title,
-  ...)
+  template = "standing", footnote = format == "both", edit = FALSE,
+  title, ...)
 }
 \arguments{
 \item{contr}{\code{pmxClass} controller}

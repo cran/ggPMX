@@ -24,3 +24,4 @@ Other pmxclass: \code{\link{get_conts}},
   \code{\link{pmx_update}}, \code{\link{set_data}},
   \code{\link{set_plot}}
 }
+\concept{pmxclass}

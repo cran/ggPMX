@@ -27,6 +27,6 @@ There is a global option set, which is available by default.
 
 \examples{
 \dontrun{
-pmxOptions(template_dir=PATH_TO_CUSTOM_CONFIGURATION)
+pmxOptions(template_dir = PATH_TO_CUSTOM_CONFIGURATION)
 }
 }

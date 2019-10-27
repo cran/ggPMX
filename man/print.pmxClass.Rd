@@ -17,3 +17,4 @@ print object to screen
 \description{
 Print pmxClass object
 }
+\concept{pmxclass functions}

@@ -27,3 +27,4 @@ Other vpc: \code{\link{pmx_plot_vpc}},
   \code{\link{pmx_vpc_obs}}, \code{\link{pmx_vpc_pi}},
   \code{\link{pmx_vpc}}
 }
+\concept{vpc}

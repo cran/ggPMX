@@ -4,8 +4,8 @@
 \alias{pmx_filter}
 \title{filter data in a pmx controller}
 \usage{
-pmx_filter(ctr, data_set = c("estimates", "predictions", "eta", "finegrid",
-  "shrink", "input", "individual"), pmx_exp)
+pmx_filter(ctr, data_set = c("estimates", "predictions", "eta",
+  "finegrid", "shrink", "input", "individual"), pmx_exp)
 }
 \arguments{
 \item{ctr}{A controller. An object of 'pmxClass'}
@@ -24,7 +24,7 @@ filter data in a pmx controller
 \donttest{
 ## example of global filter
 ctr <- theophylline()
-ctr \%>\% pmx_filter(data_set = "prediction", ID == 5 & TIME <2)
+ctr \%>\% pmx_filter(data_set = "prediction", ID == 5 & TIME < 2)
 ctr \%>\% get_data("prediction")
 }
 }

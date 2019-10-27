@@ -27,12 +27,12 @@ p1 <- ctr \%>\% get_plot("iwres_ipred")
 ## get all pages or some pages
 p2 <- ctr \%>\% get_plot("individual")
 ## returns one page of individual plot
-p2 <- ctr \%>\% get_plot("individual",npage=1)
-p3 <- ctr \%>\% get_plot("individual",npage=c(1,3))
+p2 <- ctr \%>\% get_plot("individual", npage = 1)
+p3 <- ctr \%>\% get_plot("individual", npage = c(1, 3))
 ## get distribution plot
 pdistri <- ctr \%>\% get_plot("eta_hist")
-
 }
+
 }
 \seealso{
 Other pmxclass: \code{\link{get_cats}},
@@ -43,3 +43,4 @@ Other pmxclass: \code{\link{get_cats}},
   \code{\link{pmx_update}}, \code{\link{set_data}},
   \code{\link{set_plot}}
 }
+\concept{pmxclass}

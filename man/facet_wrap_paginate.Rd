@@ -4,10 +4,10 @@
 \alias{facet_wrap_paginate}
 \title{Split facet_wrap over multiple plots}
 \usage{
-facet_wrap_paginate(facets, nrow = NULL, ncol = NULL, scales = "fixed",
-  shrink = TRUE, labeller = "label_value", as.table = TRUE,
-  switch = NULL, drop = TRUE, dir = "h", strip.position = "top",
-  page = 1)
+facet_wrap_paginate(facets, nrow = NULL, ncol = NULL,
+  scales = "fixed", shrink = TRUE, labeller = "label_value",
+  as.table = TRUE, switch = NULL, drop = TRUE, dir = "h",
+  strip.position = "top", page = 1)
 }
 \arguments{
 \item{facets}{A set of variables or expressions quoted by \code{\link[=vars]{vars()}}

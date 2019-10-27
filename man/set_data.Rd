@@ -23,13 +23,15 @@ parameter of pmx_plot family functions.
 \examples{
 ctr <- theophylline()
 dx <- ctr \%>\% get_data("eta")
-dx <- dx[,EFFECT:=factor(
-        EFFECT,levels=c("ka", "V", "Cl"),
-        labels=c("Concentration","Volume","Clearance"))]
+dx <- dx[, EFFECT := factor(
+  EFFECT,
+  levels = c("ka", "V", "Cl"),
+  labels = c("Concentration", "Volume", "Clearance")
+)]
 ## update existing data set
-ctr \%>\% set_data(eta=dx)
+ctr \%>\% set_data(eta = dx)
 ## or create a new data set
-ctr \%>\% set_data(eta_long=dx)
+ctr \%>\% set_data(eta_long = dx)
 }
 \seealso{
 Other pmxclass: \code{\link{get_cats}},
@@ -40,3 +42,4 @@ Other pmxclass: \code{\link{get_cats}},
   \code{\link{plots}}, \code{\link{pmx_update}},
   \code{\link{set_plot}}
 }
+\concept{pmxclass}

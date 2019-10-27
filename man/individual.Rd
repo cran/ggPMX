@@ -6,8 +6,8 @@
 for each individual separately}
 \usage{
 individual(labels, facets = NULL, dname = NULL, ipred_line = NULL,
-  pred_line = NULL, point = NULL, bloq = NULL, is.legend, use.finegrid,
-  ...)
+  pred_line = NULL, point = NULL, bloq = NULL, is.legend,
+  use.finegrid, ...)
 }
 \arguments{
 \item{labels}{plot texts. labels, axis,}
@@ -51,3 +51,4 @@ Other plot_pmx: \code{\link{distrib}},
   \code{\link{plot_pmx.pmx_qq}},
   \code{\link{plot_pmx.residual}}, \code{\link{plot_pmx}}
 }
+\concept{plot_pmx}

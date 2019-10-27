@@ -12,7 +12,7 @@
 #' @export
 #'
 pmx_comp_shrink <-
-  function(ctr, fun=c("sd", "var"), strat.facet, strat.color, filter, ...) {
+  function(ctr, fun = c("sd", "var"), strat.facet, strat.color, filter, ...) {
     VAR <- FUN <- PARAM <- EFFECT <- NULL
     VALUE <- OMEGA <- EBE <- NULL
     stopifnot(is_pmxclass(ctr))
@@ -28,11 +28,6 @@ pmx_comp_shrink <-
 
 
     eta <- cctr %>% get_data("eta")
-    estimates <- cctr %>% get_data("estimates")
-    if (is.null(estimates)) {
-      message("No estimates data , we can not compute shrinkage")
-      return(NULL)
-    }
 
     ## filtering
     if (!is.null(substitute(filter))) {
@@ -48,7 +43,7 @@ pmx_comp_shrink <-
     ## stratification
     grp <- as.character(unlist(lapply(strat.facet, as.list)))
     grp <- unique(intersect(c(grp, strat.color), names(eta)))
-    eta <- eta[grepl("mode", FUN)]
+    if (exists("FUN", eta)) eta <- eta[grepl("mode", FUN)]
     cols <- c("ID", "EFFECT", "VALUE", grp)
     eta <- unique(eta[, cols, with = FALSE])
 
@@ -57,9 +52,17 @@ pmx_comp_shrink <-
     ## merge data
 
     setnames(eta, "VALUE", "EBE")
-    omega <- estimates[grepl("omega", PARAM)]
-    omega[, EFFECT := gsub("(^ +)?omega_", "", PARAM)]
-    omega <- omega [, list(EFFECT, OMEGA = VALUE)]
+    omega <- cctr %>% get_data("omega")
+    if (is.null(omega)) {
+      estimates <- cctr %>% get_data("estimates")
+      if (is.null(estimates)) {
+        message("No estimates data , we can not compute shrinkage")
+        return(NULL)
+      }
+      omega <- estimates[grepl("omega", PARAM)]
+      omega[, EFFECT := gsub("(^ +)?omega_", "", PARAM)]
+      omega <- omega [, list(EFFECT, OMEGA = VALUE)]
+    }
 
     dx <- merge(eta, omega, by = "EFFECT")
 
@@ -67,8 +70,8 @@ pmx_comp_shrink <-
 
 
     dx[, {
-      coef <- if (fun == "sd") OMEGA else OMEGA ^ 2
+      coef <- if (fun == "sd") OMEGA else OMEGA^2
       shrink <- 1 - get(fun)(EBE) / coef
-      list(SHRINK = shrink, POS = max(EBE) / 2)
+      list(SHRINK = shrink, POS = max(EBE) / 2, FUN = fun)
     }, by]
   }

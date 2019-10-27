@@ -28,7 +28,7 @@ using \code{pmx_copy} user can work on a copy of the controller.
 By defaul the copy don't keep global parameters setted using pmx_settings.
 }
 \examples{
- ctr <- theophylline()
- cctr <- ctr \%>\% pmx_copy
- ## Any change in the ctr has no side effect in the ctr and vice versa
+ctr <- theophylline()
+cctr <- ctr \%>\% pmx_copy()
+## Any change in the ctr has no side effect in the ctr and vice versa
 }

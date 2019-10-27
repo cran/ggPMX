@@ -4,10 +4,12 @@
 \alias{pmx_sim}
 \title{Create simulation object}
 \usage{
-pmx_sim(file, irun, idv)
+pmx_sim(file, data, irun, idv)
 }
 \arguments{
 \item{file}{\code{character} path to the simulation file}
+
+\item{data}{\code{data.table} simulation data}
 
 \item{irun}{\code{character} name of the simulation column}
 

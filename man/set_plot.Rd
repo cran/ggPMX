@@ -5,9 +5,9 @@
 \title{Create a new plot  of the desired type}
 \usage{
 set_plot(ctr, ptype = c("IND", "DIS", "SCATTER", "ETA_PAIRS", "ETA_COV",
-  "PMX_QQ", "VPC", "PMX_DENS"), pname, use.defaults = TRUE, filter = NULL,
-  strat.color = NULL, strat.facet = NULL, color.scales = NULL,
-  trans = NULL, ...)
+  "PMX_QQ", "VPC", "PMX_DENS"), pname, use.defaults = TRUE,
+  filter = NULL, strat.color = NULL, strat.facet = NULL,
+  color.scales = NULL, trans = NULL, ...)
 }
 \arguments{
 \item{ctr}{\code{pmxClass} controller object}
@@ -50,3 +50,4 @@ Other pmxclass: \code{\link{get_cats}},
   \code{\link{plots}}, \code{\link{pmx_update}},
   \code{\link{set_data}}
 }
+\concept{pmxclass}

@@ -5,7 +5,8 @@
 \title{Update plot object}
 \usage{
 pmx_update(ctr, pname, strat.color = NULL, strat.facet = NULL,
-  color.scales = NULL, filter = NULL, trans = NULL, ..., pmxgpar = NULL)
+  color.scales = NULL, filter = NULL, trans = NULL, ...,
+  pmxgpar = NULL)
 }
 \arguments{
 \item{ctr}{\code{pmxClass} controller object}
@@ -54,3 +55,4 @@ Other pmxclass: \code{\link{get_cats}},
   \code{\link{plots}}, \code{\link{set_data}},
   \code{\link{set_plot}}
 }
+\concept{pmxclass}

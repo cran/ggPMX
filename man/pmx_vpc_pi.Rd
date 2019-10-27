@@ -5,9 +5,9 @@
 \title{Sets vpc percentile layer}
 \usage{
 pmx_vpc_pi(show = c("all", "median"), interval = c(0.05, 0.95),
-  median = list(color = "#000000", size = 1, alpha = 0.7, linetype = "solid"),
-  extreme = list(color = "#000000", size = 1, alpha = 0.7, linetype =
-  "solid"))
+  median = list(color = "#000000", size = 1, alpha = 0.7, linetype =
+  "solid"), extreme = list(color = "#000000", size = 1, alpha = 0.7,
+  linetype = "solid"))
 }
 \arguments{
 \item{show}{\code{charcater} how lines are displayed:
@@ -45,3 +45,4 @@ Other vpc: \code{\link{pmx_plot_vpc}},
   \code{\link{pmx_vpc_obs}}, \code{\link{pmx_vpc_rug}},
   \code{\link{pmx_vpc}}
 }
+\concept{vpc}

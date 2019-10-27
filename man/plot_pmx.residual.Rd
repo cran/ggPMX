@@ -32,3 +32,4 @@ Other plot_pmx: \code{\link{distrib}},
   \code{\link{plot_pmx.pmx_gpar}},
   \code{\link{plot_pmx.pmx_qq}}, \code{\link{plot_pmx}}
 }
+\concept{plot_pmx}

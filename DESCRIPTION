@@ -6,17 +6,18 @@ Description: At Novartis, we aimed at standardizing the set of diagnostic plots 
   For this, we developed a guidance that proposes an adequate set of diagnostics and a toolbox, 
   called 'ggPMX' to execute them. 'ggPMX' is a toolbox that can generate all diagnostic plots at a quality sufficient 
   for publication and submissions using few lines of code. 
-Version: 0.9.4
+Version: 0.9.6
 Authors@R: c(
               person("Amine", "Gassem", email="contact@ag-study.com", role=c("cre","aut")),
               person("Bruno", "Bieth", email="biethb@hotmail.com", role="aut"),
-              person("Irina", "Baltcheva", email="thomas.dumortier@novartis.com", role="aut"),
-              person("Thomas", "Dumortier", email="christian.bartels@novartis.com", role="aut"),
+              person("Irina", "Baltcheva", email="irina.baltcheva@gmail.com", role="aut"),
+              person("Thomas", "Dumortier", email=" thomas.dumortier@novartis.com", role="aut"),
               person("Christian", "Bartels", email="christian.bartels@novartis.com", role="aut"),
               person("Souvik", "Bhattacharya", email="souvik.bhattacharya@novartis.com", role="aut"),
-              person("Inga", "Ludwig", email="ines.paule@novartis.com", role="aut"),
+              person("Inga", "Ludwig", email="inga.ludwig@novartis.com", role="aut"),
               person("Ines", "Paule", email="ines.paule@novartis.com", role="aut"),
               person("Didier", "Renard", email="didier.renard@novartis.com", role="aut"),
+	      person("Matthew","Fidler", role = "ctb", email = "matthew.fidler@gmail.com", comment=c(ORCID="0000-0001-8538-6691")),
               person("Qing Xi", "Ooi", email="ooi.qingxi@gmail.com", role="ctr"),
               person("Novartis Pharma AG", role = c("cph"))
             )
@@ -28,11 +29,11 @@ Imports: data.table, yaml, R6, gtable, ggplot2 (>= 2.2.0), magrittr,
         stringr, assertthat, checkmate, GGally, zoo, knitr, rmarkdown
 License: GPL-2
 LazyData: true
-Suggests: testthat, xtable
+Suggests: testthat, xtable, nlmixr
 VignetteBuilder: knitr
 NeedsCompilation: no
-RoxygenNote: 6.0.1
-Packaged: 2019-06-06 11:40:34 UTC; agstudy
+RoxygenNote: 6.1.1
+Packaged: 2019-10-27 20:00:47 UTC; agstudy
 Author: Amine Gassem [cre, aut],
   Bruno Bieth [aut],
   Irina Baltcheva [aut],
@@ -42,7 +43,8 @@ Author: Amine Gassem [cre, aut],
   Inga Ludwig [aut],
   Ines Paule [aut],
   Didier Renard [aut],
+  Matthew Fidler [ctb] (<https://orcid.org/0000-0001-8538-6691>),
   Qing Xi Ooi [ctr],
   Novartis Pharma AG [cph]
 Repository: CRAN
-Date/Publication: 2019-06-06 12:00:03 UTC
+Date/Publication: 2019-10-27 20:30:02 UTC

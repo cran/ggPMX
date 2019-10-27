@@ -64,3 +64,4 @@ Other plot_pmx: \code{\link{eta_cov}},
   \code{\link{plot_pmx.pmx_qq}},
   \code{\link{plot_pmx.residual}}, \code{\link{plot_pmx}}
 }
+\concept{plot_pmx}

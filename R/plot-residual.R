@@ -34,8 +34,8 @@
 #' \item {\strong{x:}} {x axis label default to AES_X}
 #' \item {\strong{y:}} {y axis label default to AES_Y}
 #' }
-residual <- function(x, y, labels = NULL, point = NULL, is.hline=FALSE,
-                     hline=NULL, dname=NULL, facets=NULL, bloq=NULL, ...) {
+residual <- function(x, y, labels = NULL, point = NULL, is.hline = FALSE,
+                     hline = NULL, dname = NULL, facets = NULL, bloq = NULL, ...) {
   ## default labels parameters
   ## TODO pout all defaultas option
   stopifnot(!missing(x))
@@ -71,7 +71,8 @@ residual <- function(x, y, labels = NULL, point = NULL, is.hline=FALSE,
       facets = facets,
       bloq = bloq,
       gp = pmx_gpar(labels = labels, ...)
-    ), class = c("residual", "pmx_gpar")
+    ),
+    class = c("residual", "pmx_gpar")
   )
 }
 
@@ -100,7 +101,9 @@ extend_range <-
 #' @export
 plot_pmx.residual <- function(x, dx, ...) {
   with(x, {
-    if (!all(c(aess$x, aess$y) %in% names(dx))) return(NULL)
+    if (!all(c(aess$x, aess$y) %in% names(dx))) {
+      return(NULL)
+    }
     dx <- dx[!is.infinite(get(aess$x)) & !is.infinite(get(aess$y))]
 
     p <- ggplot(dx, with(aess, ggplot2::aes_string(x, y)))
@@ -141,10 +144,15 @@ plot_pmx.residual <- function(x, dx, ...) {
         theme(aspect.ratio = 1)
     }
 
-
-    if (aess$y %in% c("NPDE", "IWRES") && !gp$scale_y_log10 && is.null(x$trans)) {
-      mm <- max(dx[, aess$y, with = FALSE], na.rm = TRUE)
-      gp$ranges <- list(y = c(-mm, mm))
+    if (!(exists("ranges", gp) && is.null(gp$y))) {
+      if (aess$y %in% c("NPDE", "IWRES") && !gp$scale_y_log10 && is.null(x$trans)) {
+        mm <- max(dx[, aess$y, with = FALSE], na.rm = TRUE)
+        if (is.null(gp$ranges)) {
+          gp$ranges <- list(y = c(-mm, mm))
+        } else {
+          gp$ranges$y <- c(-mm, mm)
+        }
+      }
     }
     p <- plot_pmx(gp, p)
 

@@ -6,7 +6,8 @@
 \usage{
 pmx_qq(x, labels, dname = NULL, point = NULL, xmax = TRUE,
   facets = NULL, is.reference_line = NULL, reference_line = NULL,
-  is.shrink = NULL, shrink = NULL, is.hline = NULL, hline = NULL, ...)
+  is.shrink = NULL, shrink = NULL, is.hline = NULL, hline = NULL,
+  ...)
 }
 \arguments{
 \item{x}{\code{character} variable name to sample}
@@ -56,3 +57,4 @@ This function creates a qq plot object
 \item {\strong{size:}} {default to 1}
 }
 }
+\concept{qq_plot}
