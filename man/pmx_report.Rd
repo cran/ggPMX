@@ -6,7 +6,7 @@
 \usage{
 pmx_report(contr, name, save_dir, format = c("both", "plots", "report"),
   template = "standing", footnote = format == "both", edit = FALSE,
-  title, ...)
+  extension = NULL, title, ...)
 }
 \arguments{
 \item{contr}{\code{pmxClass} controller}
@@ -28,6 +28,9 @@ of available templates}
 the path where the plot is saved.}
 
 \item{edit}{\code{logical}  TRUE to edit the template immediately}
+
+\item{extension}{\code{character} The output document format. By default, a word report is generated. \cr
+User can specify one or more formats from c("word","pdf","html","all"). extnestion "all" to generate all formats.}
 
 \item{title}{\code{character} report title (optional)}
 
