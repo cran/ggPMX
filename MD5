@@ -1,4 +1,4 @@
-820ecd5983774ec98e1824d03d2f78aa *DESCRIPTION
+3f5a475be7cce09548f85605fb83f71b *DESCRIPTION
 327cda2d827df95bd316531448363577 *NAMESPACE
 8f15e415d0f7c80562ab394d2461a120 *R/assertions.R
 4783a1d17f0807dab83e35e3a04cdc8f *R/classInt.R
@@ -18,7 +18,7 @@ d9b3dc76c006694d330f2aceb26a32f2 *R/plot-density.R
 866995e52314e4bcffa8459e19210f5a *R/plot-qq.R
 943f760c7bb2f02f443abb97b7a25530 *R/plot-residual.R
 e146d24c97701ca58e16cad243701fcc *R/plot-themes.R
-a25d38c5a90185e93aec2b5c5badeb61 *R/plot-vpc.R
+b93086114d6737bfb0bfab9087c3f5db *R/plot-vpc.R
 6ddb66b0f608d81f0f60fa3eb891c071 *R/pmx-add-plot.R
 7f63f89c8dc77ca8baa6e64dd5c4675e *R/pmx-all-compute.R
 635384001a5067e2fd8272d005d0b6de *R/pmx-all-plots.R
@@ -44,7 +44,7 @@ ec23999f4360a6c22cfcd24572695017 *cleanup
 ab8b45a6b9423f468d403f33918dbcd1 *cleanup.win
 94df9ee96e7006511915e9c51e176ed5 *inst/doc/ggPMX-guide.R
 5139661bdb6c8be0c2325c7569e6240a *inst/doc/ggPMX-guide.Rmd
-08b1664afd6deff5e99a4ca6681b68aa *inst/doc/ggPMX-guide.pdf
+f89df9e364d3528ee192d7a20350c660 *inst/doc/ggPMX-guide.pdf
 4580d030cf1df87d6490c1b5a963042b *inst/examples/controller.R
 f557de4f2b69a80982457d82ab224c2c *inst/examples/custom_inputs.yaml
 1cf0c5ab122820f504cca042eb5d5435 *inst/examples/distribution.R
@@ -62,7 +62,7 @@ c0f0296c64ce026822e7a89b2a8e1937 *inst/examples/residual.R
 e7e7da42c01de333128c76d2e26ffc2f *inst/examples/templates/custom_report.Rmd
 6f81e8b717334f77586534953b0578a2 *inst/examples/templates/misc.Rmd
 f51226251e4e329445e0a82565c80b12 *inst/examples/uc_review.Rmd
-b668fd5e1d9c0db82d903e2787d694e0 *inst/examples/vpc.R
+effdea19412ed7fe933788793d5ab2e4 *inst/examples/vpc.R
 bbbd0834da28dd813cfd6de470fd96a5 *inst/extra/run-oq.R
 e63a7bef6911e42f8f90fdefd7289158 *inst/init/abbrev.yaml
 e5599717bafb25a8bd3c55f45f9e4a14 *inst/init/defaults.yaml
@@ -162,14 +162,14 @@ fa667f88e3ed8b144c7001f51f469e55 *man/pmx_plot.Rd
 60b075d52bb734272c5a3209716bd93f *man/pmx_plot_eta_matrix.Rd
 51f65e41535f563787a3f80630d5749d *man/pmx_plot_individual.Rd
 8188c0c86b96d749b4780c26d2550434 *man/pmx_plot_iwres_dens.Rd
-219844db6d9f9b2271288336e4404891 *man/pmx_plot_vpc.Rd
+114032709e43f329550a26dd5fbcb157 *man/pmx_plot_vpc.Rd
 a192fc967b0b6e2c5e6cc3b29aec7e5a *man/pmx_qq.Rd
 3a112ba2c9956b183cbaac21a2c964da *man/pmx_qq_plot.Rd
 f17bed0933d827e98ef31549cdd64ef5 *man/pmx_register_plot.Rd
 14fc42d709501cf60727b886a6653d7d *man/pmx_report.Rd
 22d54e1d5919f9235afb590d3f48f50d *man/pmx_report_template.Rd
 539f63ddecc7cc5e16c75ab3a708b332 *man/pmx_settings.Rd
-cbb0e6e54be78cd5617127a90685fa32 *man/pmx_sim.Rd
+41f2f24e764a6f7f82563718c49e4e48 *man/pmx_sim.Rd
 dfefdb7c19f471e921bbb00921f2419b *man/pmx_theme.Rd
 62b8cd06e2dcc1adc2677cfbf2d77655 *man/pmx_update.Rd
 15cc4ee3927330dbd875de2bae6004f3 *man/pmx_vpc.Rd
