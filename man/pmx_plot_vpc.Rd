@@ -8,7 +8,7 @@ pmx_plot_vpc(ctr, type, idv, obs, pi, ci, rug, bin, is.legend, dname,
   filter, strat.facet, facets, strat.color, trans, pmxgpar, labels,
   axis.title, axis.text, ranges, is.smooth, smooth, is.band, band,
   is.draft, draft, is.identity_line, identity_line, scale_x_log10,
-  scale_y_log10, color.scales, ...)
+  scale_y_log10, color.scales, is.footnote, ...)
 }
 \arguments{
 \item{ctr}{pmx controller}
@@ -80,6 +80,8 @@ the axis text (similar to ggplot2 axis.text theme)}
 \item{scale_y_log10}{\code{logical} if TRUE use log10 scale for y axis.}
 
 \item{color.scales}{\code{list} define scales parameter in case of strat.color \code{\link{pmx_settings}}}
+
+\item{is.footnote}{\code{logical} if TRUE add footnote}
 
 \item{...}{others graphics parameters passed :
 \itemize{

@@ -8,10 +8,11 @@
 \usage{
 pmx(config, sys = c("mlx", "nm"), directory, input, dv, dvid,
   cats = NULL, conts = NULL, occ = NULL, strats = NULL,
-  settings = NULL, endpoint = NULL, sim = NULL, bloq = NULL)
+  settings = NULL, endpoint = NULL, sim = NULL, bloq = NULL,
+  id = NULL, time = NULL)
 
 pmx_mlx(config, directory, input, dv, dvid, cats, conts, occ, strats,
-  settings, endpoint, sim, bloq)
+  settings, endpoint, sim, bloq, id, time)
 
 pmx_mlxtran(file_name, config = "standing", call = FALSE, endpoint,
   ...)
@@ -49,6 +50,10 @@ of the endpoint code.   \code{\link{pmx_endpoint}}}
 \item{sim}{\code{pmxSimClass} default to NULL. \code{\link{pmx_sim}}}
 
 \item{bloq}{\code{pmxBLOQClass} default to NULL. \code{\link{pmx_bloq}}}
+
+\item{id}{\emph{[Optional]}  \code{character} the name of Indvidual variable used in the input modelling file}
+
+\item{time}{\emph{[Optional]} \code{character} Time variable.}
 
 \item{file_name}{\code{character} mlxtran file path.}
 

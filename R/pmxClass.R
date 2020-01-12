@@ -77,14 +77,18 @@ check_argument <- function(value, pmxname) {
 #' of the endpoint code.   \code{\link{pmx_endpoint}}
 #' @param sim \code{pmxSimClass} default to NULL. \code{\link{pmx_sim}}
 #' @param bloq \code{pmxBLOQClass} default to NULL. \code{\link{pmx_bloq}}
+#' @param id \emph{[Optional]}  \code{character} the name of Indvidual variable used in the input modelling file
+#' @param time \emph{[Optional]} \code{character} Time variable. 
 #' @return \code{pmxClass} controller object.
 
 #' @export
 #' @example inst/examples/controller.R
 pmx <-
   function(config, sys = c("mlx", "nm"), directory, input, dv, dvid, cats = NULL, conts = NULL, occ = NULL, strats = NULL,
-             settings = NULL, endpoint = NULL, sim = NULL, bloq = NULL) {
+             settings = NULL, endpoint = NULL, sim = NULL, bloq = NULL,id=NULL,time=NULL) {
     directory <- check_argument(directory, "work_dir")
+    ll <- list.files(directory)
+    
     input <- check_argument(input, "input")
     dv <- check_argument(dv, "dv")
     ## dvid <- check_argument(dvid, "dvid")
@@ -103,6 +107,17 @@ pmx <-
 
     if (!inherits(config, "pmxConfig")) {
       if ("populationParameters.txt" %in% list.files(directory)) sys <- "mlx18"
+      else{
+        is_mlx <- list.files(directory,pattern="txt$")
+        if(length(is_mlx)==0){
+          stop(
+            sprintf(
+              "%s is not valid directory results path: please set a valid directory argument",
+              directory
+            )
+          )
+        }
+      }
       config <- load_config(config, sys)
     }
     if (missing(settings)) settings <- pmx_settings()
@@ -112,7 +127,7 @@ pmx <-
     if (missing(bloq)) bloq <- NULL
     assert_that(inherits(bloq, "pmxBLOQClass") || is.null(bloq))
 
-    pmxClass$new(directory, input, dv, config, dvid, cats, conts, occ, strats, settings, endpoint, sim, bloq)
+    pmxClass$new(directory, input, dv, config, dvid, cats, conts, occ, strats, settings, endpoint, sim, bloq,id,time)
   }
 
 
@@ -121,8 +136,8 @@ pmx <-
 #' \code{pmx_mlx}  is a wrapper to mlx for the MONOLIX system ( \code{sys="mlx"})
 #' @export
 pmx_mlx <-
-  function(config, directory, input, dv, dvid, cats, conts, occ, strats, settings, endpoint, sim, bloq) {
-    pmx(config, "mlx", directory, input, dv, dvid, cats, conts, occ, strats, settings, endpoint, sim, bloq)
+  function(config, directory, input, dv, dvid, cats, conts, occ, strats, settings, endpoint, sim, bloq,id, time) {
+    pmx(config, "mlx", directory, input, dv, dvid, cats, conts, occ, strats, settings, endpoint, sim, bloq,id,time)
   }
 
 
@@ -145,10 +160,11 @@ pmx_mlx <-
 
 pmx_mlxtran <- function(file_name, config = "standing", call = FALSE, endpoint, ...) {
   params <- parse_mlxtran(file_name)
-  params$config <- config
   rr <- as.list(match.call()[-1])
   rr$file_name <- NULL
   params <- append(params, rr)
+  if (!exists("config",params))  params$config <- config
+  
   if (!missing(endpoint)) {
     params$endpoint <- NULL
     params$endpoint <- endpoint
@@ -828,7 +844,8 @@ pmx_initialize <- function(self, private, data_path, input, dv,
     sys = config$sys, private$.data_path,
     self$config$data, dvid = self$dvid,
     endpoint = self$endpoint,
-    occ = self$occ
+    occ = self$occ,
+    id = self$id
   )
   ##
   ## check random effect

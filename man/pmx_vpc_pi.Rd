@@ -4,17 +4,18 @@
 \alias{pmx_vpc_pi}
 \title{Sets vpc percentile layer}
 \usage{
-pmx_vpc_pi(show = c("all", "median"), interval = c(0.05, 0.95),
+pmx_vpc_pi(show = c("all", "median", "area"), interval = c(0.05, 0.95),
   median = list(color = "#000000", size = 1, alpha = 0.7, linetype =
   "solid"), extreme = list(color = "#000000", size = 1, alpha = 0.7,
-  linetype = "solid"))
+  linetype = "dashed"), area = list(fill = "blue", alpha = 0.1))
 }
 \arguments{
 \item{show}{\code{charcater} how lines are displayed:
 \itemize{
 \item {\strong{show=all}} {lines will be displayed for each of
-the 3 percentiles. }
+the 3 percentiles. with a shaded area.}
 \item {\strong{show=median}} {Show only median line.}
+\item {\strong{show=area}} {Show only median line and the shaded area}
 }}
 
 \item{interval}{\code{numeric} quantiles values default
@@ -34,6 +35,12 @@ to \code{c(.05,.95)}}
 \item {\strong{size}} {\code{numeric} Thickness of the median percentile line. Default: 1.}
 \item {\strong{alpha}} {\code{numeric} Transparency of the median percentile line. Default: 0.7.}
 \item {\strong{linetype}} {\code{charcater} Linetype of the median percentile line. Default: "solid"}
+}}
+
+\item{area}{\code{list} containing: \cr
+\itemize{
+\item {\strong{fill}} {\code{charcater}  Color of the shaded area. Default: "blue". }
+\item {\strong{alpha}} {\code{numeric} Transparency of the sahded area. Default: 0.1.}
 }}
 }
 \description{

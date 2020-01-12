@@ -7,14 +7,11 @@ output:
     number_sections: yes
     toc: yes
     toc_depth: '3'
-  html_document:
-    toc: yes
-    toc_depth: '3'
 date: '`r Sys.Date()`'
 vignette: >
+  %\VignetteEncoding{UTF-8}
   %\VignetteIndexEntry{ggPMX: User guide}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
 \clearpage  
 ```{r load_package, echo=FALSE,warning=FALSE,message=FALSE}
@@ -531,9 +528,9 @@ ctr <- theophylline()
 
 A report (in pdf and docx format) containing all default diagnostic plots can be created using the *pmx_report* function. The *format* can take three different values:
 
-- "report": produces a pdf and a docx file (named `name.pdf` and `name.png` specified in argument *name*, located in *save_dir*) with default diagnostic plots
-- "plots": produces a folder named `ggpmx_GOF` located in *save_dir* that contains all default diagnotic plots, each in a pdf and png file. The different plots are numerated in order to have an unique identifier for each plot (ex: ebe_box-1.pdf). This is necessary for having correct footnotes that indicated the path to the source file (for submission reports).
-- "both": is a combination of both options above.
+- **report**: produces a pdf and a docx file (named `name.pdf` and `name.png` specified in argument *name*, located in *save_dir*) with default diagnostic plots
+- **plots**: produces a folder named `ggpmx_GOF` located in *save_dir* that contains all default diagnotic plots, each in a pdf and png file. The different plots are numerated in order to have an unique identifier for each plot (ex: ebe_box-1.pdf). This is necessary for having correct footnotes that indicated the path to the source file (for submission reports).
+- **both**: is a combination of both options above.
 
 Example:
 ```{r eval=FALSE}

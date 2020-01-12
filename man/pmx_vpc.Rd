@@ -7,7 +7,8 @@
 pmx_vpc(type = c("percentile", "scatter"), idv = "TIME",
   obs = pmx_vpc_obs(), pi = pmx_vpc_pi(), ci = pmx_vpc_ci(),
   rug = pmx_vpc_rug(), bin = pmx_vpc_bin(), labels = NULL,
-  facets = NULL, is.legend = FALSE, dname = NULL, ...)
+  facets = NULL, is.legend = TRUE, is.footnote = TRUE,
+  dname = NULL, ...)
 }
 \arguments{
 \item{type}{\code{charcater} can be either percentile or scatter}
@@ -29,6 +30,8 @@ pmx_vpc(type = c("percentile", "scatter"), idv = "TIME",
 \item{facets}{is a list of parameters passed to facet_wrap in case of startification}
 
 \item{is.legend}{\code{logical} if TRUE add legend}
+
+\item{is.footnote}{\code{logical} if TRUE add footnote}
 
 \item{dname}{added for compatibility with other ggPMX plots}
 

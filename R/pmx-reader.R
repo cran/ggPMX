@@ -9,6 +9,8 @@
 read_mlx_ind_est <- function(path, x, ...) {
   ID <- OCC <- NULL
   ds <- pmx_fread(path)
+  if(!is.null(x$id) && exists(x$id,ds)) setnames(ds,x$id,"id")
+  
   occ <- list(...)$occ
   if (is.null(occ)) occ <- ""
   patt_fields <- "^id|^%s|^eta_.*_(mode|mean)$"
@@ -68,9 +70,16 @@ read_mlx18_ind_est <- function(path, x, ...) {
 #'
 read_input <- function(ipath, dv, dvid, cats = "", conts = "", strats = "", occ = "",
                        endpoint = NULL, id = NULL, time = NULL) {
-  TIME <- EVID <- MDV <- y <- DV <- NULL
+  TIME <- EVID <- MDV <- y <- DV <- ID <- OCC <- NULL
   xx <- pmx_fread(ipath)
 
+  if (!is.null(id) && !exists(id,xx)) {
+    stop(sprintf("observation data does not contain id variable: %s",id))
+  } 
+  if (!is.null(time) && !exists(time,xx)) {
+    stop(sprintf("observation data does not contain time variable: %s",time))
+  } 
+  
   if (all(c("MDV", "EVID") %in% toupper(names(xx)))) {
     setnames(xx, grep("^mdv$", names(xx), ignore.case = TRUE, value = TRUE), "MDV")
     setnames(xx, grep("^evid$", names(xx), ignore.case = TRUE, value = TRUE), "EVID")
@@ -108,8 +117,11 @@ read_input <- function(ipath, dv, dvid, cats = "", conts = "", strats = "", occ 
 
 
 
-  if (!is.null(id) && id %in% names(xx)) {
-    setnames(xx, id_col, "ID")
+  if (!is.null(id) ) {
+    if(id!="ID"){
+      if (exists("ID",xx))xx[,ID:=NULL]
+      setnames(xx, id, "ID")
+    }
   } else {
     id_col <- grep("^id$", names(xx), ignore.case = TRUE, value = TRUE)
     if (length(id_col) == 0) {
@@ -133,13 +145,18 @@ read_input <- function(ipath, dv, dvid, cats = "", conts = "", strats = "", occ 
                         suggested names are : %s", dv, dv.names)
     stop(err.msg)
   }
-
-  if (nzchar(occ) && occ %in% names(xx)) {
-    setnames(xx, occ, "OCC")
+    if (nzchar(occ) && occ %in% names(xx)) {
+      if(occ!="OCC"){
+        if(exists("OCC",xx))xx[,OCC:=NULL]
+        setnames(xx, occ, "OCC")
+      }
   }
   ## round time column for further merge
-  if (!is.null(time) && time %in% names(xx)) {
+  if(!is.null(time)){
+    if (time!="TIME" ){
+    if (exists("TIME",xx))xx[,TIME:=NULL]
     setnames(xx, time, "TIME")
+    }
   } else {
     setnames(xx, grep("^time$", names(xx), ignore.case = TRUE, value = TRUE), "TIME")
   }
@@ -261,6 +278,8 @@ read_mlx_pred <- function(path, x, ...) {
     return(NULL)
   }
   xx <- pmx_fread(path)
+  if(!is.null(x$id) && exists(x$id,xx)) setnames(xx,x$id,"id")
+  
   setnames(xx, tolower(names(xx)))
   id_col <- grep("^id", names(xx), ignore.case = TRUE, value = TRUE)
   if (length(id_col) > 0 && nzchar(id_col)) setnames(xx, id_col, "id")
@@ -296,7 +315,6 @@ read_mlx_pred <- function(path, x, ...) {
   res
 }
 
-
 read_mlx18_res <- function(path, x, ...) {
   if (exists("subfolder", x)) {
     path <- file.path(dirname(path), x$subfolder)
@@ -325,6 +343,7 @@ read_mlx18_res <- function(path, x, ...) {
   }
 
   ds <- pmx_fread(file_path)
+  if(!is.null(x$id) && exists(x$id,ds)) setnames(ds,x$id,"id")
   ids <- match(tolower(names(x[["names"]])), tolower(names(ds)))
   new_vars <- names(x[["names"]])
   setnames(ds, ids, new_vars)
@@ -346,6 +365,7 @@ read_mlx18_pred <- function(path, x, ...) {
   ds <- read_mlx_pred(path = path, x = x, ...)
   if (exists("residuals", x)) {
     x$residuals$endpoint <- x$endpoint
+    x$residuals$id <- x$id
     resi <- read_mlx18_res(path, x$residuals)
     if (is.null(resi)) {
       return(NULL)
@@ -388,6 +408,7 @@ read_mlx_par_est <- function(path, x, ...) {
 load_data_set <- function(x, path, sys, ...) {
   fpath <- file.path(path, x[["file"]])
   exists_file <- file.exists(fpath)
+  params <- as.list(match.call(expand.dots = TRUE))[-1]
   if (!exists_file) {
     ep <- list(...)$endpoint
     if (!is.null(ep) && !is.null(x$pattern)) {
@@ -411,12 +432,13 @@ load_data_set <- function(x, path, sys, ...) {
     return(NULL)
   }
 
-
-
   if (exists("reader", x)) {
     return(do.call(x[["reader"]], list(fpath, x, ...)))
   }
   ds <- pmx_fread(fpath)
+  if(!is.null(x$id) && exists(x$id,ds)) setnames(ds,x$id,"id")
+  
+  
   ds <- ds[, !grep("^V[0-9]+", names(ds)), with = FALSE]
   data.table::setnames(ds, tolower(names(ds)))
   if ("names" %in% names(x)) {
@@ -431,9 +453,6 @@ load_data_set <- function(x, path, sys, ...) {
 }
 
 
-
-
-
 #' Load all/or some source data set
 #'
 #' @param sys type cane mlx/nom
@@ -446,6 +465,7 @@ load_data_set <- function(x, path, sys, ...) {
 load_source <- function(sys, path, dconf, ...) {
   dxs <- Map(function(x, nn) {
     x$name <- nn
+    if(!is.null(list(...)$id)) x$id <- list(...)$id
     load_data_set(x, path = path, sys = sys, ...)
   }, dconf, names(dconf))
 

@@ -6,7 +6,7 @@
 \usage{
 pmx_gpar(labels, axis.title, axis.text, ranges, is.smooth, smooth, is.band,
   band, is.draft, draft, discrete, is.identity_line, identity_line,
-  scale_x_log10, scale_y_log10, color.scales, is.legend)
+  scale_x_log10, scale_y_log10, color.scales, is.legend, legend.position)
 }
 \arguments{
 \item{labels}{list of labels, like title, subtitle, x , y}
@@ -42,6 +42,8 @@ pmx_gpar(labels, axis.title, axis.text, ranges, is.smooth, smooth, is.band,
 \item{color.scales}{\code{list} define scales parameter in case of strat.color \code{\link{pmx_settings}}}
 
 \item{is.legend}{\code{logical} if TRUE x axis is discrete(FALSE by default)}
+
+\item{legend.position}{\code{charcater} legend position it takes the same value as the equivalent ggplot2 parameter}
 }
 \value{
 An object of class \code{"pmx_gpar"}.

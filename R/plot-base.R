@@ -36,10 +36,10 @@ plot_pmx.pmx_gpar <- function(gpar, p) {
 
     ## limits
     if (!is.null(ranges$y)) {
-      p <- p + scale_y_continuous(limits = ranges$y)
+      p <- p %+% scale_y_continuous(limits = ranges[["y"]])
     }
     if (!is.null(ranges$x) && !discrete) {
-      p <- p %+% scale_x_continuous(limits = ranges$x)
+      p <- p %+% scale_x_continuous(limits = ranges[["x"]])
     }
 
 
@@ -55,7 +55,7 @@ plot_pmx.pmx_gpar <- function(gpar, p) {
       axis.title = gpar$axis.title
     )
 
-    if (is.legend) p <- p + pmx_theme(legend.position = "top")
+    if (is.legend) p <- p + pmx_theme(legend.position = legend.position)
 
     
 
