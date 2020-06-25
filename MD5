@@ -1,4 +1,4 @@
-54af761273756416d37c52d1ab2fc050 *DESCRIPTION
+a96263211e3492a233ba4e82a83ab7ed *DESCRIPTION
 327cda2d827df95bd316531448363577 *NAMESPACE
 8f15e415d0f7c80562ab394d2461a120 *R/assertions.R
 4783a1d17f0807dab83e35e3a04cdc8f *R/classInt.R
@@ -39,13 +39,10 @@ b430ca6c642a7fecd2e669a570481a3a *R/pmxClass.R
 816f61d0cc77fff9bc3c424a12984ec7 *R/utils.R
 6ac5f3bca8bfa9b2fb96bd59d9aa296d *R/zzz.R
 122fdec2f3a7957365295edffdd26e73 *README.md
-1420811d80e12dcac0dd1ef6ade51798 *build/vignette.rds
+879cfa201291befcb5373564a1b3ff2d *build/vignette.rds
 5047c14a2d3593e10f75ee122ba41880 *inst/doc/ggPMX-guide.R
 36621d29ebf802cd2a7c0115f42433f9 *inst/doc/ggPMX-guide.Rmd
-843eda4c5b57dc9baa614c19c7b26d00 *inst/doc/ggPMX-guide.pdf
-1c43eb0ea3f319ddef1d9e2de936a225 *inst/doc/ggPMX-nlmixr.R
-f96f1305d9a4c6e08aa493723bba7aa2 *inst/doc/ggPMX-nlmixr.Rmd
-643b68a748acfa1e937ebf0b52f870eb *inst/doc/ggPMX-nlmixr.html
+98106e10d0d44cf01e805a2fbf9b3695 *inst/doc/ggPMX-guide.pdf
 4580d030cf1df87d6490c1b5a963042b *inst/examples/controller.R
 f557de4f2b69a80982457d82ab224c2c *inst/examples/custom_inputs.yaml
 1cf0c5ab122820f504cca042eb5d5435 *inst/examples/distribution.R
@@ -109,7 +106,7 @@ c065609defa8373dc5b5e2efe2b12a02 *inst/testdata/theophylline/Monolix/pop_paramet
 36a89e7544ad7d9dc9168de5b1481fd5 *man/eta_cov_plot.Rd
 364e4c42a65adfcc99df98aea02a286a *man/eta_distribution_plot.Rd
 da7bdfdbe4068568c68d8a4e5943ac48 *man/eta_pairs.Rd
-b75d904be5a7c52e9b884272f517b44c *man/facet_wrap_paginate.Rd
+cd03c0550d4bff085504a1b99059eca0 *man/facet_wrap_paginate.Rd
 5ce1ed33ffae84d90787b39c3895bf7d *man/figures/ggPMX_cheat_sheet_0_9_4.png
 724008cad98dc4f892391fe3ce880c2a *man/getPmxOption.Rd
 84b1ce6edaf6747f402061833cd8d43e *man/get_abbrev.Rd
@@ -189,7 +186,7 @@ a9870dc3b30b8fd1176129cc6f375e3d *man/print.pmxConfig.Rd
 cf96caa3648ec053bce72dcac278487b *man/read_mlx_ind_est.Rd
 398622415eeb199e2e269a015cde9278 *man/read_mlx_par_est.Rd
 d71dfcdef92b31a88eb797378c897c47 *man/read_mlx_pred.Rd
-02bf46e94e692fccaaba2db6d66a7e06 *man/reexports.Rd
+b8f8a1cbf3a5afc81d1df65fa2f2df03 *man/reexports.Rd
 0168a3478595d3160074a995e1b45957 *man/residual.Rd
 258832a657d27907022487fa1346f401 *man/residual_scatter.Rd
 46d60517df51b372ea47d85e1b0f2479 *man/set_abbrev.Rd
@@ -216,5 +213,4 @@ cd59d47e2c1fda3c98442c21fda65e2f *tests/testthat/test-shrinkage.R
 a8fd047f57891da28ef7bee4cf618272 *tests/testthat/test-utils.R
 3c6b07df3208bfac9c86d170c04c3c19 *vignettes/fit.rds
 36621d29ebf802cd2a7c0115f42433f9 *vignettes/ggPMX-guide.Rmd
-f96f1305d9a4c6e08aa493723bba7aa2 *vignettes/ggPMX-nlmixr.Rmd
 550d8d42539492f998e583313cadad39 *vignettes/ggPMX_arch.png
