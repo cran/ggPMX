@@ -1,9 +1,9 @@
 ## ----load_package, echo=FALSE,warning=FALSE,message=FALSE---------------------
 knitr::opts_chunk$set(out.width = "100%", warning = FALSE, message = FALSE)
-library(ggPMX)
 library(ggplot2)
 library(xtable)
 library(knitr)
+library(ggPMX)
 
 theophylline <- file.path(system.file(package = "ggPMX"), "testdata", "theophylline")
 work_dir <- file.path(theophylline, "Monolix")
@@ -31,53 +31,69 @@ input_data_path   <- file.path(theophylline_path, "data_pk.csv")
 input_data_theo   <- read.csv(input_data_path)
 head(input_data_theo)
 
-## ----echo=FALSE,results='asis',out.width='.9\\linewidth'----------------------
-
-out <- rbind(
-  c("sys", "Software used for model fittng (Monolix or nlmixr)", "mlx, mlx2018, nm"),
-  c("config", "A pre-defined configuration is a set of default settings", "standing"),
-  c("directory", "Path to the directory containing model output files", ""),
-  c("input", "Path to input modeling dataset (dataset used for model fitting)", ""),
-  c("dv", "Measurable variable name, as defined in the input modeling dataset", "DV, LIDV, LNDV, Y, etc."),
-  c("dvid", "Endpoint (output) name, as defined in the input modeling dataset", "DVID, YTYPE, CMT, etc.")
-)
-
-colnames(out) <- c("Argument", "Description", "Values")
-
-xt <- xtable(head(out), label = "tab:pmx_mandatory", caption = "Mandatory arguments of pmx() function")
-print(xt, comment = F)
-
-## ----init_ctr-----------------------------------------------------------------
-theophylline_path <- file.path(system.file(package = "ggPMX"), "testdata", "theophylline")
-work_dir          <- file.path(theophylline_path, "Monolix")
-input_data_path   <- file.path(theophylline_path, "data_pk.csv")
-
-ctr <- pmx(
-  sys       = "mlx",
-  config    = "standing",
-  directory = work_dir,
-  input     = input_data_path,
-  dv        = "Y",
-  dvid      = "DVID"
-)
-
 ## -----------------------------------------------------------------------------
 ctr <- theophylline()
 
-## -----------------------------------------------------------------------------
-ctr <- pmx_mlx(
-  config    = "standing",
-  directory = work_dir,
-  input     = input_data_path,
-  dv        = "Y",
-  dvid      = "DVID"
-)
+## ---- eval = FALSE------------------------------------------------------------
+#  theophylline_path <- file.path(system.file(package = "ggPMX"), "testdata", "theophylline")
+#  work_dir          <- file.path(theophylline_path, "Monolix")
+#  input_data_path   <- file.path(theophylline_path, "data_pk.csv")
+#  
+#  ctr <- pmx_mlx(
+#    directory = work_dir,
+#    input     = input_data_path,
+#    dv        = "Y"
+#  )
 
-## -----------------------------------------------------------------------------
-mlxtran_path <- file.path(system.file(package = "ggPMX"), 
-                          "testdata", "1_popPK_model", "project.mlxtran")
+## ---- eval = FALSE------------------------------------------------------------
+#  mlxtran_path <- file.path(system.file(package = "ggPMX"),
+#                            "testdata", "1_popPK_model", "project.mlxtran")
+#  
+#  ctr <- pmx_mlxtran(file_name = mlxtran_path)
 
-ctr <- pmx_mlxtran(file_name = mlxtran_path)
+## ---- eval = FALSE------------------------------------------------------------
+#  nonmem_dir <- file.path(system.file(package = "ggPMX"), "testdata","extdata")
+#  ctr <- pmx_nm(
+#    directory = nonmem_dir,
+#    file     = "run001.lst"
+#  )
+
+## ---- eval = FALSE------------------------------------------------------------
+#  nonmem_dir <- file.path(system.file(package = "ggPMX"), "testdata","extdata")
+#  ctr <- pmx_nm(
+#    directory = nonmem_dir,
+#    runno     = "001" #can be a string or a number
+#  )
+
+## ---- eval = FALSE------------------------------------------------------------
+#  one.cmt <- function() {
+#    ini({
+#      ## You may label each parameter with a comment
+#      tka <- 0.45 # Log Ka
+#      tcl <- 1 # Log Cl
+#      ## This works with interactive models
+#      ## You may also label the preceding line with label("label text")
+#      tv <- 3.45; label("log V")
+#      ## the label("Label name") works with all models
+#      eta.ka ~ 0.6
+#      eta.cl ~ 0.3
+#      eta.v ~ 0.1
+#      add.sd <- 0.7
+#    })
+#    model({
+#      ka <- exp(tka + eta.ka)
+#      cl <- exp(tcl + eta.cl)
+#      v <- exp(tv + eta.v)
+#      linCmt() ~ add(add.sd)
+#    })
+#  }
+#  
+#  fit <- nlmixr(one.cmt, theo_sd, est="saem", control=list(print=0))
+
+## ---- eval = FALSE------------------------------------------------------------
+#  ctr <- pmx_nlmixr(fit,
+#                    vpc = FALSE ## VPC is turned on by default, can turn off
+#  )
 
 ## ---- echo=F------------------------------------------------------------------
 pkpd_path       <- file.path(system.file(package = "ggPMX"), "testdata", "pk_pd")
@@ -101,7 +117,6 @@ ep <- pmx_endpoint(
 )
 
 ctr <- pmx_mlx(
-  config    = "standing",
   directory = pkpd_work_dir,
   input     = pkpd_input_file,
   dv        = "dv",
@@ -109,9 +124,23 @@ ctr <- pmx_mlx(
   endpoint  = ep
 )
 
+## ---- eval = FALSE------------------------------------------------------------
+#  ctr <- pmx_nm(
+#    directory = nonmem_dir,
+#    file     = "run001.lst",
+#    endpoint = 1 ## select the first endpoint
+#    dvid = "DVID" ## use this column as observation id
+#  )
+
+## ---- eval = FALSE------------------------------------------------------------
+#  ctr <- pmx_nlmixr(fit,
+#                    endpoint = 1 ## select the first endpoint
+#                    dvid = "DVID" ## use this column as observation id
+#  )
+
 ## ---- echo=T, eval = FALSE----------------------------------------------------
 #  pmx_mlx(
-#    dvid = "YTYPE", ## use this column as obseration id
+#    dvid = "YTYPE", ## use this column as observation id
 #    endpoint = 1,   ## select the first endpoint
 #    ...)            ## other pmx parameters , config, input,etc..
 
@@ -121,11 +150,9 @@ work_dir          <- file.path(theophylline_path, "Monolix")
 input_data_path   <- file.path(theophylline_path, "data_pk.csv")
 
 ctr <- pmx_mlx(
-  config    = "standing",
   directory = work_dir,
   input     = input_data_path,
   dv        = "Y",
-  dvid      = "DVID",
   cats      = c("SEX"),
   conts     = c("WT0", "AGE0"),
   strats    = c("STUD", "SEX")
@@ -192,7 +219,7 @@ ctr %>% pmx_plot_iwres_time
 #  ctr %>% pmx_plot_eta_box
 
 ## ----basics_indiv, eval=F, fig.height=6, fig.width=6, fig.show='hold', fig.align='center'----
-#  ctr %>% pmx_plot_individual(npage = 1)
+#  ctr %>% pmx_plot_individual(which_pages = 1)
 
 ## ----basics_qq, eval=F, fig.height=3, fig.width=3, fig.show='hold', fig.align='center'----
 #  ctr %>% pmx_plot_npde_qq
@@ -200,6 +227,26 @@ ctr %>% pmx_plot_iwres_time
 
 ## ----basics_matrix_plot, eval=F,  fig.height=6, fig.width=6, fig.show='hold', fig.align='center'----
 #  ctr %>% pmx_plot_eta_matrix
+
+## ---- eval = FALSE------------------------------------------------------------
+#  ## Create simulated object using simulx
+#  mysim <- simulx(project=project_dir, nrep=100) #
+#  ## Retrieve simulated dataset (assumed to be in y1)
+#  simdata <- mysim$LIDV
+
+## ---- eval = FALSE------------------------------------------------------------
+#  ## Need to revert the original IDs as in modeling dataset for ggPMX
+#  ## Rename IDs column to same name as in modeling dataset, e.g.
+#  ## ???id??? in the example below
+#  simdata <- simdata %>%
+#    mutate(newId = as.numeric(as.character(id))) %>%
+#    left_join(., mysim$originalId) %>%
+#    mutate(id = as.numeric(as.character(oriId))) %>%
+#    select(-oriId, -newId) %>%
+#    data.table::data.table()
+#  
+#  ## It's highly recommended to store your simulation as .csv
+#  vpc_file <- write.csv(simdata, file = "my_VPC.csv", quote=FALSE, row.names = FALSE)
 
 ## -----------------------------------------------------------------------------
 
@@ -212,7 +259,6 @@ input_file <- file.path(theoph_path, "data_pk.csv")
 vpc_file <- file.path(theoph_path, "sim.csv")
 
 ctr <- pmx_mlx(
-  config = "standing",
   directory = WORK_DIR,
   input = input_file,
   dv = "Y",
@@ -233,6 +279,20 @@ ctr <- pmx_mlx(
 )
 
 
+
+## ---- eval = FALSE------------------------------------------------------------
+#  ctr <- pmx_nm(
+#    directory = model_dir,
+#    file      = "modelfile.ctl" #or .lst
+#    simfile   = "simulation_modelfile.ctl" #or .lst
+#  )
+
+## ---- eval = FALSE------------------------------------------------------------
+#  ctr <- pmx_nlmixr(fit) ## VPC will be generated automatically, vpc = TRUE
+#  
+#  ctr <- pmx_nlmixr(fit,
+#                    vpc = FALSE ## But can be turned off
+#  )
 
 ## ----fig.height=4, fig.width=6------------------------------------------------
 ctr %>% pmx_plot_vpc
@@ -292,9 +352,17 @@ ctr <- theophylline()
 ## ----eval=F-------------------------------------------------------------------
 #  ctr %>% get_plot_config("xx")
 
-## -----------------------------------------------------------------------------
-ctr = theophylline()
-bloq = list(show = FALSE, color = "blue", alpha = 0.2, size = 3, pch = 8)
+## ----eval=F-------------------------------------------------------------------
+#  ctr %>% pmx_mlxtran(file_name = mlx_file, bloq=pmx_bloq(cens = ???BLQ???, limit = ???LIMIT???))
+#  ctr %>% pmx_plot_individual()
+
+## ----eval=F-------------------------------------------------------------------
+#  ctr %>% pmx_mlxtran(file_name = mlx_file))
+#  ctr %>% pmx_plot_iwres_ipred(sim_blq = TRUE)
+
+## ----eval=F-------------------------------------------------------------------
+#  ctr %>% pmx_mlxtran(file_name = mlx_file, sim_blq = TRUE))
+#  ctr %>% pmx_plot_iwres_ipred()
 
 ## ----settings_example, fig.width=5, fig.height=4,eval=FALSE-------------------
 #  
@@ -392,6 +460,34 @@ ctr %>% pmx_plot_npde_time(strat.facet=~SEX)
 ## ----settings_cat_labels3, fig.height=8, fig.width=8--------------------------
 ctr %>% pmx_plot_eta_box(strat.facet =~SEX)
 
+
+## ----echo=FALSE,results='asis',out.width='.9\\linewidth'----------------------
+
+out <- rbind(
+  c("sys", "Software used for model fittng (Monolix or nlmixr)", "mlx, mlx2018, nm"),
+  c("config", "A pre-defined configuration is a set of default settings", "standing"),
+  c("directory", "Path to the directory containing model output files", ""),
+  c("input", "Path to input modeling dataset (dataset used for model fitting)", ""),
+  c("dv", "Measurable variable name, as defined in the input modeling dataset", "DV, LIDV, LNDV, Y, etc."),
+  c("dvid", "Endpoint (output) name, as defined in the input modeling dataset", "DVID, YTYPE, CMT, etc.")
+)
+
+colnames(out) <- c("Argument", "Description", "Values")
+
+xt <- xtable(head(out), label = "tab:pmx_mandatory", caption = "Mandatory arguments of pmx() function")
+print(xt, comment = F)
+
+## ----init_ctr-----------------------------------------------------------------
+theophylline_path <- file.path(system.file(package = "ggPMX"), "testdata", "theophylline")
+work_dir          <- file.path(theophylline_path, "Monolix")
+input_data_path   <- file.path(theophylline_path, "data_pk.csv")
+
+ctr <- pmx(
+  sys       = "mlx",
+  directory = work_dir,
+  input     = input_data_path,
+  dv        = "Y",
+)
 
 ## ----plots_list,echo=FALSE,results='asis'-------------------------------------
 

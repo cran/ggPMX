@@ -16,6 +16,8 @@ pmx_qq_plot(
   shrink,
   is.hline,
   hline,
+  is.vline,
+  vline,
   filter,
   strat.facet,
   facets,
@@ -61,7 +63,11 @@ pmx_plot_npde_qq(ctr, ...)
 
 \item{is.hline}{\code{logical} if TRUE add horizontal line y=0 ( TRUE by default)}
 
-\item{hline}{\code{list} geom hline graphical parameters
+\item{hline}{\code{list} geom hline graphical parameters}
+
+\item{is.vline}{\code{logical} if TRUE add vertical line x=0 ( TRUE by default)}
+
+\item{vline}{\code{list} geom vline graphical parameters
 
 \strong{pmx_update parameters}}
 

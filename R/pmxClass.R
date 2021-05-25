@@ -40,7 +40,6 @@ pmx_sim <- function(
 }
 
 
-
 check_argument <- function(value, pmxname) {
   call <- match.call()
   if (any(missing(value) | is.null(value))) {
@@ -61,7 +60,7 @@ check_argument <- function(value, pmxname) {
 #' @param config Can be either :
 #' The complete path for the configuration file, the name of configuration within the built-in
 #' list of configurations, or a configuration object.
-#' @param sys the system name can be MLX/NM
+#' @param sys the system name can "mlx" (for Monolix 2016) or "mlx18" (for Monolix 2018/19 and later)
 #' @param directory \code{character} modelling output directory.
 #' @param input \code{character} complete path to the modelling input file
 #' @param dv \code{character} the name of measurable variable used in the input modelling file
@@ -73,30 +72,29 @@ check_argument <- function(value, pmxname) {
 #' @param strats \emph{[Optional]}\code{character} extra stratification variables
 #' @param settings \emph{[Optional]}\code{pmxSettingsClass} \code{\link{pmx_settings}}
 #' shared between all plots
-#' @param endpoint \code{pmxEndpointClass} or \code{integer} or \code{charcater} defalut to NULL
+#' @param endpoint \code{pmxEndpointClass} or \code{integer} or \code{charcater} default to NULL
 #' of the endpoint code.   \code{\link{pmx_endpoint}}
-#' @param sim \code{pmxSimClass} default to NULL. \code{\link{pmx_sim}}
-#' @param bloq \code{pmxBLOQClass} default to NULL. \code{\link{pmx_bloq}}
+#' @param sim \code{pmxSimClass} default to NULL. \code{\link{pmx_sim}} used for VPC, e.g.: sim = pmx_sim(file=vpc_file, irun="rep",idv="TIME")
+#' @param bloq \code{pmxBLOQClass} default to NULL. \code{\link{pmx_bloq}} specify bloq, within controller: e.g. bloq=pmx_bloq(cens = "BLOQ_name", limit = "LIMIT_name")
+#' @param sim_blq \code{logical} if TRUE uses sim_blq values for plotting. Only for Monolix 2018 and later.
 #' @param id \emph{[Optional]}  \code{character} the name of Indvidual variable used in the input modelling file
-#' @param time \emph{[Optional]} \code{character} Time variable. 
+#' @param time \emph{[Optional]} \code{character} Time variable.
 #' @return \code{pmxClass} controller object.
 
 #' @export
 #' @example inst/examples/controller.R
-pmx <-
-  function(config, sys = c("mlx", "nm"), directory, input, dv, dvid, cats = NULL, conts = NULL, occ = NULL, strats = NULL,
-             settings = NULL, endpoint = NULL, sim = NULL, bloq = NULL,id=NULL,time=NULL) {
+pmx <- function(config, sys = "mlx", directory, input, dv, dvid, cats = NULL, conts = NULL, occ = NULL, strats = NULL,
+                settings = NULL, endpoint = NULL, sim = NULL, bloq = NULL,id=NULL,time=NULL, sim_blq = NULL) {
     directory <- check_argument(directory, "work_dir")
     ll <- list.files(directory)
-    
+
     input <- check_argument(input, "input")
-    dv <- check_argument(dv, "dv")
-    ## dvid <- check_argument(dvid, "dvid")
     if (missing(cats)) cats <- ""
     if (missing(sim)) sim <- NULL
     if (missing(endpoint)) {
       endpoint <- NULL
     }
+    if (missing(config)) config <- "standing"
     assert_that(is_character_or_null(cats))
     if (missing(conts)) conts <- ""
     assert_that(is_character_or_null(conts))
@@ -104,6 +102,11 @@ pmx <-
     assert_that(is_character_or_null(occ))
     if (missing(strats)) strats <- ""
     assert_that(is_character_or_null(strats))
+
+    if (missing(sim_blq)) sim_blq <- FALSE
+
+    if (missing(dv)) dv <- "DV"
+    if (missing(dvid)) dvid <- "DVID"
 
     if (!inherits(config, "pmxConfig")) {
       if ("populationParameters.txt" %in% list.files(directory)) sys <- "mlx18"
@@ -127,7 +130,7 @@ pmx <-
     if (missing(bloq)) bloq <- NULL
     assert_that(inherits(bloq, "pmxBLOQClass") || is.null(bloq))
 
-    pmxClass$new(directory, input, dv, config, dvid, cats, conts, occ, strats, settings, endpoint, sim, bloq,id,time)
+    pmxClass$new(directory, input, dv, config, dvid, cats, conts, occ, strats, settings, endpoint, sim, bloq,id,time, sim_blq)
   }
 
 
@@ -136,8 +139,8 @@ pmx <-
 #' \code{pmx_mlx}  is a wrapper to mlx for the MONOLIX system ( \code{sys="mlx"})
 #' @export
 pmx_mlx <-
-  function(config, directory, input, dv, dvid, cats, conts, occ, strats, settings, endpoint, sim, bloq,id, time) {
-    pmx(config, "mlx", directory, input, dv, dvid, cats, conts, occ, strats, settings, endpoint, sim, bloq,id,time)
+  function(config, directory, input, dv, dvid, cats, conts, occ, strats, settings, endpoint, sim, bloq,id, time, sim_blq) {
+    pmx(config, "mlx", directory, input, dv, dvid, cats, conts, occ, strats, settings, endpoint, sim, bloq,id,time, sim_blq)
   }
 
 
@@ -146,6 +149,8 @@ pmx_mlx <-
 #'
 #' @param file_name \code{character} mlxtran file path.
 #' @param call \code{logical} if TRUE the result is the parameters parsed
+#' @param version \code{integer} Non-negative integer. Non-obligatory option, if you don't use a wildcard in the file_name.
+#' Otherwise you MUST provide version and wildcard will be substituted with "version", which represents the mlxtran model version.
 #' @param ... extra arguments passed to pmx_mlx.
 #' @rdname pmx
 #'
@@ -158,13 +163,18 @@ pmx_mlx <-
 #' by mlxtran. This can be very helpful, in case you would like to customize parameters
 #' (adding settings vi pmx_settings, chnag eth edefault endpoint.)
 
-pmx_mlxtran <- function(file_name, config = "standing", call = FALSE, endpoint, ...) {
+pmx_mlxtran <- function(file_name, config = "standing", call = FALSE, endpoint, version = -1,  ...) {
+  # Substituting * with version in file_name
+  if (grepl("*", file_name, fixed = TRUE)) {
+    assert_that(version>=0, msg = "Using wildcard in file_name assume providing non-negative version")
+    file_name <- gsub("*", version, file_name, fixed = TRUE)
+  } 
   params <- parse_mlxtran(file_name)
   rr <- as.list(match.call()[-1])
   rr$file_name <- NULL
   params <- append(params, rr)
   if (!exists("config",params))  params$config <- config
-  
+
   if (!missing(endpoint)) {
     params$endpoint <- NULL
     params$endpoint <- endpoint
@@ -177,7 +187,9 @@ pmx_mlxtran <- function(file_name, config = "standing", call = FALSE, endpoint, 
   }
 
   params$call <- NULL
-
+  # We don't need to pass version to pmx_mlx
+  params$version <- NULL
+  
   do.call(pmx_mlx, params)
 }
 
@@ -191,7 +203,7 @@ formula_to_text <- function(form) {
 
 #' Create controller global settings
 #' @param is.draft \code{logical} if FALSE any plot is without draft annotation
-#' @param use.abbrev \code{logical} if TRUE use abbreviations mapping for axis names
+#' @param use.abbrev \code{logical} if FALSE use full description from abbreviation mapping for axis names
 #' @param color.scales \code{list} list containing elements of scale_color_manual
 #' @param use.labels \code{logical} if TRUE replace factor named by cats.labels
 #' @param cats.labels \code{list} list of named vectors for each factor
@@ -202,10 +214,15 @@ formula_to_text <- function(form) {
 #' @example inst/examples/pmx-settings.R
 #' @export
 pmx_settings <-
-  function(is.draft = TRUE, use.abbrev = FALSE, color.scales = NULL,
+  function(is.draft = TRUE, use.abbrev = TRUE, color.scales = NULL,
              cats.labels = NULL, use.labels = FALSE, use.titles = TRUE,
              effects = NULL,
              ...) {
+    checkmate::assert_logical(x=is.draft, len=1, any.missing=FALSE)
+    checkmate::assert_logical(x=use.abbrev, len=1, any.missing=FALSE)
+    checkmate::assert_logical(x=use.labels, len=1, any.missing=FALSE)
+    checkmate::assert_logical(x=use.titles, len=1, any.missing=FALSE)
+
     if (!missing(effects) && !is.null(effects)) {
       if (!is.list(effects)) stop("effects should be a list")
 
@@ -487,7 +504,7 @@ get_abbrev <- function(ctr, param) {
 #'
 #' @param ctr  \code{pmxClass} controller object
 #' @param nplot character the plot name
-#' @param npage integer or integer vector, set page number in case of multi pages plot
+#' @param which_pages integer vector (can be length 1), set page number in case of multi pages plot, or character "all" to plot all pages.
 #'
 #' @family pmxclass
 #' @return ggplot object
@@ -500,25 +517,27 @@ get_abbrev <- function(ctr, param) {
 #' ## get all pages or some pages
 #' p2 <- ctr %>% get_plot("individual")
 #' ## returns one page of individual plot
-#' p2 <- ctr %>% get_plot("individual", npage = 1)
-#' p3 <- ctr %>% get_plot("individual", npage = c(1, 3))
+#' p2 <- ctr %>% get_plot("individual", which_pages = 1)
+#' p3 <- ctr %>% get_plot("individual", which_pages = c(1, 3))
 #' ## get distribution plot
 #' pdistri <- ctr %>% get_plot("eta_hist")
 #' }
 #'
-get_plot <- function(ctr, nplot, npage = NULL) {
-  if (is.numeric(npage)) {
-    npage <- as.integer(npage)
+get_plot <- function(ctr, nplot, which_pages = "all") {
+  if (is.numeric(which_pages)) {
+    which_pages <- as.integer(which_pages)
   }
   assert_that(is_pmxclass(ctr))
   assert_that(is_string(nplot))
-  assert_that(is_integer_or_null(npage))
+  assert_that(is.integer(which_pages) || ((length(which_pages) == 1L) && (which_pages == "all")))
   nplot <- tolower(nplot)
   assert_that(is_valid_plot_name(nplot, plot_names(ctr)))
   xx <- ctr$get_plot(nplot)
-
+  if((length(which_pages) == 1L) && which_pages == "all") {
+    which_pages <- NULL
+  }
   if (is.function(xx)) {
-    xx(npage)
+    xx(which_pages)
   } else {
     xx
   }
@@ -743,8 +762,9 @@ pmxClass <- R6::R6Class(
     bloq = NULL,
     id = NULL,
     time = NULL,
-    initialize = function(data_path, input, dv, config, dvid, cats, conts, occ, strats, settings, endpoint, sim, bloq, id, time)
-      pmx_initialize(self, private, data_path, input, dv, config, dvid, cats, conts, occ, strats, settings, endpoint, sim, bloq, id, time),
+    sim_blq = FALSE,
+    initialize = function(data_path, input, dv, config, dvid, cats, conts, occ, strats, settings, endpoint, sim, bloq, id, time,sim_blq)
+      pmx_initialize(self, private, data_path, input, dv, config, dvid, cats, conts, occ, strats, settings, endpoint, sim, bloq, id, time,sim_blq),
 
     print = function(data_path, config, ...)
       pmx_print(self, private, ...),
@@ -791,8 +811,8 @@ pmxClass <- R6::R6Class(
 
 pmx_initialize <- function(self, private, data_path, input, dv,
                            config, dvid, cats, conts, occ, strats,
-                           settings, endpoint, sim, bloq, id, time) {
-  DVID <- NULL
+                           settings, endpoint, sim, bloq, id, time, sim_blq) {
+  DVID <- ID <- NULL
   if (missing(data_path) || missing(data_path)) {
     stop(
       "Expecting source path(directory ) and a config path",
@@ -808,12 +828,14 @@ pmx_initialize <- function(self, private, data_path, input, dv,
   if (missing(bloq)) bloq <- NULL
   if (missing(id)) id <- NULL
   if (missing(time)) time <- NULL
+  if (missing(sim_blq)) sim_blq <- FALSE
 
   private$.data_path <- data_path
   self$save_dir <- data_path
   if (is.character(input)) {
     private$.input_path <- input
   }
+
   self$config <- config
   self$dv <- dv
   self$dvid <- dvid
@@ -825,6 +847,7 @@ pmx_initialize <- function(self, private, data_path, input, dv,
   self$bloq <- bloq
   self$id <- id
   self$time <- time
+  self$sim_blq <- sim_blq
 
   if (!is.null(endpoint) && is.atomic(endpoint)) {
     endpoint <- pmx_endpoint(code = as.character(endpoint))
@@ -847,8 +870,6 @@ pmx_initialize <- function(self, private, data_path, input, dv,
     occ = self$occ,
     id = self$id
   )
-  ##
-  ## check random effect
 
   if (!is.null(self$data[["eta"]])) {
     re <- grep("^eta_(.*)_(mode|mean)", names(self$data[["eta"]]), value = TRUE)
@@ -865,6 +886,33 @@ pmx_initialize <- function(self, private, data_path, input, dv,
 
   self$post_load()
 
+#replace some column names of sim_blq with ggPMX naming convention
+  if(!is.null(self$data$sim_blq)){
+
+    yname <- names(self$data$sim_blq_y)[grep("simBlq",names(self$data$sim_blq_y))]
+    yname <- gsub("mode|mean|simBlq|_", "", yname)
+
+    #some cases dv and xx_simBlq are not the same
+    if(self$dv == yname){
+      self$data$sim_blq <- self$data$sim_blq[,c("NPDE","IWRES", paste(dv)) := NULL]
+      names(self$data$sim_blq) <- gsub("mode|mean|simBlq|_","", names(self$data$sim_blq))
+      self$data$sim_blq$DV <- self$data$sim_blq[[paste(dv)]]
+    } else {
+      self$data$sim_blq <- self$data$sim_blq[,c("NPDE","IWRES") := NULL]
+      names(self$data$sim_blq) <- gsub("mode|mean|simBlq|_","", names(self$data$sim_blq))
+      self$data$sim_blq$DV <- self$data$sim_blq[[yname]]
+    }
+
+    #rename npde and iwRes to NPDE and IWRES
+    place_vec <- which(names(self$data$sim_blq) == "npde" | names(self$data$sim_blq) == "iwRes")
+    names(self$data$sim_blq)[place_vec] <- toupper(names(self$data$sim_blq)[place_vec])
+
+    #give message if new version of monolix, otherwise sim_blq cannot be loaded anyway
+  } else if(self$config$sys == "mlx18") {
+    message("`sim_blq` dataset could not be generated, `sim_blq_npde_iwres` or `sim_blq_y` is missing")
+  }
+
+
   if (!is.null(sim)) {
     dx <- sim[["sim"]]
     inn <- copy(self$input)[, self$dv := NULL]
@@ -878,7 +926,12 @@ pmx_initialize <- function(self, private, data_path, input, dv,
         call. = FALSE
       )
     }
-
+    if (inherits(dx$ID,"factor") & !inherits(inn$ID,"factor")) {
+      inn[, ID := factor(ID, levels = levels(ID))]
+    }
+    if (!inherits(dx$ID, "factor") & inherits(inn$ID, "factor")) {
+      dx[, ID := factor(ID, levels = levels(ID))]
+    }
     self$data[["sim"]] <- merge(dx, inn, by = c("ID", "TIME"))
     self$sim <- sim
   }
@@ -891,6 +944,15 @@ pmx_initialize <- function(self, private, data_path, input, dv,
     self$has_re <- TRUE
   }
 
+  if (config$sys == "nm") {
+    self$data$predictions <- input
+    self$data$IND <- if (!is.null(config$finegrid)) config$finegrid else input
+    self$data$eta <- config$eta
+    self$data$omega <- config$omega
+    self$has_re <- TRUE
+    self$bloq <- bloq
+    self$data$estimates <- config$parameters
+  }
 
   ## abbrev
   keys_file <- file.path(
@@ -1086,7 +1148,7 @@ print.pmxClass <- function(x, ...) {
 #' Technically speaking we talk about chaining not piping here. However ,
 #' using \code{pmx_copy} user can work on a copy of the controller.
 #'
-#' By defaul the copy don't keep global parameters setted using pmx_settings.
+#' By default the copy does not keep global parameters set using pmx_settings.
 
 #'
 #' @examples
@@ -1103,8 +1165,9 @@ pmx_copy <- function(ctr, keep_globals = FALSE, ...) {
   if (!keep_globals) {
     nn <- rev(names(formals(pmx_settings)))[-1]
     eff_nn <- intersect(nn, names(params))
+    settings <- l_left_join(ctr$settings, params[eff_nn])
     if (length(eff_nn) > 0) {
-      cctr$settings <- do.call(pmx_settings, params[eff_nn])
+      cctr$settings <- do.call(pmx_settings, settings)
     }
   }
   cctr

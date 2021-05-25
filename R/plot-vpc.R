@@ -6,6 +6,9 @@
 #'  "fixed", "sd", "equal", "pretty", "quantile", "kmeans", "hclust" or "jenks"
 #' @param within_strat \code{logical} if TRUE compute the bining for each strat level. \cr
 #' By default t is false and bining are equal for all stratifications levels.
+#' @param seed \code{integer} used in \code{set.seed} call to ensure \cr
+#'    reproducibility if style is "kmeans". Set to NULL if this \cr
+#'    is not desired.
 #' @param ... other classInt::classIntervals parameters excpet \code{style} and \code{n}
 #'
 #' @export
@@ -14,12 +17,14 @@
 #' @family vpc
 
 pmx_vpc_bin <-
-  function(style, within_strat = FALSE, ...) {
+  function(style, within_strat = TRUE, seed = 42, ...) { #within strat = TRUE, as default in order to avoid bugs
+    # Setting seed for random number generating, so plots are have reproducible binning.
+    set.seed(seed)
     if (missing(style)) {
       return(NULL)
     }
     rr <- as.list(match.call()[-1])
-    rr
+    rr[!names(rr) == "seed"]
   }
 
 
@@ -231,12 +236,6 @@ pmx_vpc_rug <-
 
 
 
-
-
-
-
-
-
 quantile_dt <-
   function(dx, grp = "time", ind = "y", probs = c(.05, .95), prefix = "p", wide = FALSE) {
     percentile <- NULL
@@ -266,8 +265,15 @@ vpc.data <-
            rug = NULL) {
     zmax <- zmin <- out_ <- value <- percentile <- NULL
     bins <- unlist(unique(dobs[, idv, with = FALSE]))
-    
     if (type == "percentile") {
+
+      #allow for input e.g. pmx_plot_vpc(strat.facet = ~SEX)
+      if(!is.character(strat)){
+        strat <- as.character(strat)
+        strat <- sub("~","",strat)
+        strat <- strat[strat != ""]
+      }
+      
       pi <- quantile_dt(dobs, probs = probs.pi, grp = c(idv, strat), ind = dv)
       res2 <- quantile_dt(dsim, probs = probs.pi, grp = c(irun, idv, strat), ind = dv)
       ci <- quantile_dt(
@@ -275,6 +281,7 @@ vpc.data <-
         probs = probs.ci, grp = c("percentile", idv, strat),
         prefix = "CL", ind = "value", wide = TRUE
       )
+
       res <- list(ci_dt = ci,pi_dt = pi)
       nn <- sum(grepl("CL", names(ci)))
       if (nn==3){
@@ -299,7 +306,7 @@ vpc.data <-
 
 bin_idv <- function(idv, x) {
   brks <- do.call(classIntervals, append(list(var = idv), x$bin))$brks
-  if (max(brks) >= max(idv)) brks[which.max(brks)] <- max(idv)
+  if (max(brks) >= max(idv)) brks[which.max(brks)] <- max(idv)  
   if (min(brks) <= min(idv)) brks[which.min(brks)] <- min(idv)
   brks
 }
@@ -308,7 +315,6 @@ bin_idv <- function(idv, x) {
 
 find_interval <- function(x, vec, labels = NULL, ...) {
   levels <- seq_along(vec)
-  
   vals <- findInterval(x, vec, rightmost.closed = TRUE, ...)
   if (!is.null(labels)) {
     as.numeric(as.character(factor(vals, levels = unique(vals), labels = labels)))
@@ -327,8 +333,7 @@ find_interval <- function(x, vec, labels = NULL, ...) {
     if (!is.null(x$bin)) {
       if (!is.null(x$strat.facet) && !is.null(x$bin$within_strat) && x$bin$within_strat) {
         x$bin$within_strat <- NULL
-        bins <- x$input[, list(brks = bin_idv(get(idv), x)), c(x$strat.facet)]
-        
+        bins <- x$input[, list(brks = bin_idv(get(idv), x)), c(x$strat.facet)] #bins is a dt, with brks and strat.facet value bin_idv at line 300
         x$input[, bin := {
           grp <- get(x$strat.facet)
           find_interval(get(idv), bins[get(x$strat.facet) == grp, brks])
@@ -344,6 +349,7 @@ find_interval <- function(x, vec, labels = NULL, ...) {
         rug <- data.frame(x = rugs, y = NA_real_, stringsAsFactors = FALSE)
       }
     }
+    
     res <- vpc.data(
       x[["type"]],
       x$input,
@@ -410,7 +416,7 @@ vpc.pi_line <- function(dt, left, geom ) {
 vpc.plot <- function(x) {
   with(x, {
     pp <- ggplot(data = db$pi_dt, aes_string(x = if (!is.null(bin)) "bin" else idv))
-
+    
     pi_med_layer <- function() {if (!is.null(pi)) {
       vpc.pi_line(db$pi_dt[percentile == "p50"], pi$median) 
     }}
@@ -441,18 +447,23 @@ vpc.plot <- function(x) {
       )
       do.call(geom_point, params)
     }
-    rug_layer <- if (!is.null(rug)) {
-      params <- append(
-        list(
-          mapping = aes(x = x, y = y),
-          sides = "t",
-          data = db$rug_dt
-        ),
-        rug
-      )
-      
-      do.call(geom_rug, params)
-    }
+    
+    ## Rug layer was removed because of two reasons:
+      # - Didn't work properly with within_strats = TRUE, Rugs did not represent the bins
+      # - Rugs are not vital for the interpretation of VPCs plots
+    
+    #rug_layer <- if (!is.null(rug)) {
+      #params <- append(
+       # list(
+      #    mapping = aes(x = x, y = y),
+       #   sides = "t",
+      #    data = db$rug_dt
+       # ),
+      #  rug
+      #)
+      #do.call(geom_rug, params)
+    #}
+    
     
     ci_med_layer <- function() {if (!is.null(ci)) {
       nn <- grep("CL", names(db$ci_dt), value = TRUE)[c(1, 3)]
@@ -480,10 +491,13 @@ vpc.plot <- function(x) {
     }}
     
     
+    ## + rug_layer was removed because of two reasons:
+    # - Didn't work properly with within_strats = TRUE, Rugs did not represent the bins
+    # - Rugs are not vital for the interpretation of VPCs plots
     
+    pp <- ggplot(data = db$pi_dt, aes_string(x = if (!is.null(bin)) "bin" else idv)) +
+      obs_layer + pi_med_layer() + pi_ext_layer()  #+ rug_layer
     
-    pp <- ggplot(data = db$pi_dt, aes_string(x = if (!is.null(bin)) "bin" else idv)) + 
-      obs_layer + rug_layer + pi_med_layer() + pi_ext_layer() 
     pp <- if (type=="scatter") pp +  pi_shaded_layer() 
     else pp + ci_med_layer() + ci_ext_layer() 
     if(!is.null(x$obs_legend)){
@@ -493,7 +507,6 @@ vpc.plot <- function(x) {
       pp <- pp + do.call("scale_fill_manual",sim_legend)
     }
     
-    
     strat.facet <- x[["strat.facet"]]
     
     if (!is.null(strat.facet)) {
@@ -502,7 +515,6 @@ vpc.plot <- function(x) {
       }
       pp <- pp + do.call("facet_wrap", c(strat.facet, facets))
     }
-    
     if (is.footnote){
       pp <- pp +labs(caption=x$footnote)
     }

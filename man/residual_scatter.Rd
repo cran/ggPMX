@@ -12,6 +12,7 @@
 \title{Scatter residual plots}
 \usage{
 residual_scatter(
+  sim_blq,
   point,
   is.hline,
   hline,
@@ -56,6 +57,8 @@ pmx_plot_npde_time(ctr, ...)
 pmx_plot_npde_pred(ctr, ...)
 }
 \arguments{
+\item{sim_blq}{\code{logical} if TRUE uses sim_blq values for plotting. Only for Monolix 2018 and later.}
+
 \item{point}{\code{list} geom_point graphical parameters.}
 
 \item{is.hline}{\code{logical} if TRUE add horizontal line y=0 ( TRUE by default).}
@@ -122,6 +125,7 @@ the axis text (similar to ggplot2 axis.text theme)}
 \item \code{\link{pmx_gpar}} internal function to customize shared graphical parameters
 \item \code{\link{residual}} generic object for all residual (scatter) plots .
 \item \code{\link{pmx_update}} function.
+\item aess can be used to change time variable within the plot (e.g. aess = list(x="TADQBW"))
 }
 
 \strong{residual parameters}}

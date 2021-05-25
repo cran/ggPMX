@@ -36,6 +36,7 @@
 #' }
 residual <- function(x, y, labels = NULL, point = NULL, is.hline = FALSE,
                      hline = NULL, dname = NULL, facets = NULL, bloq = NULL, ...) {
+  
   ## default labels parameters
   ## TODO pout all defaultas option
   stopifnot(!missing(x))
@@ -146,7 +147,7 @@ plot_pmx.residual <- function(x, dx, ...) {
 
     if (is.null(gp$ranges) || is.null(gp$ranges$y)) {
       if (aess$y %in% c("NPDE", "IWRES") && !gp$scale_y_log10 && is.null(x$trans)) {
-        mm <- max(dx[, aess$y, with = FALSE], na.rm = TRUE)
+        mm <- max(abs(dx[, aess$y, with = FALSE]), na.rm = TRUE)
         if (is.null(gp$ranges)) {
           gp$ranges <- list(y = c(-mm, mm))
         } else  {
@@ -154,7 +155,6 @@ plot_pmx.residual <- function(x, dx, ...) {
         }
       }
     }
-    p <- plot_pmx(gp, p)
 
     strat.color <- x[["strat.color"]]
     strat.facet <- x[["strat.facet"]]
@@ -170,7 +170,8 @@ plot_pmx.residual <- function(x, dx, ...) {
     }
 
 
-
+    p <- plot_pmx(gp, p)
+    
 
     p
   })

@@ -14,6 +14,7 @@ pmx_plot_vpc(
   rug,
   bin,
   is.legend,
+  sim_blq,
   dname,
   filter,
   strat.facet,
@@ -55,9 +56,11 @@ pmx_plot_vpc(
 
 \item{rug}{\code{pmx_vpc_rug} object rug layer  \link{pmx_vpc_rug}}
 
-\item{bin}{\code{pmx_vpc_bin} object  \link{pmx_vpc_bin}}
+\item{bin}{\code{pmx_vpc_bin} object  \link{pmx_vpc_bin} specify within pmx_plot_vpc() e.g.: bin = pmx_vpc_bin(style = "kmeans", n = 10)}
 
 \item{is.legend}{\code{logical} if TRUE add legend}
+
+\item{sim_blq}{\code{logical} if TRUE uses sim_blq values for plotting. Only for Monolix 2018 and later.}
 
 \item{dname}{added for compatibility with other ggPMX plots
 

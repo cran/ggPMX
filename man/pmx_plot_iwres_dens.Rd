@@ -6,6 +6,7 @@
 \usage{
 pmx_plot_iwres_dens(
   ctr,
+  sim_blq,
   dname,
   xlim,
   var_line,
@@ -37,6 +38,8 @@ pmx_plot_iwres_dens(
 }
 \arguments{
 \item{ctr}{pmx controller}
+
+\item{sim_blq}{\code{logical} if TRUE uses sim_blq as dataset for plotting instead of predictions.}
 
 \item{dname}{\code{character} name of dataset to be used. User can create his own
 dataset using \code{\link{set_data}} and pass it as dname to be plotted.}

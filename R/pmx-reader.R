@@ -10,7 +10,7 @@ read_mlx_ind_est <- function(path, x, ...) {
   ID <- OCC <- NULL
   ds <- pmx_fread(path)
   if(!is.null(x$id) && exists(x$id,ds)) setnames(ds,x$id,"id")
-  
+
   occ <- list(...)$occ
   if (is.null(occ)) occ <- ""
   patt_fields <- "^id|^%s|^eta_.*_(mode|mean)$"
@@ -75,11 +75,11 @@ read_input <- function(ipath, dv, dvid, cats = "", conts = "", strats = "", occ 
 
   if (!is.null(id) && !exists(id,xx)) {
     stop(sprintf("observation data does not contain id variable: %s",id))
-  } 
+  }
   if (!is.null(time) && !exists(time,xx)) {
     stop(sprintf("observation data does not contain time variable: %s",time))
-  } 
-  
+  }
+
   if (all(c("MDV", "EVID") %in% toupper(names(xx)))) {
     setnames(xx, grep("^mdv$", names(xx), ignore.case = TRUE, value = TRUE), "MDV")
     setnames(xx, grep("^evid$", names(xx), ignore.case = TRUE, value = TRUE), "EVID")
@@ -137,7 +137,8 @@ read_input <- function(ipath, dv, dvid, cats = "", conts = "", strats = "", occ 
     } else {
       xx[, DV := get(dv)]
     }
-    xx <- xx[DV != 0]
+    # Omitting 0-value observations for compatibility with log transformations
+    #xx <- xx[DV != 0]
   } else {
     dv.names <- paste(setdiff(names(xx), c("ID", "id", "time", "TIME")), collapse = " or ")
     dv.names <- sprintf("'%s'", dv.names)
@@ -279,7 +280,7 @@ read_mlx_pred <- function(path, x, ...) {
   }
   xx <- pmx_fread(path)
   if(!is.null(x$id) && exists(x$id,xx)) setnames(xx,x$id,"id")
-  
+
   setnames(xx, tolower(names(xx)))
   id_col <- grep("^id", names(xx), ignore.case = TRUE, value = TRUE)
   if (length(id_col) > 0 && nzchar(id_col)) setnames(xx, id_col, "id")
@@ -314,7 +315,7 @@ read_mlx_pred <- function(path, x, ...) {
 
   res
 }
-
+#also reads mlx19
 read_mlx18_res <- function(path, x, ...) {
   if (exists("subfolder", x)) {
     path <- file.path(dirname(path), x$subfolder)
@@ -344,13 +345,55 @@ read_mlx18_res <- function(path, x, ...) {
 
   ds <- pmx_fread(file_path)
   if(!is.null(x$id) && exists(x$id,ds)) setnames(ds,x$id,"id")
+
+  if(x$pattern == "_obsVsPred") {
+    xnames <- names(x[["names"]])
+    yname <- substring(file_path, regexpr("s/", file_path) + 2)
+    yname <- sub("_obsVsPred.txt", "", yname)
+    names(x[["names"]])[which(xnames == "y_simBlq_mode")] <- paste0(yname,"_simBlq_mode")
+
+    #handling of mlx18 input, there is no y_simBlq_mean or y_simBlq_mode for Monolix version 2018
+    if(length(grep("simBlq_mode", names(ds))) == 0) {
+    names(x[["names"]])  <- gsub("_mode","", names(x[["names"]]))
+    name_simBlq <-  names(ds)[grep("simBlq", names(ds))]
+
+    message(paste0("Using simulated BLOQs of Monolix 2018 can cause slight deviations from Monolix plots regarding simulated BLOQs of the DV!\n",
+                   "Try Monolix 2019 or later for improved ggPMX simulated BLOQ function."))
+    }
+
+  }
   ids <- match(tolower(names(x[["names"]])), tolower(names(ds)))
-  new_vars <- names(x[["names"]])
+
+  if(!is.null(x[["newnames"]])) {
+    new_vars <- names(x[["newnames"]])
+  } else {
+    new_vars <- names(x[["names"]])
+  }
+
+  occ <- list(...)$occ
+  if (is.null(occ)) occ <- ""
+  if ("OCC" %in% names(ds)) {
+    new_vars <- c(new_vars, "OCC")
+    ids <- c(ids,grep("OCC", names(ds)))
+  }
+
+  if (occ != "" && !"OCC" %in% names(ds)) {
+    new_vars <- c(new_vars, "OCC")
+    ids <- c(ids,grep(occ, names(ds)))
+  }
+#if it doesn't work correctly, give null datatable instead of error
+if(NA %in% ids){
+  ds <- NULL
+} else {
   setnames(ds, ids, new_vars)
   ds[, new_vars, with = FALSE]
 }
 
+
+}
+
 read_mlx18_pred <- function(path, x, ...) {
+  ID <- NULL
   if (exists("subfolder", x) && !file.exists(path)) {
     path <- file.path(dirname(path), x$subfolder)
     finegrid_file <- file.path(path, x$file)
@@ -370,7 +413,14 @@ read_mlx18_pred <- function(path, x, ...) {
     if (is.null(resi)) {
       return(NULL)
     }
+    if (inherits(ds$ID,"factor") & !inherits(resi$ID,"factor")) {
+      resi[, ID := factor(ID, levels = levels(ID))]
+    }
+    if (!inherits(ds$ID, "factor") & inherits(resi$ID, "factor")) {
+      ds[, ID := factor(ID, levels = levels(ID))]
+    }
     ds <- merge(ds, resi, by = c("ID", "TIME"))
+
   }
   ds
 }
@@ -437,8 +487,8 @@ load_data_set <- function(x, path, sys, ...) {
   }
   ds <- pmx_fread(fpath)
   if(!is.null(x$id) && exists(x$id,ds)) setnames(ds,x$id,"id")
-  
-  
+
+
   ds <- ds[, !grep("^V[0-9]+", names(ds)), with = FALSE]
   data.table::setnames(ds, tolower(names(ds)))
   if ("names" %in% names(x)) {
@@ -468,7 +518,6 @@ load_source <- function(sys, path, dconf, ...) {
     if(!is.null(list(...)$id)) x$id <- list(...)$id
     load_data_set(x, path = path, sys = sys, ...)
   }, dconf, names(dconf))
-
 
   dxs
 }

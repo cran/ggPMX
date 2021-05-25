@@ -69,12 +69,12 @@ test_that("can set plot and filter", {
   ctr %>% set_plot("DIS", pname = "distr1", type = "box")
   p <- ctr %>% get_plot("distr1")
   pconf <- ggplot2::ggplot_build(p)
-  expect_equal(length(pconf$data), 4)
+  expect_equal(length(pconf$data), 5)
   # set plot and filter
   ctr %>% set_plot("DIS", pname = "distr2", filter = ID < 10, type = "box")
   p <- ctr %>% get_plot("distr2")
   pconf <- ggplot2::ggplot_build(p)
-  expect_equal(length(pconf$data), 4)
+  expect_equal(length(pconf$data), 5)
 })
 
 
@@ -139,4 +139,29 @@ test_that("can create a controller with data.frame as input", {
   )
 
   expect_equal(nrow(ctr4 %>% get_data("input")), nrow(dat))
+})
+
+test_that("can create controller global settings",
+  expect_is(pmx_settings(), "pmxSettingsClass")
+)
+
+test_that("can create a controller from mlxtran with explicit path", {
+  mlxtran_path <- file.path(system.file(package = "ggPMX"), "testdata", "1_popPK_model", "project.mlxtran")
+  ctr <- pmx_mlxtran(file_name = mlxtran_path)
+  expect_is(ctr, "pmxClass")
+})
+
+test_that("can catch absence of version, when wildcard is used in file_name", {
+  mlxtran_path <- file.path(system.file(package = "ggPMX"), "testdata", "*_popPK_model", "project.mlxtran")
+  error_msg_wrong_version <- "Using wildcard in file_name assume providing non-negative version"
+  error_msg_not_exist <- "file do not exist" 
+  expect_error(pmx_mlxtran(file_name = mlxtran_path), error_msg_wrong_version, fixed=TRUE)
+  expect_error(pmx_mlxtran(file_name = mlxtran_path, version = -5), error_msg_wrong_version, fixed=TRUE)
+  expect_error(pmx_mlxtran(file_name = mlxtran_path, version = 2), error_msg_not_exist, fixed=TRUE)
+})
+
+test_that("can create a controller from mlxtran with wildcard in path", {
+  mlxtran_path <- file.path(system.file(package = "ggPMX"), "testdata", "*_popPK_model", "project.mlxtran")
+  ctr <- pmx_mlxtran(file_name = mlxtran_path, version = 1)
+  expect_is(ctr, "pmxClass")
 })

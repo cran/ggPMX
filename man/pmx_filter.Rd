@@ -7,7 +7,7 @@
 pmx_filter(
   ctr,
   data_set = c("estimates", "predictions", "eta", "finegrid", "shrink", "input",
-    "individual"),
+    "individual", "sim_blq"),
   pmx_exp
 )
 }

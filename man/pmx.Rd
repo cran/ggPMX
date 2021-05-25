@@ -8,7 +8,7 @@
 \usage{
 pmx(
   config,
-  sys = c("mlx", "nm"),
+  sys = "mlx",
   directory,
   input,
   dv,
@@ -22,7 +22,8 @@ pmx(
   sim = NULL,
   bloq = NULL,
   id = NULL,
-  time = NULL
+  time = NULL,
+  sim_blq = NULL
 )
 
 pmx_mlx(
@@ -40,17 +41,25 @@ pmx_mlx(
   sim,
   bloq,
   id,
-  time
+  time,
+  sim_blq
 )
 
-pmx_mlxtran(file_name, config = "standing", call = FALSE, endpoint, ...)
+pmx_mlxtran(
+  file_name,
+  config = "standing",
+  call = FALSE,
+  endpoint,
+  version = -1,
+  ...
+)
 }
 \arguments{
 \item{config}{Can be either :
 The complete path for the configuration file, the name of configuration within the built-in
 list of configurations, or a configuration object.}
 
-\item{sys}{the system name can be MLX/NM}
+\item{sys}{the system name can "mlx" (for Monolix 2016) or "mlx18" (for Monolix 2018/19 and later)}
 
 \item{directory}{\code{character} modelling output directory.}
 
@@ -72,20 +81,25 @@ in case of multiple endpoint (PKPD).}
 \item{settings}{\emph{[Optional]}\code{pmxSettingsClass} \code{\link{pmx_settings}}
 shared between all plots}
 
-\item{endpoint}{\code{pmxEndpointClass} or \code{integer} or \code{charcater} defalut to NULL
+\item{endpoint}{\code{pmxEndpointClass} or \code{integer} or \code{charcater} default to NULL
 of the endpoint code.   \code{\link{pmx_endpoint}}}
 
-\item{sim}{\code{pmxSimClass} default to NULL. \code{\link{pmx_sim}}}
+\item{sim}{\code{pmxSimClass} default to NULL. \code{\link{pmx_sim}} used for VPC, e.g.: sim = pmx_sim(file=vpc_file, irun="rep",idv="TIME")}
 
-\item{bloq}{\code{pmxBLOQClass} default to NULL. \code{\link{pmx_bloq}}}
+\item{bloq}{\code{pmxBLOQClass} default to NULL. \code{\link{pmx_bloq}} specify bloq, within controller: e.g. bloq=pmx_bloq(cens = "BLOQ_name", limit = "LIMIT_name")}
 
 \item{id}{\emph{[Optional]}  \code{character} the name of Indvidual variable used in the input modelling file}
 
 \item{time}{\emph{[Optional]} \code{character} Time variable.}
 
+\item{sim_blq}{\code{logical} if TRUE uses sim_blq values for plotting. Only for Monolix 2018 and later.}
+
 \item{file_name}{\code{character} mlxtran file path.}
 
 \item{call}{\code{logical} if TRUE the result is the parameters parsed}
+
+\item{version}{\code{integer} Non-negative integer. Non-obligatory option, if you don't use a wildcard in the file_name.
+Otherwise you MUST provide version and wildcard will be substituted with "version", which represents the mlxtran model version.}
 
 \item{...}{extra arguments passed to pmx_mlx.}
 }

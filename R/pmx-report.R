@@ -61,12 +61,13 @@ pmx_report <-
     contr$save_dir <- tools::file_path_as_absolute(save_dir)
 
     contr$footnote <- footnote
-    res <- pmx_draft(contr, name, template, edit)
+    res <- pmx_draft(contr, name, template, edit = FALSE)
     standalone <- format %in% c("plots", "both")
     clean <- !standalone
     old_fig_process <- knitr::opts_chunk$get("fig.process")
 
     out_ <- file.path(contr$save_dir, "ggpmx_GOF")
+
     rm_dir(out_)
 
 
@@ -139,10 +140,12 @@ pmx_fig_process <- function(ctr, old_name, footnote, out_) {
 }
 
 pmx_draft <- function(ctr, name, template, edit) {
-  template_file <- file.path(ctr$save_dir, sprintf("%s.Rmd", name))
-  if (length(template_file) > 0 && file.exists(template_file)) {
-    file.remove(template_file)
+  if (length(file.path(ctr$save_dir, sprintf("%s.Rmd", name))) > 0 && 
+      file.exists(file.path(ctr$save_dir, sprintf("%s.Rmd", name)))) {
+    #file.remove(template_file)
+    name <- paste0(name, "_project")
   }
+  template_file <- file.path(ctr$save_dir, sprintf("%s.Rmd", name))
   style_file <- file.path(ctr$save_dir, "header.tex")
   if (file.exists(style_file)) file.remove(style_file)
 
@@ -222,9 +225,11 @@ create_ggpmx_gof <- function(save_dir, name) {
     rm_dir(in_)
   }
 }
+
 rm_dir <- function(to_remove) {
   if (!is.null(to_remove) && dir.exists(to_remove)) {
-    system(sprintf("rm -r %s", to_remove))
+    #system(sprintf("rm -r %s", to_remove))
+    unlink(to_remove,recursive = TRUE, force = TRUE) 
   }
 }
 

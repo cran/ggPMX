@@ -19,8 +19,6 @@ plot_pmx.pmx_gpar <- function(gpar, p) {
     assert_that(is_list_or_null(labels))
   })
 
-
-
   ## smoothing
   p <- with(gpar, {
     if (is.smooth) {
@@ -35,13 +33,18 @@ plot_pmx.pmx_gpar <- function(gpar, p) {
     ## labels:title,axis,subtitle...
 
     ## limits
-    if (!is.null(ranges$y)) {
+    if (!is.null(ranges[["y"]])) {
       p <- p %+% scale_y_continuous(limits = ranges[["y"]])
     }
-    if (!is.null(ranges$x) && !discrete) {
+
+    if (!is.null(ranges[["x"]]) && !discrete) {
       p <- p %+% scale_x_continuous(limits = ranges[["x"]])
     }
 
+    if(is.null(ranges[["x"]])) {
+      # Ensure that origin 0 is included on the X axis
+      p <- p %+% expand_limits(x=0)
+    }
 
     ## theming
     if (!inherits(gpar$axis.text, "element_text")) {
@@ -57,8 +60,6 @@ plot_pmx.pmx_gpar <- function(gpar, p) {
 
     if (is.legend) p <- p + pmx_theme(legend.position = legend.position)
 
-    
-
     ## draft layer
     if (is.draft) {
       if (scale_y_log10 && !scale_x_log10) draft$y <- 0
@@ -67,20 +68,19 @@ plot_pmx.pmx_gpar <- function(gpar, p) {
 
     ## draft layer
     if (is.identity_line) {
-      if ((scale_x_log10 && !scale_y_log10) || 
+      if ((scale_x_log10 && !scale_y_log10) ||
          (scale_y_log10 && !scale_x_log10))
         p <- p + geom_smooth(method="lm", se=FALSE)
         else p <- p + do.call(geom_abline, identity_line)
-      
     }
-    
+
     if (scale_x_log10) {
-      p <- p + scale_x_log10()
+      p <- p %+% scale_x_log10(limits = ranges[["x"]])
     }
     if (scale_y_log10) {
-      p <- p + scale_y_log10()
+      p <- p %+% scale_y_log10(limits = ranges[["y"]])
     }
-    
+
     if (exists("color.scales", gpar) && !is.null(color.scales)) {
       p <- p + do.call("scale_colour_manual", color.scales)
       p <- p + do.call("scale_fill_manual", color.scales)
@@ -98,5 +98,6 @@ plot_pmx.pmx_gpar <- function(gpar, p) {
 
     p
   })
+
   p
 }
