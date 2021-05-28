@@ -1,4 +1,4 @@
-50a52a698bd7a005846395ae0bc23b18 *DESCRIPTION
+7410acbee311c2f5ce6401f225dfd4c8 *DESCRIPTION
 f3ac49f490d60ed922cbf9ab9046fd7a *NAMESPACE
 e42fe8644b4cbc9db87c108d860cb2f0 *R/assertions.R
 4783a1d17f0807dab83e35e3a04cdc8f *R/classInt.R
@@ -51,7 +51,7 @@ c3babfff44bcc19ec835c3be6ed69748 *README.md
 5ba4e6d47ae699388e05563f5c83e563 *build/vignette.rds
 cfd939ab33f5bb8bf9732a55b06c3894 *inst/doc/ggPMX-guide.R
 5e5e88d423fbec3b5634d71ad3fcf457 *inst/doc/ggPMX-guide.Rmd
-d2c2864876c0f65eda3474b137507ea9 *inst/doc/ggPMX-guide.pdf
+527451f78c1ad7361036e1241c94b29c *inst/doc/ggPMX-guide.pdf
 4580d030cf1df87d6490c1b5a963042b *inst/examples/controller.R
 f557de4f2b69a80982457d82ab224c2c *inst/examples/custom_inputs.yaml
 1cf0c5ab122820f504cca042eb5d5435 *inst/examples/distribution.R
@@ -321,7 +321,7 @@ eac8d1d7712cd4c18cc701d43d8e94fa *tests/testthat/test-plot-residual.R
 6b7e09bab703d604f51a029f1d485b04 *tests/testthat/test-pmx-all-compute.R
 4c50bf64169ef9fc4db21ec2c5b4dd6a *tests/testthat/test-pmx-all-plots.R
 49cf1769e95e8663923b5f550c762662 *tests/testthat/test-pmx-plots-scatter.R
-65e2cf08e840e1f46ec27d284670783c *tests/testthat/test-pmx-report.R
+a0305a3fc8b332a81a25082900cf11fc *tests/testthat/test-pmx-report.R
 48d8e16deadec269f78e7dbdd4675d07 *tests/testthat/test-pmxClass.R
 799194e1363f77ce3079a7a45b9ebf0e *tests/testthat/test-pmx_filter.R
 85f579056d885935da2603f6964a62c1 *tests/testthat/test-pmx_options.R
