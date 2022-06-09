@@ -23,7 +23,9 @@
 #' @param obs \code{pmx_vpc_obs} object observation layer \link{pmx_vpc_obs}
 #' @param pi \code{pmx_vpc_pi} object percentile layer  \link{pmx_vpc_pi}
 #' @param ci \code{pmx_vpc_ci} object confidence interval layer  \link{pmx_vpc_ci}
-#' @param rug  \code{pmx_vpc_rug} object rug layer  \link{pmx_vpc_rug}
+#' @param rug  \code{pmx_vpc_rug} object rug layer  \link{pmx_vpc_rug}.
+#' Note: consider not using a rug layer when bin[["within_strat"]]=TRUE,
+#' since the rugs plotted will not reflect the bins.
 #' @param bin \code{pmx_vpc_bin} object  \link{pmx_vpc_bin} specify within pmx_plot_vpc() e.g.: bin = pmx_vpc_bin(style = "kmeans", n = 10)
 #' @param is.legend \code{logical} if TRUE add legend
 #' @param is.footnote \code{logical} if TRUE add footnote
@@ -77,8 +79,23 @@ pmx_plot_vpc <-
              strat.facet, facets, strat.color, trans, pmxgpar, labels,
              axis.title, axis.text, ranges, is.smooth, smooth, is.band,
              band, is.draft, draft, is.identity_line, identity_line,
-             scale_x_log10, scale_y_log10, color.scales, is.footnote,...) {
+           scale_x_log10, scale_y_log10, color.scales, is.footnote,...) {
+    has_rug <- !missing (rug) && !is.null(rug)
+    has_bin <- !missing(bin) && !is.null(bin)
+    if(has_bin && has_rug) {
+      if (isTRUE(bin[["within_strat"]])) {
+        warning(
+          paste0(
+            "Consider not using a rugs layer ",
+            "when bin argument has within_strats=TRUE, since the rugs will ",
+            "not reflect the bins.",
+            "This can be achieved by setting rugs=NULL, or omitting it, ",
+            "in the call to pmx_plot_vpc.")
+        )
+      }
+    }
+
     params <- as.list(match.call(expand.dots = TRUE))[-1]
     params$is.smooth <- FALSE
     wrap_pmx_plot_generic(ctr, "pmx_vpc", params)
-  }
+}

@@ -27,6 +27,34 @@ ABS_IWRES_IPRED:
     size: 2.0
     alpha: 0.9
 
+ABS_IWRES_TIME:
+  ptype: SCATTER
+  x: TIME
+  'y': IWRES
+  labels:
+    title: '|IWRES| vs TIME'
+    subtitle: ''
+    'y': '|IWRES|'
+    x: TIME
+  point:
+    shape: 1.0
+    colour: black
+    size: 1.0
+  is.hline: yes
+  is.smooth: yes
+  smooth:
+    se: no
+    colour: red
+    linetype: 1.0
+  trans: abs_y
+  bloq:
+    show: yes
+    cens: CENS
+    limit: LIMIT
+    colour: pink
+    size: 2.0
+    alpha: 0.9
+
 IWRES_IPRED:
   ptype: SCATTER
   x: IPRED
@@ -91,7 +119,7 @@ IWRES_DENS:
     title: 'Density plot of IWRES'
     subtitle: ''
     x: IWRES
-    'y': ''
+    'y': ' '
 
 IWRES_QQ:
   ptype: PMX_QQ
@@ -188,6 +216,8 @@ DV_PRED:
   labels:
     title: DV vs PRED
     subtitle: ''
+    x: PRED
+    'y': DV
   x: PRED
   'y': DV
   point:
@@ -216,6 +246,8 @@ DV_IPRED:
   labels:
     title: DV vs IPRED
     subtitle: ''
+    x: IPRED
+    'y': DV
   x: IPRED
   'y': DV
   point:

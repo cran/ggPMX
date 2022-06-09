@@ -16,6 +16,8 @@ eta_pairs(
   shrink = NULL,
   is.hline = FALSE,
   hline = NULL,
+  is.vreference_line = FALSE,
+  vreference_line = list(colour = "orange", linetype = "longdash"),
   ...
 )
 }
@@ -41,6 +43,10 @@ eta_pairs(
 \item{is.hline}{\code{logical} if TRUE add horizontal line to lower matrix plots}
 
 \item{hline}{\code{list} geom_hline graphical parameters}
+
+\item{is.vreference_line}{\code{logical} if TRUE add the +- 1.96 lines}
+
+\item{vreference_line}{\code{list} geom_hline graphical parameters for the reference lines}
 
 \item{...}{others graphics arguments passed to \code{\link{pmx_gpar}} internal object.}
 }

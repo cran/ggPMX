@@ -6,8 +6,12 @@ Description: At Novartis, we aimed at standardizing the set of diagnostic plots 
   For this, we developed a guidance that proposes an adequate set of diagnostics and a toolbox, 
   called 'ggPMX' to execute them. 'ggPMX' is a toolbox that can generate all diagnostic plots at a quality sufficient 
   for publication and submissions using few lines of code. This package focuses on plots recommended by ISoP
-  <doi:10.1002/psp4.12161>.
-Version: 1.2.6
+  <doi:10.1002/psp4.12161>. While not required, you can get/install the 'R' 'lixoftConnectors'
+    package in the 'Monolix' installation, as described at the following url
+    <https://monolix.lixoft.com/monolix-api/lixoftconnectors_installation/>.
+    When 'lixoftConnectors' is available, 'R' can use 'Monolix' directly to create the required
+    Chart Data instead of exporting it from the 'Monolix' gui.
+Version: 1.2.7
 Authors@R: c(
               person("Amine", "Gassem", email="contact@ag-study.com", role=c("aut")),
               person("Bruno", "Bieth", email="biethb@hotmail.com", role="aut"),
@@ -33,11 +37,13 @@ Imports: data.table, yaml, R6, gtable, ggplot2 (>= 2.2.0), magrittr,
         stringr, assertthat, GGally, zoo, knitr, rmarkdown, tidyr,
         dplyr, purrr, readr, rlang, tibble, checkmate, scales
 License: GPL-2
-Suggests: testthat, xtable, vdiffr, nlmixr
+Suggests: testthat, xtable, vdiffr, rxode2, nlmixr, nlmixr2,
+        nlmixr2data, lixoftConnectors, xgxr, withr
 VignetteBuilder: knitr
 NeedsCompilation: no
-RoxygenNote: 7.1.2
-Packaged: 2022-02-01 18:18:34 UTC; matt
+RoxygenNote: 7.2.0
+Encoding: UTF-8
+Packaged: 2022-06-09 20:48:23 UTC; matt
 Author: Amine Gassem [aut],
   Bruno Bieth [aut],
   Irina Baltcheva [aut],
@@ -54,4 +60,4 @@ Author: Amine Gassem [aut],
   Qing Xi Ooi [ctb],
   Novartis Pharma AG [cph]
 Repository: CRAN
-Date/Publication: 2022-02-01 18:50:06 UTC
+Date/Publication: 2022-06-09 23:00:07 UTC

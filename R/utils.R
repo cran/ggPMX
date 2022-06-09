@@ -221,6 +221,41 @@ pk_occ <- function() {
 }
 
 
+# Grabbed from babelmixr2, changed to snakecase
+lixoft_started <- NA
+
+has_lixoft_connectors <- function() {
+  if (is.na(lixoft_started)) {
+    if (!requireNamespace("lixoftConnectors", quietly = TRUE)) {
+      assignInMyNamespace("lixoft_started", FALSE)
+      return(invisible(FALSE))
+    }
+    x <- try(lixoftConnectors::initializeLixoftConnectors(software = "monolix"), silent=TRUE)
+    if (inherits(x, "try-error")) {
+      assignInMyNamespace("lixoft_started", FALSE)
+    } else {
+      assignInMyNamespace("lixoft_started", TRUE)
+    }
+  }
+  invisible(lixoft_started)
+}
+
+#' Splits by the first equal line
+#'
+#'
+#' @param x line information
+#' @return A list that contains the key and the value
+#' @author Matthew L. Fidler
+#' @noRd
+ggpmx_split_first_equal <- function(x) {
+  transpose(lapply(strsplit(x, " *= *"), function(x) {
+    if (length(x) == 1) return(c(x, ""))
+    if (length(x) == 2) return(x)
+    c(x[1], paste(x[-1], collapse="="))
+  }))
+}
+
+
 is_mlxtran <- function(file_name)
   identical(tools::file_ext(file_name), "mlxtran")
 
@@ -270,14 +305,17 @@ parse_mlxtran <- function(file_name) {
   setnames(dat, c("sub_section.name", "section.name"), c("sub_section", "section"))
   dat <- dat[sub_section != "TASKS"]
   ## split lines
-  dat[grepl("file=",line),line := gsub("file=","file = ",line)]
-  dat[, c("key", "value") := tstrsplit(dat$line, " = ")]
+  dat[, c("key", "value") := ggpmx_split_first_equal(dat$line)]
   dat[, line := NULL]
 
   ## extract controller param
   ### directory
   export_path <- gsub("'", "", dat[key == "exportpath", value])
-  directory <- file.path(dirname(file_name), export_path)
+  if(!dir.exists(export_path)) {
+      directory <- file.path(dirname(file_name), export_path)
+  }
+  else
+      directory <- export_path
   if (!dir.exists(directory)) {
     directory <- file.path(dirname(file_name), "RESULTS")
   }
@@ -304,8 +342,26 @@ parse_mlxtran <- function(file_name) {
   ## time
   time <- dat[grepl("use=time", value), key]
 
-
-
+  charts_data <- file.path(directory, "ChartsData")
+  if (!file.exists(charts_data)) {
+    # try lixoftConnectors
+    if (has_lixoft_connectors()) {
+      x <- try(lixoftConnectors::loadProject(file_name), silent=TRUE)
+      if (inherits(x, "try-error")){
+        warning("ggPMX needs ChartsData exported, could not load monolix file with lixoftConnectors",
+             call.=FALSE)
+      } else {
+        x <- try(lixoftConnectors::computeChartsData(), silent=TRUE)
+        if (file.exists(charts_data)) {
+          warning("ggPMX needs ChartsData exported, could not generate with lixoftConnectors (requires Monolix 2021+)",
+               call.=FALSE)
+        }
+      }
+    } else {
+      warning("ggPMX needs ChartsData exported",
+              call.=FALSE)
+    }
+  }
   res <- list(
     directory = directory,
     input = input,

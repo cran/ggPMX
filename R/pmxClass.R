@@ -1,3 +1,52 @@
+#' Update plot
+#' @param ctl controller
+#' @param pname parameter name
+#' @param defaults_ defaults of the parameters
+#' @param ... other arguments
+#' @noRd
+update_container_plots <- function(ctr, pname, defaults_, ...){
+  stopifnot(is_pmxclass(ctr))
+  if (!pname %in% (ctr %>% plot_names())) {return(NULL)}
+
+  pmx_update(ctr, pname, strat.color=NULL, strat.facet=NULL, color.scales=NULL,
+    filter=NULL, trans=NULL, l_left_join(defaults_, list(...)), pmxgpar=NULL
+  )
+}
+
+
+#' Create parameters for plot updating
+#' @param ctr controller
+#' @param pname parameter name
+#' @noRd
+get_plot_param <- function(ctr, pname){
+  params <- as.list(match.call(expand.dots = TRUE))[-1]
+  if ((pname == "iwres_dens") || (pname == "pmx_vpc")) {
+    params[["is.smooth"]] <- FALSE
+  }
+  params[["ctr"]] <- ctr
+  params[["pname"]] <- pname
+  params <- lang_to_expr(params)
+  params$defaults_ <- ctr$config$plots[[toupper(pname)]]
+  if (!exists("bloq", params) && !is.null(ctr$bloq)) {
+    params$defaults_[["bloq"]] <- ctr$bloq
+  }
+
+  # Check that x or y labels for updating exist (else plot updating will not work)
+  if ((!is.null(params$defaults_$labels$x)) || (!is.null(params$defaults_$labels$y))){
+    # Check if labels$x exists in added abbreviations; if not set default labels$x
+    if ((!is.null(params$defaults_$labels$x)) &&
+      (!(params$defaults_$labels$x %in% names(params$ctr$abbrev)))){
+        params$ctr$abbrev[params$defaults_$labels$x] <- params$defaults_$labels$x
+    }
+    # check if labels$y exists in added abbreviations; if not set default labels$y
+    if ((!is.null(params$defaults_$labels$y)) &&
+      (!(params$defaults_$labels$y %in% names(params$ctr$abbrev)))){
+        params$ctr$abbrev[params$defaults_$labels$y] <- params$defaults_$labels$y
+    }
+    do.call(update_container_plots, params)
+  }
+}
+
 
 #' Create simulation object
 #'
@@ -465,6 +514,9 @@ set_abbrev <- function(ctr, ...) {
   }
   class(abbrev) <- c("abbreviation", "list")
   ctr$abbrev <- abbrev
+  for (plot_name in (ctr %>% plot_names())){
+    get_plot_param(ctr, plot_name)
+  }
 }
 
 #' S3 print abbreviation
@@ -638,6 +690,7 @@ get_data <- function(ctr, data_set = c(
 #'
 #' @param ctr the controller object
 #' @param ... a named  list parameters (see example)
+#' @inheritParams base::eval
 #' @family pmxclass
 #' @details
 #' This function can be used to set an existing data set or to create a new one. The basic
@@ -657,13 +710,13 @@ get_data <- function(ctr, data_set = c(
 #' ## or create a new data set
 #' ctr %>% set_data(eta_long = dx)
 #' @export
-set_data <- function(ctr, ...) {
+set_data <- function(ctr, ..., envir=parent.frame()) {
   assert_that(is_pmxclass(ctr))
   params <- as.list(match.call(expand.dots = TRUE))[-c(1, 2)]
   if (!nzchar(names(params))) {
     stop("each data set should be well named")
   }
-  invisible(Map(function(n, v) ctr$data[[n]] <- eval(v), names(params), params))
+  invisible(Map(function(n, v) ctr$data[[n]] <- eval(v, envir=envir), names(params), params))
 }
 
 #' Get category covariates
@@ -1058,7 +1111,8 @@ pmx_transform <- function(x, dx, trans, direction) {
   )
   cols <- intersect(cols, names(dx))
   if (length(cols) > 0) {
-    dx[, (cols) := lapply(.SD, match.fun(trans)), .SDcols = (cols)]
+    fun <- match.fun(trans)
+    dx[, (cols) := lapply(.SD, fun), .SDcols = (cols)]
   }
   dx
 }
@@ -1164,8 +1218,8 @@ print.pmxClass <- function(x, ...) {
 pmx_copy <- function(ctr, keep_globals = FALSE, ...) {
   assert_that(is_pmxclass(ctr))
   cctr <- ctr$clone()
-  params <- as.list(match.call(expand.dots = TRUE))[-1]
-  params <- lang_to_expr(params)
+
+  params <- get_params_from_call()
 
   ## params <- list(...)
   if (!keep_globals) {
