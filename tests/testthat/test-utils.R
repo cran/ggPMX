@@ -1,5 +1,6 @@
 context("Test utility functions")
-
+tmp_dir <- tempfile("tmp")
+dir.create(tmp_dir)
 test_that("merge vectors error works", {
   expect_error(
     mergeVectors.(1:4, 5:8),
@@ -24,7 +25,7 @@ test_that("l_left_join merge compound lists", {
   expect_identical(res, expected)
 })
 
-test_that("pk_pd is worrking", {
+test_that("pk_pd is working", {
   ctr <- pk_pd()
   expect_s3_class(ctr, "pmxClass")
 })
@@ -41,7 +42,24 @@ wd <- file.path(system.file(package = "ggPMX"),
                 "testdata",
                 "1_popPK_model")
 
+for (f in list.files(path=wd)) {
+  if (f != "RESULTS") {
+    suppressWarnings(file.copy(file.path(wd,f), file.path(tmp_dir, f), copy.mode=FALSE))
+  }
+}
+dir.create(file.path(tmp_dir, "RESULTS"))
+for (f in list.files(path=file.path(wd, "RESULTS"))) {
+  suppressWarnings(file.copy(file.path(wd,"RESULTS", f),
+                             file.path(tmp_dir,"RESULTS", f), copy.mode=FALSE))
+}
+
+wd <- tmp_dir
+
 mlxpath <- file.path(wd, "project_copy.mlxtran")
+
+file_name <- file.path(wd,
+                       "project.mlxtran")
+
 
 test_that("parse_mlxtran: params: folder name", {
   a <- parse_mlxtran(file_name)
@@ -49,10 +67,11 @@ test_that("parse_mlxtran: params: folder name", {
     a,
     "list"
   ))
-  expect_true(a$directory == file.path(wd, "RESULTS"))
+  expect_equal(normalizePath(a$directory), normalizePath(file.path(wd, "RESULTS")))
 })
 
 test_that("parse_mlxtran: params: full file_name", {
+  skip_on_cran()
   dir.create(file.path(wd, "result"))
   section.name <- line <- section <- NULL
   sub_section <- sub_section.name <- NULL
@@ -73,7 +92,7 @@ test_that("parse_mlxtran: params: full file_name", {
     a,
     "list"
   ))
-  expect_true(a$directory == file.path(wd, "result"))
+  expect_equal(normalizePath(a$directory), normalizePath(file.path(wd, "result")))
 })
 
 test_that("parse_mlxtran: params: no exist file_name", {
@@ -95,7 +114,8 @@ test_that("parse_mlxtran: params: no exist file_name", {
 
   expect_true(inherits(
     a,
-    "list"
-  ))
-  expect_true(a$directory == file.path(wd, "RESULTS"))
+    "list"))
+  expect_equal(normalizePath(a$directory), normalizePath(file.path(wd, "RESULTS")))
 })
+
+unlink(tmp_dir, recursive=TRUE)

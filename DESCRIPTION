@@ -11,7 +11,7 @@ Description: At Novartis, we aimed at standardizing the set of diagnostic plots 
     <https://monolix.lixoft.com/monolix-api/lixoftconnectors_installation/>.
     When 'lixoftConnectors' is available, 'R' can use 'Monolix' directly to create the required
     Chart Data instead of exporting it from the 'Monolix' gui.
-Version: 1.2.7
+Version: 1.2.8
 Authors@R: c(
               person("Amine", "Gassem", email="contact@ag-study.com", role=c("aut")),
               person("Bruno", "Bieth", email="biethb@hotmail.com", role="aut"),
@@ -43,7 +43,7 @@ VignetteBuilder: knitr
 NeedsCompilation: no
 RoxygenNote: 7.2.0
 Encoding: UTF-8
-Packaged: 2022-06-09 20:48:23 UTC; matt
+Packaged: 2022-06-17 17:07:48 UTC; matt
 Author: Amine Gassem [aut],
   Bruno Bieth [aut],
   Irina Baltcheva [aut],
@@ -60,4 +60,4 @@ Author: Amine Gassem [aut],
   Qing Xi Ooi [ctb],
   Novartis Pharma AG [cph]
 Repository: CRAN
-Date/Publication: 2022-06-09 23:00:07 UTC
+Date/Publication: 2022-06-17 23:10:02 UTC

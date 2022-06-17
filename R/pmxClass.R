@@ -757,8 +757,6 @@ get_covariates <- function(ctr) {
   res[nzchar(res)]
 }
 
-
-
 #' Get continuous covariates
 #'
 #' @param ctr the controller object
@@ -770,7 +768,6 @@ get_conts <- function(ctr) {
   assert_that(is_pmxclass(ctr))
   ctr$conts
 }
-
 
 #' Get controller occasional covariates
 #'
@@ -913,7 +910,8 @@ pmx_initialize <- function(self, private, data_path, input, dv,
     }
     self$input <- setDT(input)
   }
-
+  # Always add isobserv to address issue #235
+  self$input$isobserv <- "accepted"
 
   self[["data"]] <- load_source(
     sys = config[["sys"]],
