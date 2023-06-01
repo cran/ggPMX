@@ -77,7 +77,22 @@ plot_pmx.individual <-
     dx$maxValue <- 0
     ## plot
     if (x$dname == "predictions") cat("USE predictions data set \n")
+
     strat.facet <- x[["strat.facet"]]
+
+    # dropping any rows with NA in the faceting column
+    if (!is.null(strat.facet)) {
+      faceting_column <- {
+        if (inherits(strat.facet, "formula")) {
+          # converting to character required by tidyr::drop_na
+          faceting_column <- sub("...", "", toString(strat.facet))
+        } else {strat.facet}
+      }
+
+      dx <- tidyr::drop_na(dx, tidyr::all_of(faceting_column))
+      x[["dx"]] <- tidyr::drop_na(x[["dx"]], tidyr::all_of(faceting_column))
+    }
+
     strat.color <- x[["strat.color"]]
 
     wrap.formula <- if (!is.null(strat.facet)) {
@@ -96,10 +111,13 @@ plot_pmx.individual <-
         point$shape <- NULL
         max_y <- aggregate(TIME ~ ID, data=dx, max)
         colnames(max_y) <- c("ID", "maxValue")
-        dx <- base::merge(dx, max_y, by="ID", all.x = T)
-        dx$isobserv <- with(dx, TIME < maxValue)
+        dx <- base::merge(dx, max_y, by="ID", all.x = TRUE)
+        # Rounding because "predictions" data are rounded:
+        dx$isobserv <- with(dx, round(TIME) <= maxValue)
         point$data <- base::merge(point$data, max_y, by="ID")
-        point$data$isobserv <- ifelse(point$data$TIME < point$data$maxValue, "accepted", "ignored")
+        # Rounding because "predictions" data are rounded:
+        point$data$isobserv <-
+          ifelse(round(point$data$TIME) <= point$data$maxValue, "accepted", "ignored")
         points <- copy(point)
         points$colour <- NULL
         do.call(geom_point, points)
@@ -112,29 +130,32 @@ plot_pmx.individual <-
           if (bloq$limit %in% names(bloq$data)) {
             bloq$data[!is.na(get(bloq$limit)), "y_end" := as.numeric(get(bloq$limit))]
             bloq$mapping <-
-            aes_string(
-              xend = "TIME",
-              yend = "y_end"
+            aes(
+              xend = .data$TIME,
+              yend = .data$y_end
             )
-          bloq$cens <- bloq$limit <- NULL
+            bloq$cens <- bloq$limit <- bloq$size <- NULL
           do.call(geom_segment, bloq)
           }
         }
       }
-
       if (!is.null(point)) {
-        n <- ifelse(any(point$data$isobserv == "ignored"), 3, 2)
+        n <- ifelse(any(point$data$isobserv == "ignored"), 3,
+                    ifelse(length(point$data$isobserv) == 0L, 1, 2))
         linetype_values <- c(rep("solid", n), "dashed")
-        if (any(point$data$isobserv == "ignored"))
+        if (any(point$data$isobserv == "ignored")) {
           linetype_labels <- c("accepted",
                                "ignored",
                                "individual predictions",
                                "population predictions")
-        else
+        } else if (length(point$data$isobserv) == 0L) {
+          linetype_labels <- c("individual predictions",
+                               "population predictions")
+        } else {
           linetype_labels <- c("accepted",
                                "individual predictions",
                                "population predictions")
-
+        }
       } else {
         n <- 2
         linetype_labels <- c("accepted",
@@ -145,7 +166,7 @@ plot_pmx.individual <-
 
       shape_values <- c(rep(point.shape, n + 1))
       shape_values_leg <- c(rep(point.shape, n - 1), rep(20, 2))
-      size_values <- c(rep(1, n - 1), ipred_line$size, pred_line$size)
+      linewidth_values <- c(rep(1, n - 1), ipred_line$linewidth, pred_line$linewidth)
       if (any(point$data$isobserv == "ignored"))
         colour_values <- c(point$colour[1],
                            get_invcolor(point$colour),
@@ -156,38 +177,39 @@ plot_pmx.individual <-
                            ipred_line$colour,
                            pred_line$colour)
       keywidth_values <- c(rep(0, n - 1), rep(2, 2))
-      p <- ggplot(dx, aes(TIME, DV, shape=isobserv, colour=isobserv)) +
+
+      p <- ggplot(dx, aes(TIME, DV, shape = isobserv, colour = isobserv)) +
         p_point +
-        geom_line(
-          aes(
-            y = IPRED,
-            linetype = "individual predictions",
-            colour = "individual predictions"
+        geom_line(aes(y=.data$IPRED, linetype = "individual predictions",
+                      colour = "individual predictions"),
+                  linewidth=ipred_line[["linewidth"]]) +
+        geom_line(aes(y = .data$PRED, linetype = "population predictions",
+                    colour = "population predictions"),
+                linewidth=pred_line[["linewidth"]]) +
+        scale_linetype_manual(
+          values = setNames(
+            linetype_values,
+            linetype_labels
           ),
-          size = ipred_line$size
+          guide = "none"
         ) +
-        geom_line(
-          aes(
-            y = PRED,
-            linetype = "population predictions",
-            colour = "population predictions"
+        scale_shape_manual(
+          values = setNames(
+            shape_values,
+            linetype_labels
           ),
-          size = pred_line$size
+          guide = "none"
         ) +
-        scale_linetype_manual(values = setNames(linetype_values,
-                                                linetype_labels),
-                              guide = "none") +
-        scale_shape_manual(values = setNames(shape_values,
-                                             linetype_labels),
-                           guide = "none") +
         scale_colour_manual(
-          values = setNames(colour_values,
-                            linetype_labels),
+          values = setNames(
+            colour_values,
+            linetype_labels
+          ),
           guide = guide_legend(
             override.aes = list(
               linetype = linetype_values,
               shape = shape_values_leg,
-              size = size_values
+              linewidth = linewidth_values
             ),
             title = NULL,
             keywidth = keywidth_values
@@ -195,7 +217,7 @@ plot_pmx.individual <-
         ) +
         p_bloq
 
-        gp$is.legend <- is.legend
+      gp$is.legend <- is.legend
 
       p <- plot_pmx(gp, p)
 
@@ -215,7 +237,7 @@ plot_pmx.individual <-
           if (is.null(facets$labeller)) {
             facets$labeller <- labeller(ID = function(x) sprintf("ID: %s", x))
           }
-          p + do.call(facet_wrap_paginate, facets)
+          p + do.call(ggforce::facet_wrap_paginate, facets)
         })
         if (length(res) == 1) res[[1]] else res
       }

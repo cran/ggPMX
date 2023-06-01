@@ -360,7 +360,8 @@ pmx_endpoint <-
 #' @param cens \code{character} the censoring column name
 #' @param limit \code{character}  the limit column name (optional)
 #' @param colour \code{character}  the color of the geom
-#' @param size \code{numeric}  the size of the geom
+#' @param size \code{numeric}  the size of the geom when using \code{geom_point()}
+#' @param linewidth \code{numeric} the line width of the segment when using \code{geom_segment()}
 #' @param alpha  \code{numeric}  the alpha of the geom
 #' @param show \code{logical} if FALSE remove all censory observations
 #' @param ... any other graphical parameter
@@ -377,6 +378,7 @@ pmx_bloq <-
              limit = "LIMIT",
              colour = "pink",
              size = 2,
+             linewidth=1,
              alpha = 0.9,
              show = TRUE,
              ...) {
@@ -386,6 +388,7 @@ pmx_bloq <-
       show = show,
       colour = colour,
       size = size,
+      linewidth = linewidth,
       alpha = alpha,
       ...
     )
@@ -397,6 +400,52 @@ pmx_bloq <-
   }
 
 
+#' Create shrinkage parameter object
+#' @param fun \code{list} shrinkage function can be \code{sd} or \code{var}
+#' @param size \code{numeric} shrinkage text size
+#' @param color \code{character} shrinkage text color
+#' @param vjust \code{numeric} shrinkage position vertical adjustment
+#' @param hjust \code{numeric} shrinkage position horizontal adjustment
+#' @param ... any other parameter
+#' @return \code{pmxShrinkClass} object (\code{list})
+#' @export
+
+pmx_shrink <- function(fun = c("var", "sd"),
+                       size = 1,
+                       color = "green",
+                       vjust = 1.5,
+                       hjust = 0.5,
+                       ...) {
+  checkmate::assert_character(x = fun, any.missing=FALSE)
+  checkmate::assert_numeric(x = size, len = 1, any.missing=FALSE)
+  checkmate::assert_character(x = color, len = 1, any.missing=FALSE)
+  checkmate::assert_numeric(x = vjust, len = 1, any.missing=FALSE)
+  checkmate::assert_numeric(x = hjust, len = 1, any.missing=FALSE)
+
+  if(length(fun) > 1) {fun <- "var"}
+
+  res <- list(
+    fun = fun,
+    size = size,
+    color = color,
+    vjust = vjust,
+    hjust = hjust,
+    ...
+  )
+
+  structure(res, class = c("list", "pmxShrinkClass"))
+}
+
+
+#' Performs checks of names in shrink list
+#'
+#' @param shrink_list \code{list} list of shrink arguments
+#' @export
+
+check_shrink <- function(shrink_list) {
+  arg_names <- c("fun", "size", "color", "vjust", "hjust")
+  checkmate::checkNames(names(shrink_list), must.include = arg_names)
+}
 
 
 #' Create a new plot  of the desired type
@@ -502,9 +551,11 @@ set_plot <- function(
 #' @param ... Options to set or add, with the form \code{name = value}.
 #' @export
 #' @examples
+#' \donttest{
 #' ctr <- theophylline()
 #' ctr %>% set_abbrev("new_param" = "new value")
 #' ctr %>% get_abbrev("new_param")
+#' }
 set_abbrev <- function(ctr, ...) {
   assert_that(is_pmxclass(ctr))
   abbrev <- if (length(ctr$abbrev) > 0) {
@@ -698,6 +749,7 @@ get_data <- function(ctr, data_set = c(
 #' values or apply any other data set operation) and use the new data set using the dname
 #' parameter of pmx_plot family functions.
 #' @examples
+#' \donttest{
 #' ctr <- theophylline()
 #' dx <- ctr %>% get_data("eta")
 #' dx <- dx[, EFFECT := factor(
@@ -709,6 +761,7 @@ get_data <- function(ctr, data_set = c(
 #' ctr %>% set_data(eta = dx)
 #' ## or create a new data set
 #' ctr %>% set_data(eta_long = dx)
+#' }
 #' @export
 set_data <- function(ctr, ..., envir=parent.frame()) {
   assert_that(is_pmxclass(ctr))
@@ -964,12 +1017,39 @@ pmx_initialize <- function(self, private, data_path, input, dv,
     )
 
     #rename npde and iwRes to NPDE and IWRES
-    place_vec <- which(names(self$data$sim_blq_y) == "npde" | names(self$data$sim_blq_y) == "iwRes")
-    names(self$data$sim_blq_y)[place_vec] <- toupper(names(self$data$sim_blq_y)[place_vec])
+    place_vec <- which(
+      names(self$data$sim_blq_y) == "npde" |
+      names(self$data$sim_blq_y) == "iwRes"
+    )
+    names(self$data$sim_blq_y)[place_vec] <-
+      toupper(names(self$data$sim_blq_y)[place_vec])
 
-    #give message if new version of monolix, otherwise sim_blq cannot be loaded anyway
-  } else if(self$config$sys == "mlx18") {
+    # Needed same treatment for "sim_blq" as for "sim_blq_y"
+    if(!is.null(self[["data"]][["sim_blq"]])){
+      # In some cases xx and xx_simBlq are not the same
+      suppressWarnings({
+        for(cn in c("iwRes", "pwRes", "npde")) {
+          if(paste0(cn, "_mode_simBlq") %in% colnames(self[["data"]][["sim_blq"]])) {
+            self[["data"]][["sim_blq"]][[toupper(cn)]] <-
+              self[["data"]][["sim_blq"]][[paste0(cn, "_mode_simBlq")]]
+          }
+        }
+      })
+    }
 
+    # Needed same treatment for "sim_blq_npde_iwres" as for "sim_blq_y"
+    if(!is.null(self[["data"]][["sim_blq_npde_iwres"]])){
+      #rename npde and iwRes to NPDE and IWRES
+      place_vec <- which(
+        names(self$data$sim_blq_npde_iwres) == "npde" |
+        names(self$data$sim_blq_npde_iwres) == "iwRes"
+      )
+  
+      names(self$data$sim_blq_npde_iwres)[place_vec] <-
+        toupper(names(self$data$sim_blq_npde_iwres)[place_vec])
+    }
+  } else if ((self$config$sys == "mlx18") && (self$sim_blq == TRUE)) {
+    # give message if new version of monolix, otherwise sim_blq cannot be loaded anyway
     message("`sim_blq` dataset could not be generated, `sim_blq_npde_iwres` or `sim_blq_y` is missing")
   }
 
@@ -1210,9 +1290,11 @@ print.pmxClass <- function(x, ...) {
 
 #'
 #' @examples
+#' \donttest{
 #' ctr <- theophylline()
 #' cctr <- ctr %>% pmx_copy()
 #' ## Any change in the ctr has no side effect in the ctr and vice versa
+#' }
 pmx_copy <- function(ctr, keep_globals = FALSE, ...) {
   assert_that(is_pmxclass(ctr))
   cctr <- ctr$clone()

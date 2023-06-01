@@ -5,8 +5,11 @@
 \title{Handling pmx Graphical parameters}
 \usage{
 pmx_gpar(
+  is.title,
   labels,
   axis.title,
+  which_pages,
+  print,
   axis.text,
   ranges,
   is.smooth,
@@ -18,6 +21,7 @@ pmx_gpar(
   discrete,
   is.identity_line,
   identity_line,
+  smooth_with_bloq,
   scale_x_log10,
   scale_y_log10,
   color.scales,
@@ -26,9 +30,17 @@ pmx_gpar(
 )
 }
 \arguments{
+\item{is.title}{\code{logical} if TRUE then a title is used for the plot}
+
 \item{labels}{list of labels, like title, subtitle, x , y}
 
 \item{axis.title}{list or element_text (same as ggplot2 axis.title theme)}
+
+\item{which_pages}{page(s) to display; if "all" display all pages,
+if 1 display first page, if c(1,2) display first and second pages}
+
+\item{print}{if TRUE the ouptut will be a print not a ggplot2. This
+is useful for rmarkdwon output to avoid verbose list index print.}
 
 \item{axis.text}{list or element_text (same as ggplot2 axis.text theme)}
 
@@ -51,6 +63,8 @@ pmx_gpar(
 \item{is.identity_line}{\code{logical} if TRUE add y=x line}
 
 \item{identity_line}{\code{list} y=x aes properties}
+
+\item{smooth_with_bloq}{\code{logical} if TRUE perform spline in plots with BLOQ data}
 
 \item{scale_x_log10}{logical if TRUE add scale_x_log10 layer}
 

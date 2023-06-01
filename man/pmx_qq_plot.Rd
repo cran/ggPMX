@@ -65,7 +65,8 @@ pmx_plot_cwres_qq(ctr, ...)
 
 \item{is.shrink}{\code{logical} if TRUE add shrinkage to the plot}
 
-\item{shrink}{\code{list} shrinkage graphical parameter (geom_text)}
+\item{shrink}{\code{pmxShrinkClass} shrinkage graphical parameter or
+\code{list} coercible into one}
 
 \item{is.hline}{\code{logical} if TRUE add horizontal line y=0 ( TRUE by default)}
 
@@ -172,9 +173,9 @@ ctr \%>\% pmx_plot_eta_qq(reference_line=NULL)
 # stratification  ----------------------------------
 
 ## categorical stratification color parameter
-ctr \%>\% pmx_plot_iwres_qq(strat.facet="STUD",strat.color="SEX")
+ctr \%>\% pmx_plot_iwres_qq(strat.facet=~STUD,strat.color="SEX")
 ## categorical stratification facetting
-ctr \%>\% pmx_plot_eta_qq(strat.facet = "SEX")
+ctr \%>\% pmx_plot_eta_qq(strat.facet = ~SEX)
 
 ## do not use symmetric axis
 ctr \%>\% pmx_plot_npde_qq(xmax=FALSE,reference_line=list())

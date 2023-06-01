@@ -3,6 +3,7 @@ ABS_IWRES_IPRED:
   ptype: SCATTER
   x: IPRED
   'y': IWRES
+  is.title: TRUE
   labels:
     title: '|IWRES| vs IPRED'
     subtitle: ''
@@ -14,6 +15,7 @@ ABS_IWRES_IPRED:
     size: 1.0
   is.hline: yes
   is.smooth: yes
+  smooth_with_bloq: no
   smooth:
     se: no
     colour: red
@@ -25,12 +27,14 @@ ABS_IWRES_IPRED:
     limit: LIMIT
     colour: pink
     size: 2.0
+    linewidth: 2.0
     alpha: 0.9
 
 ABS_IWRES_TIME:
   ptype: SCATTER
   x: TIME
   'y': IWRES
+  is.title: TRUE
   labels:
     title: '|IWRES| vs TIME'
     subtitle: ''
@@ -42,6 +46,7 @@ ABS_IWRES_TIME:
     size: 1.0
   is.hline: yes
   is.smooth: yes
+  smooth_with_bloq: no
   smooth:
     se: no
     colour: red
@@ -53,12 +58,14 @@ ABS_IWRES_TIME:
     limit: LIMIT
     colour: pink
     size: 2.0
+    linewidth: 2.0
     alpha: 0.9
 
 IWRES_IPRED:
   ptype: SCATTER
   x: IPRED
   'y': IWRES
+  is.title: TRUE
   labels:
     title: IWRES vs IPRED
     subtitle: ''
@@ -71,6 +78,7 @@ IWRES_IPRED:
   is.hline: yes
   is.band: yes
   is.smooth: yes
+  smooth_with_bloq: no
   smooth:
     se: no
     colour: red
@@ -81,12 +89,14 @@ IWRES_IPRED:
     limit: LIMIT
     colour: pink
     size: 2.0
+    linewidth: 2.0
     alpha: 0.9
 
 IWRES_TIME:
   ptype: SCATTER
   x: TIME
   'y': IWRES
+  is.title: TRUE
   labels:
     title: IWRES vs TIME
     subtitle: ''
@@ -98,6 +108,7 @@ IWRES_TIME:
     size: 1.0
   is.hline: yes
   is.smooth: yes
+  smooth_with_bloq: no
   is.band: yes
   smooth:
     se: no
@@ -109,11 +120,13 @@ IWRES_TIME:
     limit: LIMIT
     colour: pink
     size: 2.0
+    linewidth: 2.0
     alpha: 0.9
 
 IWRES_DENS:
   ptype: PMX_DENS
   x: IWRES
+  is.title: FALSE
   dname: predictions
   labels:
     title: 'Density plot of IWRES'
@@ -124,6 +137,7 @@ IWRES_DENS:
 IWRES_QQ:
   ptype: PMX_QQ
   x: IWRES
+  is.title: FALSE
   labels:
     title: ''
     subtitle: ''
@@ -143,6 +157,7 @@ NPDE_TIME:
   ptype: SCATTER
   x: TIME
   'y': NPDE
+  is.title: TRUE
   labels:
     title: NPDE vs TIME
     subtitle: ''
@@ -155,6 +170,7 @@ NPDE_TIME:
   is.hline: yes
   is.band: yes
   is.smooth: yes
+  smooth_with_bloq: no
   smooth:
     se: no
     colour: red
@@ -165,12 +181,14 @@ NPDE_TIME:
     limit: LIMIT
     colour: pink
     size: 2.0
+    linewidth: 2.0
     alpha: 0.9
 
 NPDE_PRED:
   ptype: SCATTER
   x: PRED
   'y': NPDE
+  is.title: TRUE
   labels:
     title: NPDE vs PRED
     subtitle: ''
@@ -185,6 +203,7 @@ NPDE_PRED:
     colour: black
   is.band: yes
   is.smooth: yes
+  smooth_with_bloq: no
   smooth:
     se: no
     colour: red
@@ -194,12 +213,14 @@ NPDE_PRED:
     cens: CENS
     limit: LIMIT
     colour: pink
+    linewidth: 2.0
     size: 2.0
     alpha: 0.9
 
 NPDE_QQ:
   ptype: PMX_QQ
   x: NPDE
+  is.title: TRUE
   labels:
     title: ''
     subtitle: ''
@@ -220,11 +241,13 @@ DV_PRED:
     'y': DV
   x: PRED
   'y': DV
+  is.title: TRUE
   point:
     shape: 1.0
     colour: black
     size: 1.0
   is.smooth: yes
+  smooth_with_bloq: no
   smooth:
     se: no
     colour: red
@@ -239,7 +262,9 @@ DV_PRED:
     limit: LIMIT
     colour: pink
     size: 2.0
+    linewidth: 2.0
     alpha: 0.9
+  square_plot: yes
     
 DV_IPRED:
   ptype: SCATTER
@@ -250,11 +275,13 @@ DV_IPRED:
     'y': DV
   x: IPRED
   'y': DV
+  is.title: TRUE
   point:
     shape: 1.0
     colour: black
     size: 1.0
   is.smooth: yes
+  smooth_with_bloq: no
   smooth:
     se: no
     colour: red
@@ -268,6 +295,7 @@ DV_IPRED:
     cens: CENS
     limit: LIMIT
     colour: pink
+    linewidth: 2.0
     size: 2.0
     alpha: 0.9
 
@@ -278,13 +306,15 @@ INDIVIDUAL:
   dname: IND
   ranges: ~
   is.smooth: no
+  smooth_with_bloq: no
+  is.title: TRUE
   ipred_line:
     colour: black
-    size: 1
+    linewidth: 1
     linetype: 2
   pred_line:
     colour: black
-    size: 1
+    linewidth: 1
     linetype: 1
   point:
     colour: black
@@ -305,6 +335,7 @@ INDIVIDUAL:
     cens: CENS
     limit: LIMIT
     colour: pink
+    linewidth: 2.0
     size: 2.0
     alpha: 0.9
   is.legend: yes
@@ -316,12 +347,13 @@ ETA_HIST:
   ptype: DIS
   type: hist
   dname: eta
+  is.title: TRUE
   facets:
     scales: free_x
     nrow: 3.0
   is.shrink: yes
   shrink:
-    fun: sd
+    fun: var
     size: 4.0
     colour: black
     hjust: -1
@@ -343,6 +375,7 @@ ETA_BOX:
   ptype: DIS
   dname: eta
   type: box
+  is.title: TRUE
   is.jitter: yes
   jitter:
     shape: 1.0
@@ -352,7 +385,7 @@ ETA_BOX:
     alpha: 0.6
   is.shrink: yes
   shrink:
-    fun: sd
+    fun: var
     size: 4.0
     colour: black
     hjust: 0.5
@@ -382,7 +415,9 @@ ETA_MATRIX:
   type.eta: mode
   text_color: black
   is.smooth: yes
+  smooth_with_bloq: no
   is.hline: yes
+  is.title: TRUE
   hline: 
     linetype: 2.0
   point:
@@ -392,33 +427,36 @@ ETA_MATRIX:
   smooth:
     se: FALSE
     linetype: 1
-    size: 1.5
+    linewidth: 1.5
     method: loess
     colour: red
   is.shrink: TRUE
   shrink:
-    fun : sd
+    fun : var
     size: 5
   
 ETA_CATS:
   ptype: ETA_COV
+  is.title: TRUE
   type: cats
   
 ETA_CONTS:
   ptype: ETA_COV
   type: conts
+  is.title: TRUE
   facets:
     scales: free
   point:
     shape: 21
     color: black
   correl:
-    colour: black
-    size: 5
+    colour: red
+    size: 4
   is.smooth: yes
+  smooth_with_bloq: no
   smooth:
     se: no
-    size: 1
+    linewidth: 1
     color: black
     linetype: 1.0
     method: lm
@@ -434,6 +472,7 @@ ETA_QQ:
   ptype: PMX_QQ
   x: VALUE
   dname: eta
+  is.title: TRUE
   labels:
     title: ''
     subtitle: ''
@@ -448,7 +487,7 @@ ETA_QQ:
   xmax: no
   is.shrink: yes
   shrink:
-    fun: sd
+    fun: var
     size: 4.0
     colour: black
     hjust: -1
@@ -463,9 +502,11 @@ PMX_VPC:
   ptype: VPC
   type: percentile
   dname: sim
+  is.title: TRUE
   labels:
     title: 'Percentile VPC'
     subtitle: '(with observations)'
     x: TIME
     'y': DV
   is.smooth: no
+  smooth_with_bloq: no

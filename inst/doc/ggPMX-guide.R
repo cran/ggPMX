@@ -1,7 +1,6 @@
 ## ----load_package, echo=FALSE,warning=FALSE,message=FALSE---------------------
 knitr::opts_chunk$set(out.width = "100%", warning = FALSE, message = FALSE)
 library(ggplot2)
-library(xtable)
 library(knitr)
 library(ggPMX)
 
@@ -18,7 +17,8 @@ ctr %>% pmx_plot_npde_time
 ctr %>% pmx_plot_vpc
 ctr %>% pmx_plot_eta_box
 ctr %>% pmx_plot_eta_matrix(
-  shrink=list(size=3,hjust=1.5))
+  shrink=list(size=3, hjust=1.5, fun="var")
+)
 
 ## ----echo=FALSE, out.width='80%', fig.align='center'--------------------------
 knitr::include_graphics("./ggPMX_arch.png")
@@ -173,6 +173,23 @@ ctr %>% plot_names()
 ## ----plot_types---------------------------------------------------------------
 ctr %>% plots()
 
+## ----head_table---------------------------------------------------------------
+# head table
+head_table <- function(out, label, caption, head=TRUE) {
+  if (head) {
+    hout <- head(out)
+  } else {
+    hout <- out
+  }
+  if (requireNamespace("xtable", quietly = TRUE)) {
+    xt <- xtable::xtable(hout, label = label,
+                         caption = caption)
+    print(xt, comment = F)
+  } else {
+    print(hout)
+  }
+}
+
 ## ----datasets_list,echo=FALSE,results='asis'----------------------------------
 
 out <- rbind(
@@ -184,10 +201,7 @@ out <- rbind(
 )
 
 colnames(out) <- c("ggPMX dataset", "Description")
-# knitr::kable(out)
-# latex(head(out), file='', label='tab:ggPMX_datasets', caption='ggPMX datasets',where = "!htbp")
-xt <- xtable(head(out), label = "tab:ggPMX_datasets", caption = "ggPMX datasets")
-print(xt, comment = F)
+head_table(out, label = "tab:ggPMX_datasets", caption = "ggPMX datasets")
 
 ## ----echo=FALSE---------------------------------------------------------------
 theophylline <- file.path(system.file(package = "ggPMX"), "testdata", "theophylline")
@@ -219,7 +233,7 @@ ctr %>% pmx_plot_iwres_time
 #  ctr %>% pmx_plot_eta_box
 
 ## ----basics_indiv, eval=F, fig.height=6, fig.width=6, fig.show='hold', fig.align='center'----
-#  ctr %>% pmx_plot_individual(which_pages = 1)
+#  ctr %>% pmx_plot_individual(which_pages=1)
 
 ## ----basics_qq, eval=F, fig.height=3, fig.width=3, fig.show='hold', fig.align='center'----
 #  ctr %>% pmx_plot_npde_qq
@@ -304,11 +318,11 @@ ctr %>% pmx_plot_vpc(type ="scatter")
 ctr %>% pmx_plot_vpc(bin=pmx_vpc_bin(style = "kmeans",n=5))
 
 ## ----fig.height=7, fig.width=6------------------------------------------------
-ctr %>% pmx_plot_vpc(strat.facet="SEX",facets=list(nrow=2))
+ctr %>% pmx_plot_vpc(strat.facet=~SEX,facets=list(nrow=2))
 
 ## ----fig.height=7, fig.width=6------------------------------------------------
 ctr %>% pmx_plot_vpc(
-  strat.facet="SEX",
+  strat.facet=~SEX,
   facets=list(nrow=2),
   type="percentile",
   is.draft = FALSE,
@@ -330,17 +344,17 @@ ctr <- theophylline()
 ## ----eval=FALSE---------------------------------------------------------------
 #  ctr %>% pmx_report(name='Diagnostic_plots2',
 #                     save_dir = work_dir,
-#                     format='both')
+#                     format='all')
 
 ## ----eval=FALSE---------------------------------------------------------------
 #  ctr %>% pmx_report(name='Diagnostic_plots1',
 #                     save_dir = work_dir,
-#                     format='report')
+#                     output='report')
 
 ## ----eval=FALSE---------------------------------------------------------------
 #  ctr %>% pmx_report(name='Diagnostic_plots3',
 #                     save_dir = work_dir,
-#                     format='report',
+#                     output'='report',
 #                     template=file.path(work_dir,'Diagnostic_plots1.Rmd'))
 
 ## ----eval=F-------------------------------------------------------------------
@@ -396,7 +410,7 @@ ctr %>% pmx_plot_npde_time
 
 ## ----settings_use.finegrid,fig.height=9, fig.width=7--------------------------
 ctr <- theophylline()
-ctr %>% pmx_plot_individual(use.finegrid =FALSE)
+ctr %>% pmx_plot_individual(which_pages="all", use.finegrid =FALSE)
 
 ## ----settings_color_scales_local----------------------------------------------
 ctr <- theophylline()
@@ -473,9 +487,7 @@ out <- rbind(
 )
 
 colnames(out) <- c("Argument", "Description", "Values")
-
-xt <- xtable(head(out), label = "tab:pmx_mandatory", caption = "Mandatory arguments of pmx() function")
-print(xt, comment = F)
+head_table(out, label = "tab:pmx_mandatory", caption = "Mandatory arguments of pmx() function")
 
 ## ----init_ctr-----------------------------------------------------------------
 theophylline_path <- file.path(system.file(package = "ggPMX"), "testdata", "theophylline")
@@ -510,8 +522,7 @@ out <- rbind(
 )
 
 colnames(out) <- c("Plot Name", "ggPMX type", "ggPMX name")
-xt <- xtable(out, label = "tab:plots_list", caption = "List of all diagnostic plots")
-print(xt, comment = F)
+head_table(out, label = "tab:plots_list", caption = "List of all diagnostic plots")
 
 ## ----functions_list,echo=FALSE,results='asis'---------------------------------
 
@@ -528,8 +539,7 @@ out <- rbind(
 
 colnames(out) <- c(" ", "Function name", "Description")
 
-xt <- xtable(out, label = "tab:func_list", caption = "List of all `ggPMX` functions")
-print(xt, comment = F)
+head_table(out, label = "tab:func_list", caption = "List of all `ggPMX` functions", head=FALSE)
 
 ## ----pmx_gpar_args------------------------------------------------------------
 args(pmx_gpar)
@@ -550,10 +560,10 @@ ctr %>%   pmx_plot_eta_box( is.shrink = FALSE)
 
 
 ## ---- compute_var-------------------------------------------------------------
-ctr %>% pmx_comp_shrink(  fun = "var")
+ctr %>% pmx_comp_shrink(fun="var")
 
 ## ---- shrink_plot_var---------------------------------------------------------
-ctr %>% pmx_plot_eta_box( shrink=list(fun = "var"))
+ctr %>% pmx_plot_eta_box(shrink=pmx_shrink(fun = "var"))
 
 ## ----shrink_comp_strat--------------------------------------------------------
 ctr %>% pmx_comp_shrink(strat.facet = ~SEX)
@@ -566,6 +576,6 @@ ctr %>% pmx_plot_eta_hist(is.shrink = TRUE, strat.facet = ~SEX,
                           facets=list(scales="free_y"))
 
 ## ----fig.width=12, fig.height=6-----------------------------------------------
-ctr %>% pmx_plot_eta_box(is.shrink = TRUE, strat.facet = "SEX",
+ctr %>% pmx_plot_eta_box(is.shrink = TRUE, strat.facet = ~SEX,
                           facets=list(scales="free_y",ncol=2))
 

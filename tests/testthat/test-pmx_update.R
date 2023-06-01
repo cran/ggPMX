@@ -16,10 +16,11 @@ test_that("can remove DIS plot", {
   expect_false("distr1" %in% ctr$plots())
 })
 
+
 test_that("can update IND plot", {
   ctr <- helpers$ctr
   ctr %>% set_plot("IND", pname = "indiv1")
-  expect_is(ctr %>% get_plot("indiv1", c(2, 4)), "list")
+  expect_is(ctr %>% get_plot("indiv1", c(1, 2)), "list")
   expect_true("indiv1" %in% ctr$plots())
   oldconf <- ctr$get_config("indiv1")
   expect_false(oldconf$gp$is.band)
@@ -28,6 +29,7 @@ test_that("can update IND plot", {
   newconf <- ctr$get_config("indiv1")
   expect_true(newconf$gp$is.band)
 })
+
 
 test_that("can remove IND plot", {
   ctr <- helpers$ctr
@@ -88,7 +90,15 @@ test_that("plot title with start.facet", {
   # Change x- and y-labels
   p1 <- ctr %>% pmx_plot_iwres_ipred(strat.color = "AGE0", strat.facet = ~STUD)
   p2 <- ctr %>% pmx_plot_iwres_ipred(strat.color = "AGE0", strat.facet = SEX ~ STUD)
+  # Custom label still takes priority
+  p3 <- pmx_plot_iwres_ipred(
+    ctr,
+    strat.color = "AGE0",
+    strat.facet = SEX ~ STUD,
+    labels = list(title = "CUSTOM_A vs CUSTOM_B by CUSTOM_OVERRIDE")
+  )
 
   expect_identical(p1$labels$title, "IWRES vs IPRED by STUD")
   expect_identical(p2$labels$title, "IWRES vs IPRED by SEX and STUD")
+  expect_identical(p3[["labels"]][["title"]], "CUSTOM_A vs CUSTOM_B by CUSTOM_OVERRIDE")
 })

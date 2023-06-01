@@ -15,7 +15,8 @@
 #' @param type box for boxplot or histogram
 #' @param dname name of dataset to be used
 #' @param is.shrink \code{logical} if TRUE add shrinkage layer
-#' @param shrink \code{list} list of parameters to tune the shrinkage
+#' @param shrink \code{pmxShrinkClass} shrinkage graphical parameter or
+#'   \code{list} coercible into one
 #' @param is.jitter \code{logical} if TRUE add jitter operator for points
 #' @param histogram \code{list} histogram graphical parameters
 
@@ -70,6 +71,7 @@ eta_distribution_plot <-
 # Distribution boxplot --------------------------------------------------------------
 
 #' Eta Distribution boxplot
+#' @param shrink \code{list} parameters to control shrinkage, must contain "fun"
 #' @family eta_distribution_plot
 #' @rdname eta_distribution_plot
 #' @export
@@ -88,6 +90,7 @@ pmx_plot_eta_box <-
 
 #' Eta Distribution histogram plot
 #' @export
+#' @param shrink \code{list} parameters to control shrinkage, must contain "fun"
 #' @family eta_distribution_plot
 #' @rdname eta_distribution_plot
 #' @export

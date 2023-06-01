@@ -1,26 +1,44 @@
 pmx_plot_generic <-
   function(ctr, pname, defaults_, ...) {
     stopifnot(is_pmxclass(ctr))
+
     if (!pname %in% (ctr %>% plot_names())) {
       return(NULL)
     }
+    
     cctr <- pmx_copy(ctr, ...)
-
-    if (length(list(...)) != 0){
-         params <- c(
-                     ctr = cctr,
-                     pname = pname,
-                     l_left_join(defaults_, list(...))
-                  )
-         do.call("pmx_update", params)
-         p <- cctr %>% get_plot(pname)
+    if("shrink" %in% names(list(...))) {
+      if(!"fun" %in% names(list(...)[["shrink"]])) {
+        stop("Shrink argument (list) does not contain an element named 'fun'")
+      }
     }
-    else {
+    len_list <- length(list(...))
+    if (len_list != 0 ||
+          (!is.null(ctr[["bloq"]])) ||
+          (!is.null(ctr[["settings"]]))) {
+      #if params were set through pmxgpar, then modify default params with pmxgpar
+      if ("pmxgpar" %in% names(list(...))) 
+        plot_params <- utils::modifyList(defaults_, list(...)[["pmxgpar"]])
+      else if (len_list != 0) {
+        plot_params <- l_left_join(defaults_, list(...))
+      } else {
+        plot_params <- NULL
+      }
+        
+      params <- c(
+        ctr = cctr,
+        pname = pname,
+        plot_params
+      )
+      do.call("pmx_update", params)
+      p <- cctr %>% get_plot(pname)
+    }
+    else
       p <- ctr %>% get_plot(pname)
-    }
     rm(cctr)
     p
   }
+
 
 lang_to_expr <-
   function(params) {
@@ -67,6 +85,7 @@ wrap_pmx_plot_generic <-
     params$pname <- pname
     params <- lang_to_expr(params)
     params$defaults_ <- ctr$config$plots[[toupper(pname)]]
+    params[["custom_title"]] <- is.character(params[["labels"]][["title"]])
     if (!exists("bloq", params) && !is.null(ctr$bloq)) {
       params$defaults_[["bloq"]] <- ctr$bloq
     }

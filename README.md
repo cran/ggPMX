@@ -33,6 +33,10 @@ diagnostics such as: - residual- and empirical Bayes estimate
 (EBE)-based plots, - distribution plots, - prediction- and
 simulation-based diagnostics (visual predictive checks).
 
+ggPMX creates plot objects which can be further customized and extended
+using the extensive [ggplot2
+syntax](https://ggplot2.tidyverse.org/reference/gg-add.html).
+
 In addition, shrinkage and summary parameters tables can be also
 produced. By default, the PDF- or Word-format diagnostic report contains
 essential goodness-of-fit plots. However, these can be adapted to
@@ -247,7 +251,7 @@ ctr <- theophylline()
 
 ### Models fitted with Monolix (versions 2016 and later)
 
-\#\#\#\#`pmx_mlx()`
+#### `pmx_mlx()`
 
 The controller initialization using the Monolix controller `pmx_mlx()`,
 which is a wrapper function for `pmx()` with `sys="mlx"` (See Appendix
@@ -285,7 +289,7 @@ assigned by printing it.
 
 ### Models fitted with NONMEM (versions 7.2 and later)
 
-\#\#\#\#`pmx_nm()`
+#### `pmx_nm()`
 
 The controller initialization using the NONMEM controller `pmx_nm()` is
 based on reading functions of the xpose package. It is highly
@@ -319,7 +323,7 @@ ctr <- pmx_nm(
 
 ### Models fitted with nlmixr
 
-\#\#\#\#`pmx_nlmixr()`
+#### `pmx_nlmixr()`
 
 It is simple to create a ggPMX controller for a nlmixr object using
 `pmx_nlmixr()`. Using the theophylline example with a nlmixr model we
@@ -490,6 +494,13 @@ pmx_mlx(
 
 Internally, a pmxEndpoint object will be created, and observations
 having YTYPE=x will be filtered.
+
+### Note: dependent variable renaming for Monolix
+
+When fitting a multiple-endpoint model, Monolix is known to rename
+endpoint variables to y1, y2. For controller creation to work it may
+necessary to reverse this renaming in the simulation file (e.g. y1 -\>
+LIDV).
 
 ## Controller with covariates
 
@@ -749,7 +760,9 @@ ctr %>% pmx_plot_eta_matrix
 
 In order to generate VPCs a simulation dataset is requried. Creation of
 VPC is slightly different dependening on the fitting software used
-(Monolix, NONMEM or nlmixr).
+(Monolix, NONMEM or nlmixr). Make sure to use the same name for the dv
+column in the simulation file as the one used in the input (modeling
+dataset).
 
 ### Models fitted with Monolix (versions 2016 and later)
 
@@ -889,13 +902,21 @@ ctr %>% pmx_plot_vpc(bin=pmx_vpc_bin(style = "kmeans",n=5))
 
 <img src="man/figures/README-unnamed-chunk-28-1.png" width="100%" />
 
-### Stratification
+### Set custom x- and/or y-axis labels
 
 ``` r
-ctr %>% pmx_plot_vpc(strat.facet="SEX",facets=list(nrow=2))
+ctr %>% pmx_plot_vpc(labels = c(x = "DV axis", y = "TIME axis"))
 ```
 
 <img src="man/figures/README-unnamed-chunk-29-1.png" width="100%" />
+
+### Stratification
+
+``` r
+ctr %>% pmx_plot_vpc(strat.facet=~SEX,facets=list(nrow=2))
+```
+
+<img src="man/figures/README-unnamed-chunk-30-1.png" width="100%" />
 
 ### Monolix-like customisation
 
@@ -903,7 +924,7 @@ User can customize the options to get a Monolix-like display.
 
 ``` r
 ctr %>% pmx_plot_vpc(
-  strat.facet="SEX",
+  strat.facet=~SEX,
   facets=list(nrow=2),
   type="percentile",
   is.draft = FALSE,
@@ -916,35 +937,37 @@ ctr %>% pmx_plot_vpc(
 )
 ```
 
-<img src="man/figures/README-unnamed-chunk-30-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-31-1.png" width="100%" />
 
 # Diagnostics report
 
 A report (in pdf and docx format) containing all default diagnostic
-plots can be created using the *pmx\_report* function. The *format* can
+plots can be created using the *pmx\_report* function. The *output* can
 take three different values:
 
   - “report”: produces a pdf and a docx file (named `name.pdf` and
     `name.png` specified in argument *name*, located in *save\_dir*)
     with default diagnostic plots
-  - “plots”: produces a folder named `ggpmx_GOF` located in *save\_dir*
-    that contains all default diagnotic plots, each in a pdf and png
-    file. The different plots are numerated in order to have an unique
-    identifier for each plot (ex: ebe\_box-1.pdf). This is necessary for
-    having correct footnotes that indicated the path to the source file
-    (for submission reports).
-  - “both”: is a combination of both options above.
+  - “plots”: produces a folder named after *plots\_subdir* parameter
+    (`ggpmx_GOF` by default, if parameter is not specified) located in
+    *save\_dir* that contains all default diagnostic plots, each in a
+    pdf and png file. The different plots are numerated in order to have
+    an unique identifier for each plot (ex: ebe\_box-1.pdf). This is
+    necessary for having correct footnotes that indicated the path to
+    the source file (for submission reports).
+  - “all”: is a combination of both options above.
 
 Example:
 
 ``` r
 ctr %>% pmx_report(name='Diagnostic_plots2',
                    save_dir = work_dir,
-                   format='both')
+                   plots_subdir = "ggpmx_report",
+                   output='all')
 ```
 
 Note that running the same command first with the option
-“format=‘plots’” and then with the option “format=‘report’” will
+“output=‘plots’” and then with the option “output=‘report’” will
 remove the *ggpmx\_GOF* folder.
 
 Note also that by default, the report will have the DRAFT label on all
@@ -958,7 +981,8 @@ the following command:
 ``` r
 ctr %>% pmx_report(name='Diagnostic_plots1',
                    save_dir = work_dir,
-                   format='report')
+                   plots_subdir = "ggpmx_report",
+                   output='report')
 ```
 
 The Rmarkdown (.Rmd) file is the “template”. The user can modify the
@@ -969,7 +993,8 @@ command:
 ``` r
 ctr %>% pmx_report(name='Diagnostic_plots3',
                    save_dir = work_dir,
-                   format='report',
+                   plots_subdir = "ggpmx_report",
+                   output='report',
                    template=file.path(work_dir,'Diagnostic_plots1.Rmd'))
 ```
 
@@ -1076,6 +1101,24 @@ all plots. In order to switch this label off, the user sets the
 ``` r
 
 ctr <- theophylline(settings = pmx_settings(is.draft = FALSE))
+```
+
+### Reordering facet panels
+
+The order of factors in a facet plot is determined by the data contained
+in the predictions data frame. Ordering of facet panels can be performed
+by changing the factor specification for facet columns in the
+*predictions* data frame.
+
+The example below defines a Controller with changed SEX facet panels
+order: 1 will be plotted before 0 rather than the other way round.
+
+``` r
+ctr <- theophylline()
+ctr[["data"]][["predictions"]][["SEX"]] <-
+  factor(ctr[["data"]][["predictions"]][["SEX"]], levels=c("1","0"))
+
+pmx_plot_iwres_ipred(ctr, strat.facet=~SEX)
 ```
 
 ### Use abbreviation definitions
@@ -1212,6 +1255,26 @@ ctr %>% pmx_plot_eta_box(strat.facet =~SEX)
 
 <img src="man/figures/README-settings_cat_labels3-1.png" width="100%" />
 
+### Define binning used for VPC plots
+
+The type of binning used for VPC plots can be applied as an update to
+the controller object, causing the binning to be applied to subsequent
+VPC plots.
+
+Updating the controller is achieved using `pmx_update` in a command
+like:
+
+``` r
+pmx_update(ctr, "pmx_vpc", bin=pmx_vpc_bin(within_strat=TRUE, style="jenks"))
+```
+
+Subsequent VPC plotting calls will then use “jenks” style binning. For
+example:
+
+``` r
+ctr %>% pmx_plot_vpc
+```
+
 # Appendix
 
 ## Generic Controller creation with `pmx()`
@@ -1324,10 +1387,10 @@ plot types.
 
 ``` r
 args(pmx_gpar)
-#> function (labels, axis.title, axis.text, ranges, is.smooth, smooth, 
-#>     is.band, band, is.draft, draft, discrete, is.identity_line, 
-#>     identity_line, scale_x_log10, scale_y_log10, color.scales, 
-#>     is.legend, legend.position) 
+#> function (is.title, labels, axis.title, which_pages, print, axis.text, 
+#>     ranges, is.smooth, smooth, is.band, band, is.draft, draft, 
+#>     discrete, is.identity_line, identity_line, smooth_with_bloq, 
+#>     scale_x_log10, scale_y_log10, color.scales, is.legend, legend.position) 
 #> NULL
 ```
 
@@ -1400,10 +1463,15 @@ ctr %>% pmx_comp_shrink(  fun = "var")
 ```
 
 ``` r
-ctr %>% pmx_plot_eta_box( shrink=list(fun = "var"))
+ctr %>% pmx_plot_eta_box( shrink=pmx_shrink(fun = "var"))
 ```
 
 <img src="man/figures/README-shrink_plot_var-1.png" width="100%" />
+
+Note that for plotting functions which take a shrink parameter, this can
+be created using the `pmx_shrink` function to create a `pmxShrinkClass`
+object (or it can be a list which can be converted into such an object
+using `pmx_shrink`).
 
 ## Shrinkage and stratification
 
@@ -1447,4 +1515,4 @@ ctr %>% pmx_plot_eta_box(is.shrink = TRUE, strat.facet = "SEX",
                           facets=list(scales="free_y",ncol=2))
 ```
 
-<img src="man/figures/README-unnamed-chunk-41-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-45-1.png" width="100%" />

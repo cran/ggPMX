@@ -10,10 +10,12 @@ RES:
     size: 1.0
   is.hline: no
   is.smooth: yes
+  smooth_with_bloq: no
   smooth:
     se: no
     colour: red
     linetype: 1.0
+  square_plot: yes
 
 DIS_hist:
   type: hist
@@ -71,20 +73,23 @@ IND:
   dname: IND
   ranges: ~
   is.smooth: no
+  smooth_with_bloq: no
   ipred_line:
     colour: black
-    size: 1
+    linewidth: 1
   pred_line:
     colour: black
-    size: 1
+    linewidth: 1
   point:
     colour: black
     shape : 21
     size: 1
   is.legend: no
+  which_pages: all
+  print: TRUE
   facets:
     ncol: 3
-    nrow: 4
+    nrow: 7
     scales: free
   labels:
     title: Individual fits

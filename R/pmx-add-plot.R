@@ -77,19 +77,24 @@ before_add_check <- function(self, private, x, pname) {
 
 .strat_x <- function(x) {
   if (!is.null(x[["strat.color"]])) {
+    strat.color <- x[["strat.color"]]
+    if (is.formula(strat.color)) {
+      strat.color <- setdiff(as.character(strat.color), "~")
+    }
     gp <- x[["gp"]]
-    gp[["labels"]][["legend"]] <- x[["strat.color"]]
+    gp[["labels"]][["legend"]] <- strat.color
     x[["gp"]] <- gp
   }
-  if (!is.null(x[["strat.facet"]])) {
-    tit <- x$gp[["labels"]][["title"]]
-    tit <- gsub(" by .*", "", tit)
-    x$gp[["labels"]][["title"]] <-
-      sprintf(
-        "%s by %s", tit, formula_to_text(x[["strat.facet"]])
-      )
-  } else {
-    x$gp[["labels"]][["title"]] <- gsub(" by.*", "", x$gp[["labels"]][["title"]])
+
+  if (isFALSE(x[["gp"]][["custom_title"]])) {
+    x[["gp"]][["labels"]][["title"]] <- gsub(" by .*", "", x[["gp"]][["labels"]][["title"]])
+    if (!is.null(x[["strat.facet"]])) {
+      x[["gp"]][["labels"]][["title"]] <- sprintf(
+          "%s by %s",
+          x[["gp"]][["labels"]][["title"]],
+          formula_to_text(x[["strat.facet"]])
+        )
+    }
   }
   invisible(x)
 }
@@ -110,7 +115,7 @@ before_add_check <- function(self, private, x, pname) {
 
   dx <- x$dx
   grp <- as.character(unlist(lapply(x[["strat.facet"]], as.list)))
-  grp <- unique(intersect(c(grp, x[["strat.color"]]), names(dx)))
+  grp <- unique(intersect(c(grp, as.character(x[["strat.color"]])), names(dx)))
   if (x$ptype == "DIS") {
     VAR <- FUN <- NULL
     if (exists("FUN", dx)) dx <- dx[grepl("mode", FUN)]
@@ -166,6 +171,8 @@ before_add_check <- function(self, private, x, pname) {
       }
       if (exists("EFFECT", x$dx)) {
         x$dx[, EFFECT := factor(EFFECT, levels = effs$levels, labels = effs$labels)]
+        if ((x$ptype == "ETA_COV") && (x$type == "cats"))
+          x$dx <- x$dx[!(is.na(x$dx[["EFFECT"]])), ]
       }
     }
   }

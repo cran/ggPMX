@@ -32,7 +32,8 @@ distrib(
 
 \item{histogram}{\code{list} histogram graphical parameters}
 
-\item{shrink}{\code{list} list of parameters to tune the shrinkage}
+\item{shrink}{\code{pmxShrinkClass} shrinkage graphical parameter or
+\code{list} coercible into one}
 
 \item{dname}{name of dataset to be used}
 
@@ -71,9 +72,9 @@ Other plot_pmx:
 \code{\link{plot_pmx.eta_pairs}()},
 \code{\link{plot_pmx.individual}()},
 \code{\link{plot_pmx.pmx_dens}()},
-\code{\link{plot_pmx.pmx_gpar}()},
 \code{\link{plot_pmx.pmx_qq}()},
 \code{\link{plot_pmx.residual}()},
+\code{\link{plot_pmx_gpar_real}()},
 \code{\link{plot_pmx}()}
 }
 \concept{plot_pmx}

@@ -1,4 +1,7 @@
-
+#' @export
+plot_pmx.pmx_gpar <- function(x, dx, ...) {
+  plot_pmx_gpar_real(gpar=x, p=dx, ...)
+}
 
 #' The ggPMX base plot function
 #'
@@ -7,10 +10,12 @@
 #' general settings like , smoothing, add band, labelling, theming,...
 #' @param gpar object of pmx_gpar type
 #' @param p plot
+#' @param bloq_cens bloq censored column name
 #' @import ggplot2
 #' @family plot_pmx
 #' @return ggplot2 object
-plot_pmx.pmx_gpar <- function(gpar, p) {
+#' @export
+plot_pmx_gpar_real <- function(gpar, p, bloq_cens) {
   assert_that(is_pmx_gpar(gpar))
   assert_that(is_ggplot(p))
   with(gpar, {
@@ -22,6 +27,9 @@ plot_pmx.pmx_gpar <- function(gpar, p) {
   ## smoothing
   p <- with(gpar, {
     if (is.smooth) {
+      if (exists("smooth_with_bloq") && smooth_with_bloq) {
+        smooth$data <- p$data[p[["data"]][[bloq_cens]] == 0, ]
+      }
       smooth$na.rm <- TRUE
       p <- p + do.call(geom_smooth, smooth)
     }
@@ -75,15 +83,31 @@ plot_pmx.pmx_gpar <- function(gpar, p) {
     }
 
     if (scale_x_log10) {
-      p <- p %+% scale_x_log10(limits = ranges[["x"]])
+      if (rlang::is_installed("xgxr")) {
+        p <- p %+% xgxr::xgx_scale_x_log10(limits = ranges[["x"]])
+      } else {
+        p <- p %+% scale_x_log10(limits = ranges[["x"]])
+      }
+      warning("Applying log to x variable will cause nonpositive values to be dropped.")
     }
+
     if (scale_y_log10) {
-      p <- p %+% scale_y_log10(limits = ranges[["y"]])
+      if (rlang::is_installed("xgxr")) {
+        p <- p %+% xgxr::xgx_scale_y_log10(limits = ranges[["y"]])
+      } else {
+        p <- p %+% scale_y_log10(limits = ranges[["y"]])
+      }
+      warning("Applying log to y-variable will cause nonpositive values to be dropped.")
     }
 
     if (exists("color.scales", gpar) && !is.null(color.scales)) {
       p <- p + do.call("scale_colour_manual", color.scales)
       p <- p + do.call("scale_fill_manual", color.scales)
+    }
+
+    if(!is.title) {
+      labels$title <- ""
+      labels$subtitle <- ""
     }
 
     p <- p + with(labels, ggplot2::labs(

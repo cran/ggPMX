@@ -7,7 +7,8 @@
 #' @param type.eta \code{character} type of eat can be 'mode' or 'mean'.'mode' by default
 #' @param text_color color of the correlation text in the upper matrix
 #' @param is.shrink \code{logical} if TRUE add shrinkage to the plot
-#' @param shrink \code{list} shrinkage graphical parameter
+#' @param shrink \code{pmxShrinkClass} shrinkage graphical parameter or
+#'   \code{list} coercible into one
 #' @param point \code{list} geom_point graphical parameter
 #' @param is.smooth \code{logical} if TRUE add smoothing to lower matrix plots
 #' @param smooth \code{list} geom_smooth graphical parameters
@@ -19,7 +20,9 @@
 #' @return ecorrel object
 #' @family plot_pmx
 #' @importFrom  GGally ggally_cor ggally_densityDiag
+#' @inheritParams pmx_gpar
 eta_pairs <- function(
+                      is.title,
                       title,
                       dname = NULL,
                       type.eta = c("mode", "mean"),
@@ -72,7 +75,7 @@ eta_pairs <- function(
 
 lower.plot <- function(data, x, y, point, is.smooth, smooth, gp, is.hline, hline, ymax) {
   p <-
-    ggplot(data = data, aes_string(x = x, y = y)) + do.call(geom_point, point)
+    ggplot(data = data, aes(x = .data[[x]], y = .data[[y]])) + do.call(geom_point, point)
   if (is.smooth) {
     p <- p + do.call(geom_smooth, smooth)
   }
@@ -86,7 +89,7 @@ lower.plot <- function(data, x, y, point, is.smooth, smooth, gp, is.hline, hline
 }
 
 diag.plot <- function(data, x, gp, is.vreference_line, vreference_line) {
-  p <- ggally_densityDiag(data = data, aes_string(x = x))
+  p <- ggally_densityDiag(data = data, aes(x = .data[[x]]))
     if (is.vreference_line) {
       vreference_line1 <- vreference_line
       vreference_line1$xintercept <- -1.96
@@ -104,7 +107,7 @@ diag.plot <- function(data, x, gp, is.vreference_line, vreference_line) {
 
 
 upper.plot <- function(data, x, y, text_color, gp) {
-  p <- ggally_cor(data = data, aes_string(x = x, y = y), colour = text_color)
+  p <- ggally_cor(data = data, aes(x = .data[[x]], y = .data[[y]]), colour = text_color)
   plot_pmx(gp, p)
 }
 
@@ -176,7 +179,9 @@ gtable_remove_grobs <- function(table, names, ...) {
 #'
 #' @param x pmx_gpar object
 #' @param shrink.dx data.table of shrinkage
-#' @param shrink list graphical parameter
+#' @param shrink \code{pmxShrinkClass} shrinkage graphical parameter or
+#'   \code{list} coercible into one
+
 #' @return ggplot2 object
 #' @importFrom GGally ggally_text
 plot_shrink <-
@@ -219,6 +224,10 @@ plot_pmx.eta_pairs <- function(x, dx, ...) {
   ## avoid RCMDCHECK warning
   ID <- EFFECT <- VALUE <- FUN <- NULL
 
+  if(!x$gp$is.title) {
+    x$gp$labels$title <- ""
+    x$gp$labels$subtitle <- ""
+  }
 
   ## filter by type of eta
   if (exists("FUN", dx)) dx <- dx[FUN == x$type.eta]
@@ -267,6 +276,7 @@ plot_pmx.eta_pairs <- function(x, dx, ...) {
       yProportions = if (is.shrink) c(1, rep(5, length(nn)))
     )
   })
+  p <- p + labs(title = x$gp$labels$title, subtitle = x$gp$labels$subtitle)
   p$is.shrink <- x$is.shrink
   attributes(p)$class <- c("pmx_eta_matrix", "gg", "ggmatrix")
   p +

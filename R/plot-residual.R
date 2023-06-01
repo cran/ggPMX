@@ -1,5 +1,3 @@
-
-
 #' This function create a residual for each observed value and also generates a residual
 #' distribution
 #'
@@ -13,7 +11,7 @@
 #' @param facets \code{list} wrap facetting in case of strat.facet
 #' @param ... others graphics arguments passed to \code{\link{pmx_gpar}} internal object.
 #' @param bloq \code{pmxBLOQ} object created by \code{\link{pmx_bloq}}
-
+#' @param square_plot square dv_pred plot  (TRUE by default)
 #'
 #' @return a residual object
 #' @seealso \code{\link{plot_pmx.residual}}
@@ -35,8 +33,8 @@
 #' \item {\strong{y:}} {y axis label default to AES_Y}
 #' }
 residual <- function(x, y, labels = NULL, point = NULL, is.hline = FALSE,
-                     hline = NULL, dname = NULL, facets = NULL, bloq = NULL, ...) {
-
+                     hline = NULL, dname = NULL, facets = NULL, bloq = NULL,
+                     square_plot = TRUE, ...) {
   ## default labels parameters
   ## TODO pout all defaultas option
   stopifnot(!missing(x))
@@ -59,7 +57,6 @@ residual <- function(x, y, labels = NULL, point = NULL, is.hline = FALSE,
   point <- l_left_join(default_point, point)
   hline <- l_left_join(default_hline, hline)
   if (is.null(dname)) dname <- "predictions"
-
   structure(
     list(
       ptype = "SCATTER",
@@ -71,6 +68,7 @@ residual <- function(x, y, labels = NULL, point = NULL, is.hline = FALSE,
       hline = hline,
       facets = facets,
       bloq = bloq,
+      square_plot = square_plot,
       gp = pmx_gpar(labels = labels, ...)
     ),
     class = c("residual", "pmx_gpar")
@@ -107,20 +105,35 @@ plot_pmx.residual <- function(x, dx, ...) {
     }
     dx <- dx[!is.infinite(get(aess$x)) & !is.infinite(get(aess$y))]
 
-    p <- ggplot(dx, with(aess, ggplot2::aes_string(x, y)))
+    p <- ggplot(dx, with(aess, ggplot2::aes(.data[[x]], .data[[y]])))
+
+    # applying strat.color as color aesthetic mapping for point
+    if (!is.null(x[["strat.color"]])) {
+      if(is.null(point[["mapping"]])) point[["mapping"]] <- aes()
+      with(point, {
+        strat.color <- x[["strat.color"]]
+        if (is.formula(strat.color)) {
+          strat.color <- setdiff(as.character(strat.color), "~")
+        }
+        mapping <- modifyList(mapping, aes(color=strat.color))
+        mapping[["colour"]] <- NULL
+      })
+    }
 
     p <- p + do.call(geom_point, point)
 
+    bloq_cens <- bloq[["cens"]]
     if (!is.null(bloq)) {
-      bloq$data <- dx[get(bloq$cens) != 0]
-      bloq$cens <- bloq$limit <- NULL
+      bloq$data <- dx[get(bloq_cens) != 0]
+      bloq$cens <- bloq$limit <- bloq$linewidth <- NULL
       p <- p + do.call(geom_point, bloq)
     }
 
     if (is.hline) p <- p + do.call(geom_hline, hline)
 
-
-    if (aess$y == "DV" && !(gp$scale_x_log10 || gp$scale_y_log10)) {
+    square_plot <- x[["square_plot"]]
+    if (aess$y == "DV" && square_plot && !(gp$scale_x_log10 ||
+      gp$scale_y_log10)) {
       xrange <- extend_range(dx[, c(aess$x, aess$y), with = FALSE])
       if (!is.null(gp$ranges)) {
         if (is.null(gp$ranges$x)) {
@@ -150,17 +163,13 @@ plot_pmx.residual <- function(x, dx, ...) {
         mm <- max(abs(dx[, aess$y, with = FALSE]), na.rm = TRUE)
         if (is.null(gp$ranges)) {
           gp$ranges <- list(y = c(-mm, mm))
-        } else  {
+        } else {
           gp$ranges$y <- c(-mm, mm)
         }
       }
     }
 
-    strat.color <- x[["strat.color"]]
     strat.facet <- x[["strat.facet"]]
-    if (!is.null(strat.color)) {
-      p <- p %+% geom_point(aes_string(colour = strat.color))
-    }
 
     if (!is.null(strat.facet)) {
       if (is.character(strat.facet)) {
@@ -170,7 +179,7 @@ plot_pmx.residual <- function(x, dx, ...) {
     }
 
 
-    p <- plot_pmx(gp, p)
+    p <- plot_pmx(gp, p, bloq_cens)
 
 
     p

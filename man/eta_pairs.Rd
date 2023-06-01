@@ -5,6 +5,7 @@
 \title{This creates an eta correlation which defines the relationship between parameters}
 \usage{
 eta_pairs(
+  is.title,
   title,
   dname = NULL,
   type.eta = c("mode", "mean"),
@@ -22,6 +23,8 @@ eta_pairs(
 )
 }
 \arguments{
+\item{is.title}{\code{logical} if TRUE then a title is used for the plot}
+
 \item{title}{character the plot title}
 
 \item{dname}{name of dataset to be used}
@@ -38,7 +41,8 @@ eta_pairs(
 
 \item{point}{\code{list} geom_point graphical parameter}
 
-\item{shrink}{\code{list} shrinkage graphical parameter}
+\item{shrink}{\code{pmxShrinkClass} shrinkage graphical parameter or
+\code{list} coercible into one}
 
 \item{is.hline}{\code{logical} if TRUE add horizontal line to lower matrix plots}
 
@@ -66,9 +70,9 @@ Other plot_pmx:
 \code{\link{plot_pmx.eta_pairs}()},
 \code{\link{plot_pmx.individual}()},
 \code{\link{plot_pmx.pmx_dens}()},
-\code{\link{plot_pmx.pmx_gpar}()},
 \code{\link{plot_pmx.pmx_qq}()},
 \code{\link{plot_pmx.residual}()},
+\code{\link{plot_pmx_gpar_real}()},
 \code{\link{plot_pmx}()}
 }
 \concept{plot_pmx}

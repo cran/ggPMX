@@ -287,6 +287,11 @@ read_mlx_pred <- function(path, x, ...) {
 
   setnames(xx, tolower(names(xx)))
   id_col <- grep("^id", names(xx), ignore.case = TRUE, value = TRUE)
+  if (length(id_col) > 1) {
+    nc <- vapply(id_col, nchar, integer(1), USE.NAMES=FALSE)
+    id_col <- id_col[which(nc == min(nc))]
+    warning("multiple id columns possible, selected smallest:", id_col)
+  }
   if (length(id_col) > 0 && nzchar(id_col)) setnames(xx, id_col, "id")
   if (grepl("#", xx[1, "id", with = FALSE], fixed = TRUE)) {
     xx[, c("id", "OCC") := tstrsplit(id, "#")][, c("id", "OCC") := list(as.integer(id), as.integer(OCC))]
@@ -362,6 +367,7 @@ read_mlx18_res <- function(path, x, ...) {
     xnames <- names(x[["names"]])
     yname <- substring(file_path, regexpr("s/", file_path) + 2)
     yname <- sub("_obsVsPred.txt", "", yname)
+    yname <- basename(yname)
     names(x[["names"]])[which(xnames == "y_simBlq_mode")] <- paste0(yname,"_simBlq_mode")
 
     #handling of mlx18 input, there is no y_simBlq_mean or y_simBlq_mode for Monolix version 2018

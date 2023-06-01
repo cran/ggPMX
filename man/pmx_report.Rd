@@ -8,11 +8,12 @@ pmx_report(
   contr,
   name,
   save_dir,
-  format = c("both", "plots", "report"),
+  plots_subdir = "ggpmx_GOF",
+  output = c("all", "plots", "report"),
   template = "standing",
-  footnote = format == "both",
+  footnote = output == "all",
   edit = FALSE,
-  extension = NULL,
+  format = NULL,
   title,
   ...
 )
@@ -22,14 +23,16 @@ pmx_report(
 
 \item{name}{\code{character} The report name}
 
-\item{save_dir}{Output directory.  A directory to write the results files to}
+\item{save_dir}{Output directory. A directory to write the results files to}
 
-\item{format}{\code{character} the result type, can be \cr
+\item{plots_subdir}{Output folder name, ggpmx_GOF by default}
+
+\item{output}{\code{character} the result type, can be \cr
 a standalone directory of plots or a report document as defined in the template \cr
 (pdf, docx,..) ,or both}
 
 \item{template}{\code{character} ggPMX predefined template or the
-path to a custom rmarkdwon template. \cr
+path to a custom rmarkdown template. \cr
 Use \code{\link{pmx_report_template}} to get the list
 of available templates}
 
@@ -38,8 +41,8 @@ the path where the plot is saved.}
 
 \item{edit}{\code{logical}  TRUE to edit the template immediately}
 
-\item{extension}{\code{character} The output document format. By default, a word report is generated. \cr
-User can specify one or more formats from c("word","pdf","html","all"). extnestion "all" to generate all formats.}
+\item{format}{\code{character} The output document format. By default, a word report is generated. \cr
+User can specify one or more formats from c("word","pdf","html","all"). format "all" to generate all formats.}
 
 \item{title}{\code{character} report title (optional)}
 
@@ -61,13 +64,14 @@ library(ggPMX)
 
 ## case1: generate a single report
 withr::with_tempdir({
-
   ctr <- theophylline()
   ctr \%>\% pmx_report(
     name = "my_report",
     save_dir = getwd(),
-    format="report")
+    output="report"
+  )
 })
+
 
 ## case2: generate standalone plots
 withr::with_tempdir({
@@ -75,40 +79,34 @@ withr::with_tempdir({
   ctr \%>\% pmx_report(
     name = "my_report",
     save_dir = getwd(),
-    format="plots")
+    output="plots"
+  )
 })
+
 
 ## case3: generate both : reports + plots
 ## by default add footnote
 ## Note, you can force footnote to FALSE using footnote parameter
 withr::with_tempdir({
-
   ctr <- theophylline()
   ctr \%>\% pmx_report(
-    name = "my_report",
-    save_dir = getwd(),
-    format="both")
-
+    name="my_report",
+    save_dir=getwd(),
+    output="all"
+  )
 })
-
-
-
 
 
 ## case4 : generate standalone plots with footnotes
 withr::with_tempdir({
-
   ctr <- theophylline()
   ctr \%>\% pmx_report(
-    name = "my_report",
-    save_dir = getwd(),
+    name="my_report",
+    save_dir=getwd(),
     footnote=TRUE,
-    format="plots")
-
+    output="plots"
+  )
 })
-
-
-
 
 
 ##  case6: dynamic edit
@@ -116,8 +114,8 @@ withr::with_tempdir({
 # ctr <- theophylline()
 # ctr \%>\% pmx_report(
 #   save_dir = file.path(getwd(),"case6"),
-#   name = "my_report",
-#   format="report",
+#   name="my_report",
+#   output="report",
 #   edit = TRUE)
 
 
@@ -127,10 +125,8 @@ withr::with_tempdir({
 ##   name="report2",
 ##   save_dir = getwd(),
 ##   template="individual",
-##   format="both",
+##   format="all",
 ##   which_pages=1:2
 ## )
-
 }
-
 }

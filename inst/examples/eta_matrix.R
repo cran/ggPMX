@@ -19,7 +19,7 @@ ctr %>% pmx_plot_eta_matrix(is.draft = FALSE)
 ## change text color line
 ctr %>% pmx_plot_eta_matrix(
   text_color="red",
-  shrink=list(mapping=aes(color="magenta"))
+  shrink=pmx_shrink(mapping=aes(color="magenta"))
   )
 
 ## custom point aes and static parameters
@@ -35,7 +35,7 @@ ctr %>% pmx_plot_eta_matrix(
 ## IGNORE continuous stratification
 ctr %>% pmx_plot_eta_matrix(strat.color = "WT0")
 ## IGNORE  categorical stratification
-ctr %>% pmx_plot_eta_matrix(strat.facet = "SEX")
+ctr %>% pmx_plot_eta_matrix(strat.facet = ~SEX)
 
 # subsetting  --------------------------------------
 

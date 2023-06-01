@@ -1,5 +1,4 @@
 
-
 #' Select/Map covariates using human labels
 #' @param values \code{list} of covariates to use to  create the plot
 #' @param labels \code{list} of covariates facets labels
@@ -101,22 +100,6 @@ eta_cov <- function(
   ), class = c("eta_cov", "pmx_gpar"))
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #' This plots an ETA covariance matrix which can be used to define the co-relation between the parameters and
 #' its shrinkage
 #'
@@ -152,12 +135,12 @@ plot_pmx.eta_cov <- function(x, dx, ...) {
       if (x$is.strat.color) {
         if(length(cats) > 1) {
           dx.cats <- dx.cats[, var_val = paste0(variable, value)]
-          boxplot_layers <- geom_boxplot(aes_string(x = "value", y = "VALUE", fill = "var_val"))
+          boxplot_layers <- geom_boxplot(aes(x = .data$value, y = .data$VALUE, fill = .data$var_val))
         }
-        else boxplot_layers <- geom_boxplot(aes_string(x = "value", y = "VALUE", fill = "value"))
+        else boxplot_layers <- geom_boxplot(aes(x = .data$value, y = .data$VALUE, fill = .data$value))
       }
       else {
-        boxplot_layers <- geom_boxplot(aes_string(x = "value", y = "VALUE"))
+        boxplot_layers <- geom_boxplot(aes(x = .data$value, y = .data$VALUE))
       }
 
       ggplot(dx.cats, measure.vars = cats) +
@@ -180,8 +163,8 @@ plot_pmx.eta_cov <- function(x, dx, ...) {
             ]
           )
       }
-      x$facets$facets <- stats::as.formula("EFFECT~variable")
-      p <- ggplot(dx.conts, aes_string(x = "value", y = "VALUE")) +
+      x$facets$rows <- stats::as.formula("EFFECT~variable")
+      p <- ggplot(dx.conts, aes(x = .data$value, y = .data$VALUE)) +
         do.call(geom_point, x$point) +
         ## do.call(geom_smooth, x$smooth) +
         do.call(facet_grid, x$facets)
