@@ -1,6 +1,6 @@
-c3b81d86ec9de075b6c981d1eef0dd67 *DESCRIPTION
+8963b6ff8a5255850030d8dabf2257e5 *DESCRIPTION
 cbb0200402b7d789d30674495d54871d *NAMESPACE
-b356ed8fbb61a8592a2dfb757717fad0 *NEWS.md
+e522bca5ebf3b0d7b49d0eb3147464c0 *NEWS.md
 e42fe8644b4cbc9db87c108d860cb2f0 *R/assertions.R
 519e130b33925963377c413ab85a673c *R/classInt.R
 fb68397ee6960516d835520f89f403d7 *R/config.R
@@ -12,7 +12,7 @@ d4ba8be25ce57b1b2131bd93142ee9b5 *R/gpar.R
 730147edb47aeefffbd03a187388ef03 *R/nlmixr.R
 6ce6f17a881243d4e1ed860cf74eef70 *R/nonmem_reader.R
 aa7f3133fbd8ae9b580a41d5832707e5 *R/param_table.R
-75b4c92c1ba6ce9f63a2680422d197cf *R/plot-base.R
+7892b74590c13d3ddbe05da0409bcb0d *R/plot-base.R
 7e2cf7e0f320c4faa63911dd8c641dda *R/plot-density.R
 d20d79dfe7ff3d4c9db8392c0bb6e310 *R/plot-distribution.R
 05d4ac79d468bcd7bb93b75f10968a4a *R/plot-eta-cov.R
@@ -52,7 +52,7 @@ cd605a63b654d4732ac3fdd16ebc8db0 *README.md
 6d514178cd51dd9d3e4e9f1b999b32ff *build/vignette.rds
 dec9be272d2fe267f691334ed6cd1f49 *inst/doc/ggPMX-guide.R
 6eed29d151840a97c7cf23ab6b81216f *inst/doc/ggPMX-guide.Rmd
-75e2c5a485451f3aada1cbf88543d332 *inst/doc/ggPMX-guide.pdf
+9842c921e5d318e65ba817311e8ef7da *inst/doc/ggPMX-guide.pdf
 4580d030cf1df87d6490c1b5a963042b *inst/examples/controller.R
 f557de4f2b69a80982457d82ab224c2c *inst/examples/custom_inputs.yaml
 02bfa4621b4be92c4f839cc56ee35736 *inst/examples/distribution.R
@@ -334,7 +334,7 @@ e1dabc34980ab738daf50331c78ca3e7 *tests/testthat/test-pmx-plot-vpc.R
 9cfeb243a42de351e971f934c869ded0 *tests/testthat/test-pmx-plots-distribution.R
 1158618af6d409b8be2633902b2eff60 *tests/testthat/test-pmx-plots-scatter.R
 17e25242e423c9c2f81bb4d4a143a0c9 *tests/testthat/test-pmx-post_load.R
-0f14f2506f35724c5925532faef273f6 *tests/testthat/test-pmx-report.R
+1d0959ab2cf5212face3fbb0847ae7db *tests/testthat/test-pmx-report.R
 a5c14d9f86304c4b2d10c6f0d72a40a9 *tests/testthat/test-pmx-vpc-bin.R
 d3eb8c79f495a24852f402d126d9d779 *tests/testthat/test-pmxClass.R
 799194e1363f77ce3079a7a45b9ebf0e *tests/testthat/test-pmx_filter.R
