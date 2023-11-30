@@ -48,18 +48,18 @@ creates a graphic distribution object
 \details{
 \strong{labels} is a list that contains:
 \itemize{
-\item {\strong{title:}} {plot title default "EBE distribution"}
-\item {\strong{subtitle:}} {plot subtitle default empty}
-\item {\strong{x:}} {x axis label default to "Etas"}
-\item {\strong{y:}} {y axis label default to empty}
-\item {\strong{legend:}} {legend title default to "random Effect"}
+\item \strong{title:} plot title default "EBE distribution"
+\item \strong{subtitle:} plot subtitle default empty
+\item \strong{x:} x axis label default to "Etas"
+\item \strong{y:} y axis label default to empty
+\item \strong{legend:} legend title default to "random Effect"
 }
 \strong{shrink} is a list that contains:
 \itemize{
-\item {\strong{fun:}} {shrinkage function can be \code{sd} or \code{var}}
-\item {\strong{size:}} {shrinkage text size}
-\item {\strong{color:}} {shrinkage text color}
-\item {\strong{vjust:}} {shrinkage position vertical adjustment}
+\item \strong{fun:} shrinkage function can be \code{sd} or \code{var}
+\item \strong{size:} shrinkage text size
+\item \strong{color:} shrinkage text color
+\item \strong{vjust:} shrinkage position vertical adjustment
 }
 }
 \seealso{
@@ -72,9 +72,9 @@ Other plot_pmx:
 \code{\link{plot_pmx.eta_pairs}()},
 \code{\link{plot_pmx.individual}()},
 \code{\link{plot_pmx.pmx_dens}()},
+\code{\link{plot_pmx.pmx_gpar}()},
 \code{\link{plot_pmx.pmx_qq}()},
 \code{\link{plot_pmx.residual}()},
-\code{\link{plot_pmx_gpar_real}()},
 \code{\link{plot_pmx}()}
 }
 \concept{plot_pmx}

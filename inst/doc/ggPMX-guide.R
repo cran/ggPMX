@@ -3,6 +3,8 @@ knitr::opts_chunk$set(out.width = "100%", warning = FALSE, message = FALSE)
 library(ggplot2)
 library(knitr)
 library(ggPMX)
+library(data.table)
+setDTthreads(2)
 
 theophylline <- file.path(system.file(package = "ggPMX"), "testdata", "theophylline")
 work_dir <- file.path(theophylline, "Monolix")
@@ -34,7 +36,7 @@ head(input_data_theo)
 ## -----------------------------------------------------------------------------
 ctr <- theophylline()
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  theophylline_path <- file.path(system.file(package = "ggPMX"), "testdata", "theophylline")
 #  work_dir          <- file.path(theophylline_path, "Monolix")
 #  input_data_path   <- file.path(theophylline_path, "data_pk.csv")
@@ -45,27 +47,27 @@ ctr <- theophylline()
 #    dv        = "Y"
 #  )
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  mlxtran_path <- file.path(system.file(package = "ggPMX"),
 #                            "testdata", "1_popPK_model", "project.mlxtran")
 #  
 #  ctr <- pmx_mlxtran(file_name = mlxtran_path)
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  nonmem_dir <- file.path(system.file(package = "ggPMX"), "testdata","extdata")
 #  ctr <- pmx_nm(
 #    directory = nonmem_dir,
 #    file     = "run001.lst"
 #  )
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  nonmem_dir <- file.path(system.file(package = "ggPMX"), "testdata","extdata")
 #  ctr <- pmx_nm(
 #    directory = nonmem_dir,
 #    runno     = "001" #can be a string or a number
 #  )
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  one.cmt <- function() {
 #    ini({
 #      ## You may label each parameter with a comment
@@ -90,12 +92,12 @@ ctr <- theophylline()
 #  
 #  fit <- nlmixr(one.cmt, theo_sd, est="saem", control=list(print=0))
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  ctr <- pmx_nlmixr(fit,
 #                    vpc = FALSE ## VPC is turned on by default, can turn off
 #  )
 
-## ---- echo=F------------------------------------------------------------------
+## ----echo=F-------------------------------------------------------------------
 pkpd_path       <- file.path(system.file(package = "ggPMX"), "testdata", "pk_pd")
 pkpd_work_dir   <- file.path(pkpd_path, "RESULTS")
 pkpd_input_file <- file.path(pkpd_path, "pk_pd.csv")
@@ -124,7 +126,7 @@ ctr <- pmx_mlx(
   endpoint  = ep
 )
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  ctr <- pmx_nm(
 #    directory = nonmem_dir,
 #    file     = "run001.lst",
@@ -132,13 +134,13 @@ ctr <- pmx_mlx(
 #    dvid = "DVID" ## use this column as observation id
 #  )
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  ctr <- pmx_nlmixr(fit,
 #                    endpoint = 1 ## select the first endpoint
 #                    dvid = "DVID" ## use this column as observation id
 #  )
 
-## ---- echo=T, eval = FALSE----------------------------------------------------
+## ----echo=T, eval = FALSE-----------------------------------------------------
 #  pmx_mlx(
 #    dvid = "YTYPE", ## use this column as observation id
 #    endpoint = 1,   ## select the first endpoint
@@ -242,13 +244,13 @@ ctr %>% pmx_plot_iwres_time
 ## ----basics_matrix_plot, eval=F,  fig.height=6, fig.width=6, fig.show='hold', fig.align='center'----
 #  ctr %>% pmx_plot_eta_matrix
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  ## Create simulated object using simulx
 #  mysim <- simulx(project=project_dir, nrep=100) #
 #  ## Retrieve simulated dataset (assumed to be in y1)
 #  simdata <- mysim$LIDV
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  ## Need to revert the original IDs as in modeling dataset for ggPMX
 #  ## Rename IDs column to same name as in modeling dataset, e.g.
 #  ## ???id??? in the example below
@@ -294,14 +296,14 @@ ctr <- pmx_mlx(
 
 
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  ctr <- pmx_nm(
 #    directory = model_dir,
 #    file      = "modelfile.ctl" #or .lst
 #    simfile   = "simulation_modelfile.ctl" #or .lst
 #  )
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  ctr <- pmx_nlmixr(fit) ## VPC will be generated automatically, vpc = TRUE
 #  
 #  ctr <- pmx_nlmixr(fit,
@@ -414,12 +416,12 @@ ctr %>% pmx_plot_individual(which_pages="all", use.finegrid =FALSE)
 
 ## ----settings_color_scales_local----------------------------------------------
 ctr <- theophylline()
-ctr %>% pmx_plot_npde_time(strat.color="STUD")+ 
+ctr %>% pmx_plot_npde_time(strat.color="STUD")+
       ggplot2::scale_color_manual(
         "Study",
         labels=c("Study 1","Study 2"),
         values=c("1"="green","2"="blue"))
-    
+
 
 
 ## ----settings_solor_scales,fig.height=5, fig.width=8--------------------------
@@ -556,13 +558,13 @@ ctr %>% pmx_plot_eta_hist
 
 
 ## ----shrink_plot_no-----------------------------------------------------------
-ctr %>%   pmx_plot_eta_box( is.shrink = FALSE) 
+ctr %>%   pmx_plot_eta_box( is.shrink = FALSE)
 
 
-## ---- compute_var-------------------------------------------------------------
+## ----compute_var--------------------------------------------------------------
 ctr %>% pmx_comp_shrink(fun="var")
 
-## ---- shrink_plot_var---------------------------------------------------------
+## ----shrink_plot_var----------------------------------------------------------
 ctr %>% pmx_plot_eta_box(shrink=pmx_shrink(fun = "var"))
 
 ## ----shrink_comp_strat--------------------------------------------------------

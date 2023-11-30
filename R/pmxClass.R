@@ -261,7 +261,7 @@ formula_to_text <- function(form) {
 #' @export
 pmx_settings <-
   function(is.draft = TRUE, use.abbrev = TRUE, color.scales = NULL,
-             cats.labels = NULL, use.labels = FALSE, use.titles = TRUE,
+             cats.labels = NULL, use.labels = FALSE, use.titles = FALSE,
              effects = NULL,
              ...) {
     checkmate::assert_logical(x=is.draft, len=1, any.missing=FALSE)
@@ -453,15 +453,15 @@ check_shrink <- function(shrink_list) {
 #' @param ctr \code{pmxClass} controller object
 #' @param ptype plot type can be:
 ##' \itemize{
-##'  \item{"IND"}{ Individual plot type: \code{\link{individual}} }
-##'  \item{"DIS"}{ Distribution plot type : \code{\link{distrib}}}
-##'  \item{"SCATTER"}{ Residual plot type :\code{\link{residual}}}
+##'  \item "IND" Individual plot type: \code{\link{individual}}
+##'  \item "DIS" Distribution plot type : \code{\link{distrib}}
+##'  \item "SCATTER" Residual plot type :\code{\link{residual}}
 ##' }
 ##' @param pname plot name, if missing it will be created using function aestetics
 ##' @param filter optional filter which will be applied to plotting data
 ##' @param strat.facet \code{formula} define categorical stratification as formula
 ##' @param strat.color \code{character}
-##' @param trans \code{list}{transformation operator}
+##' @param trans \code{list} transformation operator
 ##' @param color.scales \code{list} can be used with strat.color to set scale_color_manual
 ##' @param use.defaults \code{logical} if FALSE do not use defaults defined in yaml init files
 #' @param ... other plot parameters to configure \code{\link{pmx_gpar}}.
@@ -1044,7 +1044,7 @@ pmx_initialize <- function(self, private, data_path, input, dv,
         names(self$data$sim_blq_npde_iwres) == "npde" |
         names(self$data$sim_blq_npde_iwres) == "iwRes"
       )
-  
+
       names(self$data$sim_blq_npde_iwres)[place_vec] <-
         toupper(names(self$data$sim_blq_npde_iwres)[place_vec])
     }

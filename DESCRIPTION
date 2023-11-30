@@ -1,17 +1,17 @@
 Package: ggPMX
 Title: 'ggplot2' Based Tool to Facilitate Diagnostic Plots for NLME
         Models
-Description: At Novartis, we aimed at standardizing the set of diagnostic plots used for modeling 
-  activities in order to reduce the overall effort required for generating such plots. 
-  For this, we developed a guidance that proposes an adequate set of diagnostics and a toolbox, 
-  called 'ggPMX' to execute them. 'ggPMX' is a toolbox that can generate all diagnostic plots at a quality sufficient 
+Description: At Novartis, we aimed at standardizing the set of diagnostic plots used for modeling
+  activities in order to reduce the overall effort required for generating such plots.
+  For this, we developed a guidance that proposes an adequate set of diagnostics and a toolbox,
+  called 'ggPMX' to execute them. 'ggPMX' is a toolbox that can generate all diagnostic plots at a quality sufficient
   for publication and submissions using few lines of code. This package focuses on plots recommended by ISoP
   <doi:10.1002/psp4.12161>. While not required, you can get/install the 'R' 'lixoftConnectors'
     package in the 'Monolix' installation, as described at the following url
     <https://monolix.lixoft.com/monolix-api/lixoftconnectors_installation/>.
     When 'lixoftConnectors' is available, 'R' can use 'Monolix' directly to create the required
     Chart Data instead of exporting it from the 'Monolix' gui.
-Version: 1.2.10
+Version: 1.2.11
 Authors@R: c(
               person("Amine", "Gassem", email="contact@ag-study.com", role=c("aut")),
               person("Bruno", "Bieth", email="biethb@hotmail.com", role="aut"),
@@ -36,13 +36,13 @@ Imports: data.table, yaml, R6, gtable, ggplot2 (>= 3.4.0), ggforce,
         magrittr, stringr, assertthat, GGally, zoo, knitr, rmarkdown,
         tidyr, dplyr, purrr, readr, rlang, checkmate, scales
 License: GPL-2
-Suggests: testthat, xtable, vdiffr, rxode2, captioner, nlmixr2,
-        nlmixr2data, lixoftConnectors, xgxr, withr, lifecycle
+Suggests: testthat, xtable, vdiffr, rxode2, nlmixr2, nlmixr2data,
+        lixoftConnectors, xgxr, withr, lifecycle
 VignetteBuilder: knitr
 NeedsCompilation: no
 RoxygenNote: 7.2.3
 Encoding: UTF-8
-Packaged: 2023-06-16 17:16:40 UTC; matt
+Packaged: 2023-11-30 14:42:42 UTC; matt
 Author: Amine Gassem [aut],
   Bruno Bieth [aut],
   Irina Baltcheva [aut],
@@ -60,4 +60,4 @@ Author: Amine Gassem [aut],
   Novartis Pharma AG [cph]
 Maintainer: Matthew Fidler <matt.fidler@novartis.com>
 Repository: CRAN
-Date/Publication: 2023-06-16 23:20:07 UTC
+Date/Publication: 2023-11-30 16:10:06 UTC

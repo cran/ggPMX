@@ -22,9 +22,9 @@ set_plot(
 
 \item{ptype}{plot type can be:
 \itemize{
- \item{"IND"}{ Individual plot type: \code{\link{individual}} }
- \item{"DIS"}{ Distribution plot type : \code{\link{distrib}}}
- \item{"SCATTER"}{ Residual plot type :\code{\link{residual}}}
+ \item "IND" Individual plot type: \code{\link{individual}}
+ \item "DIS" Distribution plot type : \code{\link{distrib}}
+ \item "SCATTER" Residual plot type :\code{\link{residual}}
 }}
 
 \item{pname}{plot name, if missing it will be created using function aestetics}
@@ -39,7 +39,7 @@ set_plot(
 
 \item{color.scales}{\code{list} can be used with strat.color to set scale_color_manual}
 
-\item{trans}{\code{list}{transformation operator}}
+\item{trans}{\code{list} transformation operator}
 
 \item{...}{other plot parameters to configure \code{\link{pmx_gpar}}.}
 }

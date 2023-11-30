@@ -1,3 +1,12 @@
+# ggPMX 1.2.11
+
+* Fix bug so that reading monolix works on R devel (as requested by CRAN)
+
+* Change defaults so that scientific notation is not enabled by default
+  and title is also not added by default
+
+* Monolix 2023 can now be read by ggPMX
+
 # ggPMX 1.2.10
 
 * Skip draft parameter template creation test on CRAN, on some systems
