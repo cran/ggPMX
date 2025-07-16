@@ -8,10 +8,11 @@ add_footnote <- function(pp, pname, save_dir) {
 }
 
 
-#' Split footnote if it exceeds maximumum width
+#' Split footnote if it exceeds maximum width
 
 #' @param s \code{character} the footnoote text
 #' @param n \code{integer} the maximum width of a footnote
+#' @returns character with split input character
 #' @examples
 #' split_footnote("Source: /tmp/mylongdirectory", 10)
 #' @noRd
@@ -141,7 +142,7 @@ pmx_plot_individual <-
 
 
     if (cctr$footnote) {
-      if (!inherits(p, "ggplot")) {
+      if (!is_ggplot(p)) {
         p <- Map(
           function(p, id) {
             ctr$enqueue_plot("indiv")
@@ -158,7 +159,7 @@ pmx_plot_individual <-
     rm(cctr)
 
     if (print) {
-      if (is.list(p) & (!inherits(p, "ggplot"))) {
+      if (is.list(p) & (!is_ggplot(p))) {
         invisible(lapply(p, print))
       } else {
         invisible(print(p))

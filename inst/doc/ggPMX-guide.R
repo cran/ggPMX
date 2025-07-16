@@ -37,65 +37,65 @@ head(input_data_theo)
 ctr <- theophylline()
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  theophylline_path <- file.path(system.file(package = "ggPMX"), "testdata", "theophylline")
-#  work_dir          <- file.path(theophylline_path, "Monolix")
-#  input_data_path   <- file.path(theophylline_path, "data_pk.csv")
-#  
-#  ctr <- pmx_mlx(
-#    directory = work_dir,
-#    input     = input_data_path,
-#    dv        = "Y"
-#  )
+# theophylline_path <- file.path(system.file(package = "ggPMX"), "testdata", "theophylline")
+# work_dir          <- file.path(theophylline_path, "Monolix")
+# input_data_path   <- file.path(theophylline_path, "data_pk.csv")
+# 
+# ctr <- pmx_mlx(
+#   directory = work_dir,
+#   input     = input_data_path,
+#   dv        = "Y"
+# )
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  mlxtran_path <- file.path(system.file(package = "ggPMX"),
-#                            "testdata", "1_popPK_model", "project.mlxtran")
-#  
-#  ctr <- pmx_mlxtran(file_name = mlxtran_path)
+# mlxtran_path <- file.path(system.file(package = "ggPMX"),
+#                           "testdata", "1_popPK_model", "project.mlxtran")
+# 
+# ctr <- pmx_mlxtran(file_name = mlxtran_path)
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  nonmem_dir <- file.path(system.file(package = "ggPMX"), "testdata","extdata")
-#  ctr <- pmx_nm(
-#    directory = nonmem_dir,
-#    file     = "run001.lst"
-#  )
+# nonmem_dir <- file.path(system.file(package = "ggPMX"), "testdata","extdata")
+# ctr <- pmx_nm(
+#   directory = nonmem_dir,
+#   file     = "run001.lst"
+# )
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  nonmem_dir <- file.path(system.file(package = "ggPMX"), "testdata","extdata")
-#  ctr <- pmx_nm(
-#    directory = nonmem_dir,
-#    runno     = "001" #can be a string or a number
-#  )
+# nonmem_dir <- file.path(system.file(package = "ggPMX"), "testdata","extdata")
+# ctr <- pmx_nm(
+#   directory = nonmem_dir,
+#   runno     = "001" #can be a string or a number
+# )
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  one.cmt <- function() {
-#    ini({
-#      ## You may label each parameter with a comment
-#      tka <- 0.45 # Log Ka
-#      tcl <- 1 # Log Cl
-#      ## This works with interactive models
-#      ## You may also label the preceding line with label("label text")
-#      tv <- 3.45; label("log V")
-#      ## the label("Label name") works with all models
-#      eta.ka ~ 0.6
-#      eta.cl ~ 0.3
-#      eta.v ~ 0.1
-#      add.sd <- 0.7
-#    })
-#    model({
-#      ka <- exp(tka + eta.ka)
-#      cl <- exp(tcl + eta.cl)
-#      v <- exp(tv + eta.v)
-#      linCmt() ~ add(add.sd)
-#    })
-#  }
-#  
-#  fit <- nlmixr(one.cmt, theo_sd, est="saem", control=list(print=0))
+# one.cmt <- function() {
+#   ini({
+#     ## You may label each parameter with a comment
+#     tka <- 0.45 # Log Ka
+#     tcl <- 1 # Log Cl
+#     ## This works with interactive models
+#     ## You may also label the preceding line with label("label text")
+#     tv <- 3.45; label("log V")
+#     ## the label("Label name") works with all models
+#     eta.ka ~ 0.6
+#     eta.cl ~ 0.3
+#     eta.v ~ 0.1
+#     add.sd <- 0.7
+#   })
+#   model({
+#     ka <- exp(tka + eta.ka)
+#     cl <- exp(tcl + eta.cl)
+#     v <- exp(tv + eta.v)
+#     linCmt() ~ add(add.sd)
+#   })
+# }
+# 
+# fit <- nlmixr(one.cmt, theo_sd, est="saem", control=list(print=0))
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  ctr <- pmx_nlmixr(fit,
-#                    vpc = FALSE ## VPC is turned on by default, can turn off
-#  )
+# ctr <- pmx_nlmixr(fit,
+#                   vpc = FALSE ## VPC is turned on by default, can turn off
+# )
 
 ## ----echo=F-------------------------------------------------------------------
 pkpd_path       <- file.path(system.file(package = "ggPMX"), "testdata", "pk_pd")
@@ -127,24 +127,24 @@ ctr <- pmx_mlx(
 )
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  ctr <- pmx_nm(
-#    directory = nonmem_dir,
-#    file     = "run001.lst",
-#    endpoint = 1 ## select the first endpoint
-#    dvid = "DVID" ## use this column as observation id
-#  )
+# ctr <- pmx_nm(
+#   directory = nonmem_dir,
+#   file     = "run001.lst",
+#   endpoint = 1 ## select the first endpoint
+#   dvid = "DVID" ## use this column as observation id
+# )
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  ctr <- pmx_nlmixr(fit,
-#                    endpoint = 1 ## select the first endpoint
-#                    dvid = "DVID" ## use this column as observation id
-#  )
+# ctr <- pmx_nlmixr(fit,
+#                   endpoint = 1 ## select the first endpoint
+#                   dvid = "DVID" ## use this column as observation id
+# )
 
 ## ----echo=T, eval = FALSE-----------------------------------------------------
-#  pmx_mlx(
-#    dvid = "YTYPE", ## use this column as observation id
-#    endpoint = 1,   ## select the first endpoint
-#    ...)            ## other pmx parameters , config, input,etc..
+# pmx_mlx(
+#   dvid = "YTYPE", ## use this column as observation id
+#   endpoint = 1,   ## select the first endpoint
+#   ...)            ## other pmx parameters , config, input,etc..
 
 ## ----init_ctr_covar-----------------------------------------------------------
 theophylline_path <- file.path(system.file(package = "ggPMX"), "testdata", "theophylline")
@@ -219,50 +219,50 @@ ctr %>% plot_names()
 ctr %>% pmx_plot_iwres_time
 
 ## ----basics_res, eval=F, out.width='.48\\linewidth', fig.height=4, fig.width=6, fig.show='hold', fig.align='center'----
-#  ctr %>% pmx_plot_dv_pred
-#  ctr %>% pmx_plot_dv_ipred
-#  
-#  ctr %>% pmx_plot_iwres_time
-#  ctr %>% pmx_plot_npde_time
-#  
-#  ctr %>% pmx_plot_iwres_ipred
-#  ctr %>% pmx_plot_abs_iwres_ipred
-#  
-#  ctr %>% pmx_plot_npde_pred
+# ctr %>% pmx_plot_dv_pred
+# ctr %>% pmx_plot_dv_ipred
+# 
+# ctr %>% pmx_plot_iwres_time
+# ctr %>% pmx_plot_npde_time
+# 
+# ctr %>% pmx_plot_iwres_ipred
+# ctr %>% pmx_plot_abs_iwres_ipred
+# 
+# ctr %>% pmx_plot_npde_pred
 
 ## ----basics_ebe_hist, eval=F , fig.height=3, fig.width=3, fig.show='hold', fig.align='center'----
-#  ctr %>% pmx_plot_eta_hist
-#  ctr %>% pmx_plot_eta_box
+# ctr %>% pmx_plot_eta_hist
+# ctr %>% pmx_plot_eta_box
 
 ## ----basics_indiv, eval=F, fig.height=6, fig.width=6, fig.show='hold', fig.align='center'----
-#  ctr %>% pmx_plot_individual(which_pages=1)
+# ctr %>% pmx_plot_individual(which_pages=1)
 
 ## ----basics_qq, eval=F, fig.height=3, fig.width=3, fig.show='hold', fig.align='center'----
-#  ctr %>% pmx_plot_npde_qq
-#  ctr %>% pmx_plot_iwres_qq
+# ctr %>% pmx_plot_npde_qq
+# ctr %>% pmx_plot_iwres_qq
 
 ## ----basics_matrix_plot, eval=F,  fig.height=6, fig.width=6, fig.show='hold', fig.align='center'----
-#  ctr %>% pmx_plot_eta_matrix
+# ctr %>% pmx_plot_eta_matrix
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  ## Create simulated object using simulx
-#  mysim <- simulx(project=project_dir, nrep=100) #
-#  ## Retrieve simulated dataset (assumed to be in y1)
-#  simdata <- mysim$LIDV
+# ## Create simulated object using simulx
+# mysim <- simulx(project=project_dir, nrep=100) #
+# ## Retrieve simulated dataset (assumed to be in y1)
+# simdata <- mysim$LIDV
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  ## Need to revert the original IDs as in modeling dataset for ggPMX
-#  ## Rename IDs column to same name as in modeling dataset, e.g.
-#  ## ???id??? in the example below
-#  simdata <- simdata %>%
-#    mutate(newId = as.numeric(as.character(id))) %>%
-#    left_join(., mysim$originalId) %>%
-#    mutate(id = as.numeric(as.character(oriId))) %>%
-#    select(-oriId, -newId) %>%
-#    data.table::data.table()
-#  
-#  ## It's highly recommended to store your simulation as .csv
-#  vpc_file <- write.csv(simdata, file = "my_VPC.csv", quote=FALSE, row.names = FALSE)
+# ## Need to revert the original IDs as in modeling dataset for ggPMX
+# ## Rename IDs column to same name as in modeling dataset, e.g.
+# ## ???id??? in the example below
+# simdata <- simdata %>%
+#   mutate(newId = as.numeric(as.character(id))) %>%
+#   left_join(., mysim$originalId) %>%
+#   mutate(id = as.numeric(as.character(oriId))) %>%
+#   select(-oriId, -newId) %>%
+#   data.table::data.table()
+# 
+# ## It's highly recommended to store your simulation as .csv
+# vpc_file <- write.csv(simdata, file = "my_VPC.csv", quote=FALSE, row.names = FALSE)
 
 ## -----------------------------------------------------------------------------
 
@@ -297,18 +297,18 @@ ctr <- pmx_mlx(
 
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  ctr <- pmx_nm(
-#    directory = model_dir,
-#    file      = "modelfile.ctl" #or .lst
-#    simfile   = "simulation_modelfile.ctl" #or .lst
-#  )
+# ctr <- pmx_nm(
+#   directory = model_dir,
+#   file      = "modelfile.ctl" #or .lst
+#   simfile   = "simulation_modelfile.ctl" #or .lst
+# )
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  ctr <- pmx_nlmixr(fit) ## VPC will be generated automatically, vpc = TRUE
-#  
-#  ctr <- pmx_nlmixr(fit,
-#                    vpc = FALSE ## But can be turned off
-#  )
+# ctr <- pmx_nlmixr(fit) ## VPC will be generated automatically, vpc = TRUE
+# 
+# ctr <- pmx_nlmixr(fit,
+#                   vpc = FALSE ## But can be turned off
+# )
 
 ## ----fig.height=4, fig.width=6------------------------------------------------
 ctr %>% pmx_plot_vpc
@@ -344,54 +344,54 @@ input_data <- file.path(theophylline, "data_pk.csv")
 ctr <- theophylline()
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  ctr %>% pmx_report(name='Diagnostic_plots2',
-#                     save_dir = work_dir,
-#                     format='all')
+# ctr %>% pmx_report(name='Diagnostic_plots2',
+#                    save_dir = work_dir,
+#                    format='all')
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  ctr %>% pmx_report(name='Diagnostic_plots1',
-#                     save_dir = work_dir,
-#                     output='report')
+# ctr %>% pmx_report(name='Diagnostic_plots1',
+#                    save_dir = work_dir,
+#                    output='report')
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  ctr %>% pmx_report(name='Diagnostic_plots3',
-#                     save_dir = work_dir,
-#                     output'='report',
-#                     template=file.path(work_dir,'Diagnostic_plots1.Rmd'))
+# ctr %>% pmx_report(name='Diagnostic_plots3',
+#                    save_dir = work_dir,
+#                    output'='report',
+#                    template=file.path(work_dir,'Diagnostic_plots1.Rmd'))
 
 ## ----eval=F-------------------------------------------------------------------
-#  ctr %>% pmx_plot_xx(list of options)
+# ctr %>% pmx_plot_xx(list of options)
 
 ## ----eval=F-------------------------------------------------------------------
-#  ctr %>% pmx_update(???xx???, list of options)
+# ctr %>% pmx_update(???xx???, list of options)
 
 ## ----eval=F-------------------------------------------------------------------
-#  ctr %>% get_plot_config("xx")
+# ctr %>% get_plot_config("xx")
 
 ## ----eval=F-------------------------------------------------------------------
-#  ctr %>% pmx_mlxtran(file_name = mlx_file, bloq=pmx_bloq(cens = ???BLQ???, limit = ???LIMIT???))
-#  ctr %>% pmx_plot_individual()
+# ctr %>% pmx_mlxtran(file_name = mlx_file, bloq=pmx_bloq(cens = ???BLQ???, limit = ???LIMIT???))
+# ctr %>% pmx_plot_individual()
 
 ## ----eval=F-------------------------------------------------------------------
-#  ctr %>% pmx_mlxtran(file_name = mlx_file))
-#  ctr %>% pmx_plot_iwres_ipred(sim_blq = TRUE)
+# ctr %>% pmx_mlxtran(file_name = mlx_file))
+# ctr %>% pmx_plot_iwres_ipred(sim_blq = TRUE)
 
 ## ----eval=F-------------------------------------------------------------------
-#  ctr %>% pmx_mlxtran(file_name = mlx_file, sim_blq = TRUE))
-#  ctr %>% pmx_plot_iwres_ipred()
+# ctr %>% pmx_mlxtran(file_name = mlx_file, sim_blq = TRUE))
+# ctr %>% pmx_plot_iwres_ipred()
 
 ## ----settings_example, fig.width=5, fig.height=4,eval=FALSE-------------------
-#  
-#  ## set one or more settings
-#  my_settings <- pmx_settings(
-#    is.draft   = FALSE,
-#    use.abbrev = TRUE,
-#    ...) ### set other settings parameters here
-#  ctr <-
-#    pmx_mlx(
-#      ..., ## put here other pmx parametes
-#      settings = my_settings
-#    )
+# 
+# ## set one or more settings
+# my_settings <- pmx_settings(
+#   is.draft   = FALSE,
+#   use.abbrev = TRUE,
+#   ...) ### set other settings parameters here
+# ctr <-
+#   pmx_mlx(
+#     ..., ## put here other pmx parametes
+#     settings = my_settings
+#   )
 
 ## ----settings_is_draft,fig.height=3, fig.width=3, fig.show='hold', fig.align='center'----
 

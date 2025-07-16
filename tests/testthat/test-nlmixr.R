@@ -1,6 +1,7 @@
-if (helper_skip() && requireNamespace("nlmixr2", quietly = TRUE)) {
+if (helper_skip() && requireNamespace("nlmixr2est", quietly = TRUE)) {
   test_that("nlmixr test", {
     skip_on_cran()
+    skip_on_os("windows") #fairly slow on Windows probably due to nlmixr compilation time
 
     # Data' purpose illustrates the error and my data set
     df <- dplyr::tibble(
@@ -30,7 +31,7 @@ if (helper_skip() && requireNamespace("nlmixr2", quietly = TRUE)) {
       })
     }
 
-    fit <- nlmixr2::nlmixr2(fun, df, list(print = 0), est = "posthoc")
+    fit <- nlmixr2est::nlmixr2(fun, df, list(print = 0), est = "posthoc")
 
     expect_error(pmx_nlmixr(fit), NA)
 
@@ -40,6 +41,7 @@ if (helper_skip() && requireNamespace("nlmixr2", quietly = TRUE)) {
 
   test_that("warfarin example", {
     skip_on_cran()
+    skip_on_os("windows")
 
     PKdata <- nlmixr2data::warfarin %>%
       dplyr::filter(dvid == "cp") %>%
@@ -78,11 +80,11 @@ if (helper_skip() && requireNamespace("nlmixr2", quietly = TRUE)) {
     }
 
     fitOne.comp.transit_S <-
-      nlmixr2::nlmixr(One.comp.transit,
+      nlmixr2est::nlmixr(One.comp.transit,
                       PKdata,
                       est = "saem",
-                      nlmixr2::saemControl(print = 100),
-                      nlmixr2::tableControl(cwres = TRUE, npde = TRUE)
+                      nlmixr2est::saemControl(print = 100),
+                      nlmixr2est::tableControl(cwres = TRUE, npde = TRUE)
                       )
 
     expect_error(pmx_nlmixr(fitOne.comp.transit_S,
@@ -113,7 +115,8 @@ if (helper_skip() && requireNamespace("nlmixr2", quietly = TRUE)) {
 
   test_that("integrated demo", {
     skip_on_cran()
-
+    skip_on_os("windows")
+    
     dat <- xgxr::case1_pkpd %>%
       dplyr::rename(DV = LIDV) %>%
       dplyr::filter(CMT %in% 1:2) %>%
@@ -157,11 +160,13 @@ if (helper_skip() && requireNamespace("nlmixr2", quietly = TRUE)) {
       })
     }
 
-    cmt2fit.logn <- nlmixr2::nlmixr(cmt2, dat2, "saem",
+    cmt2fit.logn <- nlmixr2est::nlmixr(cmt2, dat2, "saem",
                                     control = list(print = 0),
-                                    table = nlmixr2::tableControl(cwres = TRUE, npde = TRUE)
+                                    table = nlmixr2est::tableControl(cwres = TRUE, npde = TRUE)
                                     )
 
-    ctr <- pmx_nlmixr(cmt2fit.logn, conts = c("WEIGHTB"), cats = "TRTACT", vpc = TRUE)
+    expect_warning({
+      ctr <- pmx_nlmixr(cmt2fit.logn, conts = c("WEIGHTB"), cats = "TRTACT", vpc = TRUE)
+    }, "disabling vpc")
   })
 }

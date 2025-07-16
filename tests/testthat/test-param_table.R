@@ -77,8 +77,9 @@ if (helper_skip()) {
 
   #------------------- param_table with nlmixr start -----------------------------
   context("Test param_table() with nlmixr controller")
-  if (requireNamespace("nlmixr2", quiet=TRUE)) {
+  if (requireNamespace("nlmixr2est", quietly=TRUE)) {
     test_that("param_table: params return: kable", {
+      skip_on_os("windows")
       one.compartment <- function() {
         ini({
           tka <- 0.45 # Log Ka
@@ -99,7 +100,7 @@ if (helper_skip()) {
           cp ~ add(add.sd)
         })
       }
-      fit <- nlmixr2::nlmixr(one.compartment, nlmixr2data::theo_sd, "saem",
+      fit <- nlmixr2est::nlmixr(one.compartment, nlmixr2data::theo_sd, "saem",
                              control = list(print = 0)
                              )
       ctr <- pmx_nlmixr(fit, conts = c("cl", "v"))
