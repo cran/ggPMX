@@ -1,3 +1,6 @@
+## ----setup, include=FALSE-----------------------------------------------------
+knitr::opts_chunk$set(dpi=100)
+
 ## ----load_package, echo=FALSE,warning=FALSE,message=FALSE---------------------
 knitr::opts_chunk$set(out.width = "100%", warning = FALSE, message = FALSE)
 library(ggplot2)

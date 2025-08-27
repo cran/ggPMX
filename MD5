@@ -1,6 +1,6 @@
-b7400c7decc649a2e07613082ce9cb52 *DESCRIPTION
+050b2cdb148fd6056a4a2f69d1e7c9da *DESCRIPTION
 9e452e8907bb035add6dd1a0a370b38a *NAMESPACE
-f2c96b1a37081bf69cdbb2ef7d4e1975 *NEWS.md
+6087838c7d330f676522d09b4a4e90dc *NEWS.md
 5c9a7494894a136b31e85d8f0dfbf7d9 *R/assertions.R
 d59c19a3e11ec1c12e0ef148ba60d5d2 *R/classInt.R
 fb68397ee6960516d835520f89f403d7 *R/config.R
@@ -50,10 +50,10 @@ d75e0afea7d0efa81f24e68e7326ecfb *R/pmx_read_nm_tables.R
 c93f337793cf5cffd63355559e9c5dd4 *R/utils.R
 6ac5f3bca8bfa9b2fb96bd59d9aa296d *R/zzz.R
 cd605a63b654d4732ac3fdd16ebc8db0 *README.md
-77eb9352bc816adf8b539848cca6e449 *build/vignette.rds
-3cd4336d22eb908f6b2dd4ae8fc35f7b *inst/doc/ggPMX-guide.R
-ff859e7949fe94ca2e3c48cd35a82ace *inst/doc/ggPMX-guide.Rmd
-42452263b216cc3208f4b9a8a4e36f56 *inst/doc/ggPMX-guide.pdf
+29d879ded33a52e94f9266eff08fc571 *build/vignette.rds
+f7e624f5bd790f3cef7db79a4d1ccb55 *inst/doc/ggPMX-guide.R
+dc7e48513b4176b380235b95a234f11f *inst/doc/ggPMX-guide.Rmd
+f0d560dfe159cdfa2f25b905f1cad830 *inst/doc/ggPMX-guide.pdf
 4580d030cf1df87d6490c1b5a963042b *inst/examples/controller.R
 f557de4f2b69a80982457d82ab224c2c *inst/examples/custom_inputs.yaml
 02bfa4621b4be92c4f839cc56ee35736 *inst/examples/distribution.R
@@ -188,7 +188,7 @@ ee84ee356e9e14a0ef9a93ed9a179643 *man/getPmxOption.Rd
 e919264b335a1724f27ab64b7c8d1e2a *man/get_plot.Rd
 b71e4126292cc19470143b8f6cbe91ea *man/get_plot_config.Rd
 3b12cec0420bc7d984c5a25be77e88c3 *man/get_strats.Rd
-6b0d541507863b03f2bda8aa6e33c406 *man/ggPMX.Rd
+b908f953ac56c1dccf892ea0a7d03a0c *man/ggPMX.Rd
 1ac99192f10a5189d54e15051ea1c0f9 *man/gtable_remove_grobs.Rd
 15e22ad5e2289d2375994271e1e68aff *man/individual.Rd
 963e5fe14859bdb8896f273e2221813a *man/input_finegrid.Rd
@@ -305,13 +305,13 @@ a43e35d88a9446b75a3f7b4762539cdd *tests/testthat/helper-skip.R
 9d695d0929c2b9bf4a34b24e47f14acf *tests/testthat/test-gpar.R
 9a2652e4c3ceb03f2d2befdfa9a5ed0b *tests/testthat/test-nlmixr.R
 9b4131a2be775d8aa0d4b49cbe499cff *tests/testthat/test-nonmem_reader.R
-42aabe0aafc758749582b258af90cb43 *tests/testthat/test-param_table.R
+b249b3d23af279fae6502cd3727b0efe *tests/testthat/test-param_table.R
 d909417dc5cb802bafa672caa5e06cba *tests/testthat/test-plot-base.R
 b77145432adf52e08c78263a3469367c *tests/testthat/test-plot-defaults.R
 24112a1871e228fd57ab4e4a25c35667 *tests/testthat/test-plot-density.R
 d84e01b100315aa03d90f8474a44375a *tests/testthat/test-plot-distribution.R
 e5b96a685ec7c20945e6a1191ecaf5b8 *tests/testthat/test-plot-eta-pairs.R
-979b5ab2c95cbea07b2686d27e756028 *tests/testthat/test-plot-individual.R
+3bea2f2969f06a8e9baaf07d6d7999f4 *tests/testthat/test-plot-individual.R
 cc790beee1cb4bfd60a8b91870c58d5a *tests/testthat/test-plot-residual.R
 2ce69541a2f5dce10c38f6b586d107e8 *tests/testthat/test-plot.R
 1b09b6b1b72093c0eb625ee0d6e84456 *tests/testthat/test-pmx-all-compute.R
@@ -322,7 +322,7 @@ d2ec6d5c133ea15b63cf3b4ddc228a22 *tests/testthat/test-pmx-plot-eta-cov.R
 1570cf8a7c53b379886caabf759cfe5a *tests/testthat/test-pmx-plots-saem-convergence.R
 0bdb34f8e1c971c54e8889f807a5767a *tests/testthat/test-pmx-plots-scatter.R
 10a92bbdd8f9f25a82d2d86841c33fce *tests/testthat/test-pmx-post_load.R
-ebadfbda693477c8db7bcfd40586eb43 *tests/testthat/test-pmx-report.R
+9cbc7ce309e2264f26d9273ea6922e3d *tests/testthat/test-pmx-report.R
 dc67502a53e18971f204880007731c7b *tests/testthat/test-pmx-vpc-bin.R
 6ca8213e78a75905f6b460db99f4e055 *tests/testthat/test-pmxClass.R
 4c9e47cbc5e3a761e4fa138134d823da *tests/testthat/test-pmx_filter.R
@@ -338,5 +338,5 @@ daf6c3cdd561c2d14333a9be35432838 *tests/testthat/test-simBlq-npde.R
 f0ecdb83761cf039049b211e73ead515 *tests/testthat/test-utils.R
 8dfc5912ecaa355c9054b881e6954eb3 *tests/testthat/test-vdiff.R
 db1f7a38f8246131536ceda46b0d6347 *tests/testthat/warfarin_PD_project.zip
-ff859e7949fe94ca2e3c48cd35a82ace *vignettes/ggPMX-guide.Rmd
+dc7e48513b4176b380235b95a234f11f *vignettes/ggPMX-guide.Rmd
 550d8d42539492f998e583313cadad39 *vignettes/ggPMX_arch.png
