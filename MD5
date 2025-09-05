@@ -1,6 +1,6 @@
-050b2cdb148fd6056a4a2f69d1e7c9da *DESCRIPTION
+b742319b9cd2d0b96c664509eff11db0 *DESCRIPTION
 9e452e8907bb035add6dd1a0a370b38a *NAMESPACE
-6087838c7d330f676522d09b4a4e90dc *NEWS.md
+1aeb7205d1bc5f9a091cfa2c5a1e8923 *NEWS.md
 5c9a7494894a136b31e85d8f0dfbf7d9 *R/assertions.R
 d59c19a3e11ec1c12e0ef148ba60d5d2 *R/classInt.R
 fb68397ee6960516d835520f89f403d7 *R/config.R
@@ -17,7 +17,7 @@ b4bd2dd71f1713372da89a1cc05e7754 *R/ggforce-facet-paginate.R
 47a5c910386e3f2f467d617af389e172 *R/plot-distribution.R
 f28f199c4764acfd1505065afa6280c3 *R/plot-eta-cov.R
 8c4eb02973aa863e6686f2cf9286ad71 *R/plot-eta-pairs.R
-5eedf35d932224316bd96b5e799b24d3 *R/plot-individual.R
+283e0ff29956789051d2d56e205e7eb6 *R/plot-individual.R
 34f8435a151ae9a5826ca58442a132fe *R/plot-qq.R
 20d749b10b95183db567c3e12cc41962 *R/plot-residual.R
 aeb211b5bd9a1d3d93664f7fe81f1ebd *R/plot-themes.R
@@ -37,9 +37,9 @@ ea60efe6e64ff9ae4c9eae9f3b17f478 *R/pmx-plots-quantile.R
 2228d7db25a801eda9704fe0edf0c2ac *R/pmx-plots-scatter.R
 3474ab11f3d7be7ecf1327826b63b340 *R/pmx-plots-vpc.R
 9531a5e6ebe01a056c69cccb72f50e04 *R/pmx-post_load.R
-d9939e71d04b9a37ae8e1cd9eb59b07e *R/pmx-reader.R
+ba54f5a1140b6de51e8d41acfc141c82 *R/pmx-reader.R
 ba822012267e86d12db51579f9361f77 *R/pmx-report.R
-93daffe62d2ae208ac097439c341b2b2 *R/pmxClass.R
+10afd12cad8f895a58ec21e8558d1625 *R/pmxClass.R
 867b61de137015ff1292d54a72052a0e *R/pmx_list_nm_tables.R
 edf492f6e5be6180bbaf13d862683727 *R/pmx_manual_import.R
 5dc5d531f6613ae110550841140c95f2 *R/pmx_read_nm_files.R
@@ -53,7 +53,7 @@ cd605a63b654d4732ac3fdd16ebc8db0 *README.md
 29d879ded33a52e94f9266eff08fc571 *build/vignette.rds
 f7e624f5bd790f3cef7db79a4d1ccb55 *inst/doc/ggPMX-guide.R
 dc7e48513b4176b380235b95a234f11f *inst/doc/ggPMX-guide.Rmd
-f0d560dfe159cdfa2f25b905f1cad830 *inst/doc/ggPMX-guide.pdf
+fb53d800bc489db2d57704a1b6ca92f4 *inst/doc/ggPMX-guide.pdf
 4580d030cf1df87d6490c1b5a963042b *inst/examples/controller.R
 f557de4f2b69a80982457d82ab224c2c *inst/examples/custom_inputs.yaml
 02bfa4621b4be92c4f839cc56ee35736 *inst/examples/distribution.R
@@ -297,6 +297,7 @@ ded42cac2bed3c66a2ce870697672a2f *tests/testthat/helper-pmxClass.R
 d8bcd35ae3ca0287b2eaac323eb135fa *tests/testthat/helper-reader.R
 a43e35d88a9446b75a3f7b4762539cdd *tests/testthat/helper-skip.R
 5dd23441fd2439f621bc39b567e56bbf *tests/testthat/helper-update_plots.R
+802e3884cda7b25491d9cceb1f5f83b9 *tests/testthat/setup.R
 6f8caf16e20220ca6665a8a180b381c3 *tests/testthat/test-2023table.R
 231bf9ddf064ce9fcac73cb1c32dc2f8 *tests/testthat/test-assertions.R
 929c2e1b57c91d05875312b5d29dc42f *tests/testthat/test-classInt.R
@@ -332,7 +333,7 @@ dc67502a53e18971f204880007731c7b *tests/testthat/test-pmx-vpc-bin.R
 134a2eda8fe07618b3276e909f720383 *tests/testthat/test-pmx_options.R
 2c60e984f928fa6e85cffd8ee49f54f2 *tests/testthat/test-pmx_read_nm_files.R
 3bab5d7f4df2f4eb764e32c828d3838d *tests/testthat/test-pmx_update.R
-43e8092423905591916eac9ac9779f2f *tests/testthat/test-reader.R
+2f4a2855c4a89edef43649a90f486788 *tests/testthat/test-reader.R
 96f9fc4b05fc9f7700b3844bc0b10626 *tests/testthat/test-shrinkage.R
 daf6c3cdd561c2d14333a9be35432838 *tests/testthat/test-simBlq-npde.R
 f0ecdb83761cf039049b211e73ead515 *tests/testthat/test-utils.R
